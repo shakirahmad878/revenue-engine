@@ -133,11 +133,14 @@
               <p class="text-xs text-slate-400">High-Ticket Emergency HVAC, Plumbing & Restoration Contractors</p>
             </div>
             <div class="flex items-center gap-2">
+              <button onclick="openDiscoverModal()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-bold text-xs rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
+                <i class="fa-solid fa-magnifying-glass-plus"></i> Auto-Discover Leads
+              </button>
               <button onclick="openAddLeadModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5">
                 <i class="fa-solid fa-plus"></i> Add Lead
               </button>
-              <button onclick="sendBatchTouch(1)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
-                <i class="fa-solid fa-play"></i> Send Touch 1 Batch
+              <button onclick="sendBatchTouch(1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-play"></i> Send Batch
               </button>
             </div>
           </div>
@@ -238,6 +241,51 @@
     </div>
 
   </main>
+
+  <!-- Auto Discover Modal -->
+  <div id="discoverModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-emerald-400"></i> Auto-Discover High-Ticket Leads
+        </h3>
+        <button onclick="closeDiscoverModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-300">The autonomous engine will search, verify active email domains, and inject real deliverable businesses directly into your pipeline.</p>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Target Metro Market:</label>
+          <select id="discoverCity" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+            <option value="Houston, TX">Houston, TX (High Heatwave Demand)</option>
+            <option value="Phoenix, AZ">Phoenix / Scottsdale, AZ (Extreme AC Demand)</option>
+            <option value="Atlanta, GA">Atlanta, GA (High-Ticket Metro)</option>
+            <option value="Miami, FL">Miami / South Florida (24/7 Cooling Demand)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Niche Category:</label>
+          <select id="discoverNiche" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+            <option value="HVAC">Emergency HVAC & AC Repair ($1,800 Avg Ticket)</option>
+            <option value="Plumbing">24/7 Emergency Plumbing & Burst Pipe ($2,200 Avg Ticket)</option>
+            <option value="Roofing">Storm Damage & Roof Restoration ($6,500 Avg Ticket)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Leads to Inject:</label>
+          <input type="number" id="discoverLimit" value="3" min="1" max="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+        <button onclick="closeDiscoverModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
+        <button onclick="runAutoDiscovery()" id="discoverSubmitBtn" class="px-4 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 rounded-lg text-xs font-bold flex items-center gap-1.5">
+          <i class="fa-solid fa-bolt"></i> Scrape & Inject Leads
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Add Lead Modal -->
   <div id="addLeadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -473,6 +521,40 @@
       if (confirm("Are you sure you want to reset all prospects to initial outreach status?")) {
         await fetch('/api/reset', { method: 'POST' });
         fetchState();
+      }
+    }
+
+    function openDiscoverModal() {
+      document.getElementById("discoverModal").classList.remove("hidden");
+    }
+
+    function closeDiscoverModal() {
+      document.getElementById("discoverModal").classList.add("hidden");
+    }
+
+    async function runAutoDiscovery() {
+      const city = document.getElementById("discoverCity").value;
+      const niche = document.getElementById("discoverNiche").value;
+      const limit = parseInt(document.getElementById("discoverLimit").value) || 3;
+      const btn = document.getElementById("discoverSubmitBtn");
+      
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scraping Leads...`;
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/leads/discover', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ city: city, niche: niche, limit: limit })
+        });
+        const data = await res.json();
+        closeDiscoverModal();
+        fetchState();
+      } catch (err) {
+        console.error("Discovery error:", err);
+      } finally {
+        btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Scrape & Inject Leads`;
+        btn.disabled = false;
       }
     }
 

@@ -15,6 +15,12 @@ from email.mime.multipart import MIMEMultipart
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from datetime import datetime, timedelta
 
+# Import Lead Discovery Engine
+try:
+    from lead_finder import discover_leads
+except ImportError:
+    from sales_engine.lead_finder import discover_leads
+
 # UTF-8 Console for Windows
 if sys.platform == "win32":
     try:
@@ -342,7 +348,34 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
         except Exception:
             body = {}
 
-        if path == "/api/prospects":
+        if path == "/api/leads/discover":
+            city = body.get("city", "Houston, TX")
+            niche = body.get("niche", "HVAC")
+            limit = int(body.get("limit", 3))
+            
+            with lock:
+                prospects = load_json(PROSPECTS_FILE, [])
+                existing_emails = {p["email"].lower() for p in prospects}
+                found = discover_leads(city=city, niche=niche, limit=limit)
+                
+                added = []
+                for item in found:
+                    if item["email"].lower() not in existing_emails:
+                        item["id"] = f"lead-{len(prospects) + 1:03d}"
+                        item["status"] = "Ready for Outreach"
+                        item["outreach_stage"] = 0
+                        item["last_contact_date"] = None
+                        prospects.append(item)
+                        existing_emails.add(item["email"].lower())
+                        added.append(item)
+                
+                if added:
+                    save_json(PROSPECTS_FILE, prospects)
+                    log_activity("LEAD_DISCOVERY", f"Auto-discovered and injected {len(added)} verified {niche} prospects for {city}")
+                
+                return self._send_json({"success": True, "added_count": len(added), "leads": added})
+
+        elif path == "/api/prospects":
             with lock:
                 prospects = load_json(PROSPECTS_FILE, [])
                 new_lead = {
