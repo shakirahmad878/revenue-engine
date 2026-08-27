@@ -369,7 +369,7 @@
 
     async function fetchState() {
       try {
-        const res = await fetch('/api/status');
+        const res = await fetch('/api/status?t=' + Date.now());
         const data = await res.json();
         
         // Update KPI
@@ -405,8 +405,8 @@
           `).join("");
         }
 
-        // Fetch Prospects
-        const pRes = await fetch('/api/prospects');
+        // Fetch Prospects with Cache Busting
+        const pRes = await fetch('/api/prospects?t=' + Date.now());
         globalProspects = await pRes.json();
         renderProspectsTable(globalProspects);
 
