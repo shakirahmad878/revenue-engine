@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: autonomous-revenue-engine
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: "python sales_engine/server.py"
+    envVars:
+      - key: PORT
+        value: 10000

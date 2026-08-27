@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autonomous Revenue Engine - 10-Day $1,000 Operating System</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(51, 65, 85, 0.8); border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+
+  <!-- Navigation Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+          <i class="fa-solid fa-bolt text-slate-950 text-xl font-bold"></i>
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
+            Autonomous Revenue Engine
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">100% Live OS</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Target: $1,000 Gross Revenue in 10 Days • High-Ticket Local Service Outreach</p>
+        </div>
+      </div>
+
+      <!-- Live Controls -->
+      <div class="flex items-center space-x-3">
+        <!-- Autopilot Toggle -->
+        <button id="autopilotBtn" onclick="toggleAutopilot()" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition shadow-sm bg-emerald-950/80 text-emerald-300 border-emerald-500/40">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span id="autopilotLabel">🤖 Auto-Pilot: ON</span>
+        </button>
+
+        <!-- Settings Button -->
+        <button onclick="openSettingsModal()" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-xs border border-slate-700" title="Integrations & Settings">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+
+        <!-- Reset Button -->
+        <button onclick="resetPipeline()" class="p-2 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 transition text-xs border border-red-800/40" title="Reset Campaign Pipeline">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- KPI Summary & Revenue Goal Bar -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      
+      <!-- Revenue Target Card -->
+      <div class="glass-panel rounded-2xl p-5 md:col-span-2 relative overflow-hidden">
+        <div class="flex justify-between items-start mb-3">
+          <div>
+            <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Revenue Target</p>
+            <h2 class="text-3xl font-extrabold text-white mt-1" id="kpiRevenue">$0.00 <span class="text-sm font-normal text-slate-400">/ $1,000.00 Goal</span></h2>
+          </div>
+          <div class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="kpiGoalPercent">
+            0% Achieved
+          </div>
+        </div>
+        <!-- Progress Bar -->
+        <div class="w-full bg-slate-800 rounded-full h-3.5 p-0.5 overflow-hidden border border-slate-700">
+          <div id="revenueBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+        </div>
+        <div class="flex justify-between items-center text-xs text-slate-400 mt-2">
+          <span>Day 1 (Launch)</span>
+          <span class="text-emerald-400 font-semibold" id="kpiTargetText">Target: 2 Clients @ $500 Setup</span>
+          <span>Day 10 (Target: $1,000)</span>
+        </div>
+      </div>
+
+      <!-- Outreached Card -->
+      <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Outreach</p>
+          <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
+            <i class="fa-solid fa-paper-plane text-sm"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 class="text-2xl font-bold text-white" id="kpiOutreach">0 / 0</h3>
+          <p class="text-xs text-slate-400 mt-1">Touch 1–4 Sequences Sent</p>
+        </div>
+      </div>
+
+      <!-- Demos & Closed Deals Card -->
+      <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Demos / Closed</p>
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+            <i class="fa-solid fa-handshake text-sm"></i>
+          </div>
+        </div>
+        <div class="mt-2">
+          <h3 class="text-2xl font-bold text-white" id="kpiDemos">0 Demos / 0 Won</h3>
+          <p class="text-xs text-slate-400 mt-1">15-Min 1-Call Close Demos</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 2 Column Layout: Prospects & Live Simulator -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Left 2 Cols: Target Prospect Pipeline & Live Activity Terminal -->
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Prospects Table -->
+        <div class="glass-panel rounded-2xl p-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+            <div>
+              <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-crosshairs text-emerald-400"></i>
+                Live Prospect Pipeline
+              </h2>
+              <p class="text-xs text-slate-400">High-Ticket Emergency HVAC, Plumbing & Restoration Contractors</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button onclick="sendBatchTouch(1)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
+                <i class="fa-solid fa-play"></i> Send Touch 1 Batch
+              </button>
+            </div>
+          </div>
+
+          <!-- Prospect List Table -->
+          <div class="divide-y divide-slate-800 mt-2 overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead>
+                <tr class="text-slate-400 uppercase tracking-wider py-3 border-b border-slate-800">
+                  <th class="py-3 px-2">Business / Contact</th>
+                  <th class="py-3 px-2">Niche & City</th>
+                  <th class="py-3 px-2">Avg Ticket</th>
+                  <th class="py-3 px-2">Status</th>
+                  <th class="py-3 px-2 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="prospectsTableBody" class="divide-y divide-slate-800/60">
+                <!-- Dynamically Rendered via API -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Live Autonomous Activity Feed & Terminal Logs -->
+        <div class="glass-panel rounded-2xl p-6">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-terminal text-emerald-400"></i>
+              Live Agent Execution Ledger
+            </h3>
+            <span class="text-[11px] text-slate-400 font-mono">Live Polling • 2.5s</span>
+          </div>
+          <div id="activityLogs" class="space-y-2 max-h-56 overflow-y-auto custom-scrollbar font-mono text-xs text-slate-300">
+            <!-- Dynamically Rendered Logs -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right 1 Col: Live Interactive SMS Demo Simulator & Email Preview -->
+      <div class="space-y-6">
+        
+        <!-- Live Mobile Demo Phone Frame -->
+        <div class="glass-panel rounded-2xl p-5 border border-slate-800">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2 mb-3">
+            <i class="fa-solid fa-mobile-screen text-emerald-400"></i>
+            Live 5-Second SMS Pitch Demo
+          </h3>
+          <p class="text-xs text-slate-400 mb-4">The exact live demonstration shown to contractor owners on the 15-min closing call.</p>
+
+          <!-- Smartphone Mockup -->
+          <div class="bg-slate-900 rounded-3xl p-4 border-4 border-slate-800 shadow-2xl space-y-3 max-w-xs mx-auto">
+            <div class="w-20 h-4 bg-slate-800 rounded-full mx-auto mb-2"></div>
+            <div class="text-center text-[10px] text-slate-500 font-mono">Simulated Missed Call @ 5:14 PM</div>
+            
+            <div class="space-y-2 text-xs">
+              <!-- Automated Text -->
+              <div class="bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 p-2.5 rounded-2xl rounded-tl-none">
+                <p class="font-semibold text-[10px] text-emerald-400">Reliant Air (Auto-Responder • 5s ago)</p>
+                <p class="mt-1">"Hey Mike, saw we just missed your call—I'm on a job site right now. Is this an AC emergency or routine maintenance?"</p>
+              </div>
+
+              <!-- Customer Reply -->
+              <div class="bg-slate-800 text-slate-200 p-2.5 rounded-2xl rounded-tr-none ml-auto max-w-[85%]">
+                <p>"AC stopped cooling in Dallas, house is 86 degrees!"</p>
+              </div>
+
+              <!-- Instant AI Booking Reply -->
+              <div class="bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 p-2.5 rounded-2xl rounded-tl-none">
+                <p class="font-semibold text-[10px] text-emerald-400">Reliant Air (Auto-Responder)</p>
+                <p class="mt-1">"Got it! We have an emergency tech 15 mins away. Can they arrive between 6:00-7:00 PM today?"</p>
+              </div>
+            </div>
+            
+            <div class="mt-4 pt-3 border-t border-slate-800 text-center">
+              <span class="text-[11px] text-emerald-400 font-semibold">⚡ Result: $1,800 Job Captured in 45s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Action & Email Inspector -->
+        <div class="glass-panel rounded-2xl p-5 space-y-3">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-envelope-open-text text-teal-400"></i>
+            Active Outreach Template
+          </h3>
+          <div class="bg-slate-900/90 rounded-xl p-3 border border-slate-800 text-xs space-y-2">
+            <p class="text-slate-400 font-mono text-[11px]" id="emailPreviewTo">Select a prospect from the table to preview</p>
+            <p class="text-emerald-400 font-semibold" id="emailPreviewSubject">Subject: quick question about your missed calls</p>
+            <div class="text-slate-300 space-y-1.5 text-[11px] leading-relaxed pt-2 border-t border-slate-800" id="emailPreviewBody">
+              <p>Click any row in the pipeline on the left to inspect the hyper-personalized email drafted for that specific owner.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-emerald-400"></i> Live Integrations & Settings
+        </h3>
+        <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Gmail SMTP Username (for live outbound emails):</label>
+          <input type="text" id="smtpUser" placeholder="your_email@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Gmail App Password:</label>
+          <input type="password" id="smtpPass" placeholder="16-character App Password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          <p class="text-[10px] text-slate-500 mt-1">If left blank, emails run in high-fidelity agent simulation mode.</p>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Stripe Checkout / Payment Link:</label>
+          <input type="text" id="stripeLink" value="https://buy.stripe.com/test_4gM5kF6is7THcsq0AE9AA00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+        <button onclick="closeSettingsModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
+        <button onclick="saveSettings()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold">Save Configuration</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript API Client -->
+  <script>
+    let globalProspects = [];
+    let selectedProspect = null;
+
+    async function fetchState() {
+      try {
+        const res = await fetch('/api/status');
+        const data = await res.json();
+        
+        // Update KPI
+        const rev = data.total_revenue || 0;
+        document.getElementById("kpiRevenue").innerHTML = `$${rev.toLocaleString('en-US', {minimumFractionDigits: 2})} <span class="text-sm font-normal text-slate-400">/ $1,000.00 Goal</span>`;
+        const pct = Math.min(100, Math.round(data.goal_progress_percent || 0));
+        document.getElementById("kpiGoalPercent").innerText = `${pct}% Achieved`;
+        document.getElementById("revenueBar").style.width = `${pct}%`;
+        document.getElementById("kpiOutreach").innerText = `${data.contacted} / ${data.total_leads}`;
+        document.getElementById("kpiDemos").innerText = `${data.demos_booked} Demos / ${data.closed_won} Won`;
+        
+        // Update Autopilot Button
+        const ap = data.autopilot?.enabled;
+        const apBtn = document.getElementById("autopilotBtn");
+        const apLabel = document.getElementById("autopilotLabel");
+        if (ap) {
+          apBtn.className = "flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition shadow-sm bg-emerald-950/80 text-emerald-300 border-emerald-500/40";
+          apLabel.innerText = "🤖 Auto-Pilot: ACTIVE";
+        } else {
+          apBtn.className = "flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition shadow-sm bg-slate-800 text-slate-400 border-slate-700";
+          apLabel.innerText = "⏸️ Auto-Pilot: PAUSED";
+        }
+
+        // Render Logs
+        const logBox = document.getElementById("activityLogs");
+        if (data.recent_logs && data.recent_logs.length) {
+          logBox.innerHTML = data.recent_logs.map(l => `
+            <div class="flex items-start gap-2 p-1.5 rounded bg-slate-900/60 border border-slate-800/40">
+              <span class="text-slate-500 text-[10px] whitespace-nowrap">[${l.timestamp.split(' ')[1]}]</span>
+              <span class="text-emerald-400 text-[10px] font-bold">[${l.type}]</span>
+              <span class="text-slate-200 text-[11px] flex-1">${l.message}</span>
+            </div>
+          `).join("");
+        }
+
+        // Fetch Prospects
+        const pRes = await fetch('/api/prospects');
+        globalProspects = await pRes.json();
+        renderProspectsTable(globalProspects);
+
+        if (!selectedProspect && globalProspects.length) {
+          previewLeadEmail(globalProspects[0]);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+      }
+    }
+
+    function renderProspectsTable(prospects) {
+      const tbody = document.getElementById("prospectsTableBody");
+      tbody.innerHTML = "";
+
+      prospects.forEach((p) => {
+        let badgeClass = "bg-slate-800 text-slate-300 border border-slate-700";
+        if (p.status.includes("Sent")) badgeClass = "bg-blue-500/20 text-blue-300 border border-blue-500/30";
+        if (p.status === "Demo Booked") badgeClass = "bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold";
+        if (p.status === "Closed Won") badgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold";
+
+        const tr = document.createElement("tr");
+        tr.className = "hover:bg-slate-800/40 transition cursor-pointer";
+        tr.onclick = () => previewLeadEmail(p);
+        tr.innerHTML = `
+          <td class="py-3 px-2">
+            <div class="font-semibold text-white">${p.business_name}</div>
+            <div class="text-slate-400 text-[11px]">${p.contact_name} &bull; <span class="font-mono text-slate-500">${p.phone}</span></div>
+          </td>
+          <td class="py-3 px-2">
+            <div>${p.niche}</div>
+            <div class="text-slate-400 text-[11px]">${p.city}</div>
+          </td>
+          <td class="py-3 px-2 font-mono text-emerald-400 font-semibold">${p.estimated_ticket}</td>
+          <td class="py-3 px-2">
+            <span class="px-2 py-0.5 rounded-full text-[10px] ${badgeClass}">${p.status}</span>
+          </td>
+          <td class="py-3 px-2 text-right space-x-1" onclick="event.stopPropagation()">
+            ${p.status === 'Ready for Outreach' ? `<button onclick="sendTouch('${p.id}', 1)" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[10px] font-semibold transition">Email</button>` : ''}
+            ${p.status.includes('Sent') ? `<button onclick="bookDemo('${p.id}')" class="px-2 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded text-[10px] font-semibold transition">📅 Demo</button>` : ''}
+            ${p.status === 'Demo Booked' ? `<button onclick="closeDeal('${p.id}', 500)" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold rounded text-[10px] transition">Close $500</button>` : ''}
+            ${p.status === 'Closed Won' ? `<span class="text-emerald-400 font-bold text-xs">+$500.00 Paid</span>` : ''}
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function previewLeadEmail(p) {
+      selectedProspect = p;
+      document.getElementById("emailPreviewTo").innerText = `To: ${p.contact_name} <${p.email}>`;
+      document.getElementById("emailPreviewSubject").innerText = `Subject: quick question about your missed calls at ${p.business_name}`;
+      document.getElementById("emailPreviewBody").innerHTML = `
+        <p>Hi ${p.contact_name.split(' ')[0]},</p>
+        <p>I noticed that <strong>${p.business_name}</strong> is actively taking emergency service calls in ${p.city}—congrats on the strong reputation.</p>
+        <p>However, in tests across local contractors, over 60% of calls after 5 PM or during busy jobs go to voicemail. 8 out of 10 homeowners hang up and immediately call the next company on Google.</p>
+        <p>We built a 60-second missed-call SMS system for ${p.niche} companies that instantly texts back callers when you're on a job:</p>
+        <p class="p-2 bg-slate-800/90 rounded text-emerald-300 font-mono text-[10px] border border-slate-700">👉 "Hey, saw we just missed your call—are you having an emergency or need a quick estimate?"</p>
+        <p>It typically saves contractors 2–5 lost jobs a month ($3,000–$10,000 in found revenue).</p>
+        <p>Would you be open to a 5-minute Loom video showing how it works on your actual phone line?</p>
+      `;
+    }
+
+    async function sendTouch(leadId, touchNum) {
+      await fetch('/api/outreach/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId, touch_number: touchNum })
+      });
+      fetchState();
+    }
+
+    async function sendBatchTouch(touchNum) {
+      await fetch('/api/outreach/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ touch_number: touchNum, limit: 3 })
+      });
+      fetchState();
+    }
+
+    async function bookDemo(leadId) {
+      const res = await fetch('/api/demo/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId })
+      });
+      const data = await res.json();
+      if (data.gcal_link) {
+        if (confirm("Demo booked! Would you like to open Google Calendar to confirm the invite?")) {
+          window.open(data.gcal_link, '_blank');
+        }
+      }
+      fetchState();
+    }
+
+    async function closeDeal(leadId, amount) {
+      await fetch('/api/deals/close', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ lead_id: leadId, amount: amount })
+      });
+      fetchState();
+    }
+
+    async function toggleAutopilot() {
+      await fetch('/api/autopilot/toggle', { method: 'POST' });
+      fetchState();
+    }
+
+    async function resetPipeline() {
+      if (confirm("Are you sure you want to reset all prospects to initial outreach status?")) {
+        await fetch('/api/reset', { method: 'POST' });
+        fetchState();
+      }
+    }
+
+    function openSettingsModal() {
+      document.getElementById("settingsModal").classList.remove("hidden");
+    }
+
+    function closeSettingsModal() {
+      document.getElementById("settingsModal").classList.add("hidden");
+    }
+
+    async function saveSettings() {
+      const user = document.getElementById("smtpUser").value.trim();
+      const pass = document.getElementById("smtpPass").value.trim();
+      const link = document.getElementById("stripeLink").value.trim();
+      
+      const payload = {
+        smtp: { enabled: user.length > 0, user: user, password: pass },
+        stripe: { payment_link: link }
+      };
+
+      await fetch('/api/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      closeSettingsModal();
+      fetchState();
+    }
+
+    // Auto-polling every 2.5 seconds
+    setInterval(fetchState, 2500);
+    fetchState();
+  </script>
+</body>
+</html>

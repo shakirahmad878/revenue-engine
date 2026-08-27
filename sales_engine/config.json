@@ -1,0 +1,27 @@
+{
+  "smtp": {
+    "enabled": true,
+    "host": "smtp.gmail.com",
+    "port": 587,
+    "user": "shakirahmad878@gmail.com",
+    "password": "oltwaaprvuumaban",
+    "from_name": "Shakir Ahmad | Growth Lead",
+    "from_email": "shakirahmad878@gmail.com"
+  },
+  "calendar": {
+    "default_duration_minutes": 15,
+    "meeting_title": "15-Minute Revenue Leak Audit & Live Demo - Shakir Ahmad",
+    "meeting_location": "Google Meet"
+  },
+  "stripe": {
+    "payment_link": "https://buy.stripe.com/test_4gM5kF6is7THcsq0AE9AA00",
+    "package_name": "24-Hour Speed-to-Lead Missed Call System",
+    "unit_price": 500
+  },
+  "autopilot": {
+    "enabled": true,
+    "interval_seconds": 12,
+    "batch_size_per_cycle": 1,
+    "auto_followup_days": 2
+  }
+}
