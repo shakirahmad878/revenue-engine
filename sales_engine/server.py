@@ -342,6 +342,30 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
         except Exception:
             body = {}
 
+        if path == "/api/prospects":
+            with lock:
+                prospects = load_json(PROSPECTS_FILE, [])
+                new_lead = {
+                    "id": f"lead-{len(prospects) + 1:03d}",
+                    "business_name": body.get("business_name", "Unknown Business"),
+                    "contact_name": body.get("contact_name", "Business Owner"),
+                    "title": body.get("title", "Owner"),
+                    "email": body.get("email", ""),
+                    "phone": body.get("phone", ""),
+                    "city": body.get("city", "USA"),
+                    "niche": body.get("niche", "Home Services"),
+                    "estimated_ticket": body.get("estimated_ticket", "$1,500"),
+                    "identified_pain": body.get("identified_pain", "Missed after-hours emergency calls going to competitors."),
+                    "status": "Ready for Outreach",
+                    "outreach_stage": 0,
+                    "last_contact_date": None,
+                    "notes": "Custom added lead."
+                }
+                prospects.append(new_lead)
+                save_json(PROSPECTS_FILE, prospects)
+                log_activity("PROSPECT_ADDED", f"Added new prospect: {new_lead['business_name']} ({new_lead['email']})")
+                return self._send_json({"success": True, "lead": new_lead})
+
         if path == "/api/outreach/send":
             lead_id = body.get("lead_id")
             touch_num = body.get("touch_number", 1)

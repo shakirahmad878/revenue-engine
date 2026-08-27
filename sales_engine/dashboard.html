@@ -133,6 +133,9 @@
               <p class="text-xs text-slate-400">High-Ticket Emergency HVAC, Plumbing & Restoration Contractors</p>
             </div>
             <div class="flex items-center gap-2">
+              <button onclick="openAddLeadModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-plus"></i> Add Lead
+              </button>
               <button onclick="sendBatchTouch(1)" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
                 <i class="fa-solid fa-play"></i> Send Touch 1 Batch
               </button>
@@ -235,6 +238,48 @@
     </div>
 
   </main>
+
+  <!-- Add Lead Modal -->
+  <div id="addLeadModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-emerald-400"></i> Add Verified Prospect
+        </h3>
+        <button onclick="closeAddLeadModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Company / Business Name:</label>
+          <input type="text" id="newLeadCompany" placeholder="e.g. Austin Elite AC & Heating" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Owner / Contact Name:</label>
+          <input type="text" id="newLeadName" placeholder="e.g. John Miller" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-semibold mb-1">Verified Email Address (Required):</label>
+          <input type="email" id="newLeadEmail" placeholder="e.g. info@austineliteac.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">City / State:</label>
+            <input type="text" id="newLeadCity" placeholder="Austin, TX" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          </div>
+          <div>
+            <label class="block text-slate-300 font-semibold mb-1">Average Ticket:</label>
+            <input type="text" id="newLeadTicket" placeholder="$1,800" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
+        <button onclick="closeAddLeadModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
+        <button onclick="saveNewLead()" class="px-4 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-slate-950 rounded-lg text-xs font-bold">Add to Pipeline</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Settings Modal -->
   <div id="settingsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -429,6 +474,46 @@
         await fetch('/api/reset', { method: 'POST' });
         fetchState();
       }
+    }
+
+    function openAddLeadModal() {
+      document.getElementById("addLeadModal").classList.remove("hidden");
+    }
+
+    function closeAddLeadModal() {
+      document.getElementById("addLeadModal").classList.add("hidden");
+    }
+
+    async function saveNewLead() {
+      const company = document.getElementById("newLeadCompany").value.trim();
+      const name = document.getElementById("newLeadName").value.trim();
+      const email = document.getElementById("newLeadEmail").value.trim();
+      const city = document.getElementById("newLeadCity").value.trim() || "Austin, TX";
+      const ticket = document.getElementById("newLeadTicket").value.trim() || "$1,800";
+
+      if (!email || !company) {
+        alert("Please provide at least a Business Name and Email Address.");
+        return;
+      }
+
+      await fetch('/api/prospects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          business_name: company,
+          contact_name: name || "Business Owner",
+          email: email,
+          city: city,
+          estimated_ticket: ticket,
+          niche: "Emergency AC & Heating"
+        })
+      });
+
+      closeAddLeadModal();
+      document.getElementById("newLeadCompany").value = "";
+      document.getElementById("newLeadName").value = "";
+      document.getElementById("newLeadEmail").value = "";
+      fetchState();
     }
 
     function openSettingsModal() {
