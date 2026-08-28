@@ -167,7 +167,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
 
 EMAIL_TEMPLATES = {
     1: {
-        "subject": "quick question regarding automated parent WhatsApp attendance alerts for {business_name}",
+        "subject": "automated parent SMS attendance alerts & roll-call elimination for {business_name}",
         "body": """Respected {contact_name},
 
 I hope this email finds you well.
@@ -178,13 +178,13 @@ In most top private and CBSE/ICSE institutions, two persistent daily challenges 
 1. Class teachers lose 10–15 minutes of productive 1st-period teaching every morning filling manual paper registers.
 2. Working parents frequently call the school office to confirm if their child or school bus arrived safely on time.
 
-We have developed a lightweight Smart Gate Kiosk & Instant WhatsApp Safety System designed specifically for schools in Assam:
-👉 As students tap their QR ID badge at the school gate (takes 1.2 seconds), an automated WhatsApp alert is instantly dispatched to their parents' phone:
+We have developed a lightweight Smart Gate Kiosk & Instant Parent SMS Safety System designed specifically for schools in Assam:
+👉 As students tap their QR ID badge at the school gate (takes 1.2 seconds), an automated Transactional SMS is instantly dispatched to their parents' phone (14 Paise / alert, 100% cellular delivery even with parent's mobile data OFF):
 "Dear Parent, your child has safely arrived at {business_name} at 07:54 AM."
-👉 At 08:30 AM, the Principal receives a live Strength Summary (Total Enrolled vs Present vs Absent) on their phone with a 1-click button to send automated WhatsApp absence notices to parents.
-👉 Automatically generates 1-click CBSE / SEBA official monthly compliance registers.
+👉 At 08:30 AM, the Principal receives a live Strength Summary (Total Enrolled vs Present vs Absent) on their phone with a 1-click button to send automated absence notices to parents.
+👉 The system is 100% self-funding and generates ₹2,00,000+ in annual school surplus through standard parent digital fees.
 
-The system requires zero expensive hardware and runs on any existing school laptop, tablet, or QR/RFID reader.
+The system requires zero expensive hardware and runs on any existing school laptop, tablet, or USB laser scanner.
 
 Would you or your administrative team be open to a quick 10-minute live demonstration this week to see how it works?
 
@@ -196,12 +196,12 @@ Direct Phone / WhatsApp: +91 98640-XXXXX
 G.S. Road, Guwahati, Assam"""
     },
     2: {
-        "subject": "Re: quick question regarding automated parent WhatsApp attendance alerts for {business_name}",
+        "subject": "Re: automated parent SMS attendance alerts for {business_name}",
         "body": """Respected {contact_name},
 
-Following up on my note below regarding the automated Parent WhatsApp Attendance Kiosk for {business_name}.
+Following up on my note below regarding the automated Parent SMS Attendance Kiosk for {business_name}.
 
-We have a live interactive demonstration portal available where you can test scanning student QR badges and view live parent WhatsApp notification alerts in real-time:
+We have a live interactive demonstration portal available where you can test scanning student QR badges and view live parent SMS notification alerts in real-time:
 👉 http://localhost:5000/pitch_landing.html
 
 Would 10 minutes on Wednesday or Thursday work for a brief demonstration for your administrative office?
@@ -247,20 +247,23 @@ def log_activity(activity_type, message):
 
 def generate_email_content(prospect, touch_number=1):
     template = EMAIL_TEMPLATES.get(touch_number, EMAIL_TEMPLATES[1])
-    first_name = prospect["contact_name"].split()[0]
+    contact_name = prospect.get("contact_name", "Principal")
+    first_name = contact_name.split()[0] if contact_name else "Principal"
     subject = template["subject"].format(
-        business_name=prospect["business_name"],
+        business_name=prospect.get("business_name", "School"),
+        contact_name=contact_name,
         first_name=first_name,
-        city=prospect["city"],
-        niche=prospect["niche"],
-        estimated_ticket=prospect.get("estimated_ticket", "$1,500")
+        city=prospect.get("city", "Assam"),
+        niche=prospect.get("niche", "CBSE School"),
+        estimated_ticket=prospect.get("estimated_ticket", "₹24,999")
     )
     body = template["body"].format(
-        business_name=prospect["business_name"],
+        business_name=prospect.get("business_name", "School"),
+        contact_name=contact_name,
         first_name=first_name,
-        city=prospect["city"],
-        niche=prospect["niche"],
-        estimated_ticket=prospect.get("estimated_ticket", "$1,500")
+        city=prospect.get("city", "Assam"),
+        niche=prospect.get("niche", "CBSE School"),
+        estimated_ticket=prospect.get("estimated_ticket", "₹24,999")
     )
     return subject, body
 

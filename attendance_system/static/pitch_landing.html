@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart School Attendance & Parent WhatsApp System - B2B Proposal</title>
+  <title>Smart School Attendance & Parent SMS Safety OS — B2B Proposal</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -18,7 +18,7 @@
         <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/40">🏫</div>
         <div>
           <span class="text-base font-extrabold text-white tracking-tight">SmartSchool OS</span>
-          <span class="text-[10px] ml-2 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold uppercase">CBSE / SEBA Ready</span>
+          <span class="text-[10px] ml-2 px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold uppercase">Assam CBSE / SEBA Ready</span>
         </div>
       </div>
 
@@ -34,16 +34,16 @@
   <section class="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 text-xs font-mono font-semibold mb-6">
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      The #1 Choice for Private Schools in Assam & North-East India
+      100% Guaranteed Cell Delivery • Works Even With Parent's Mobile Data OFF
     </div>
 
     <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight max-w-4xl mx-auto leading-tight sm:leading-none">
-      Instant Parent WhatsApp Alerts & <br class="hidden sm:inline">
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-indigo-300 to-amber-400">1.2s High-Speed Gate Attendance</span>
+      Instant Parent SMS Alerts & <br class="hidden sm:inline">
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-indigo-300 to-amber-400">1.2s Gate Attendance Kiosk</span>
     </h1>
 
     <p class="text-base sm:text-lg text-gray-300 max-w-3xl mx-auto mt-6 leading-relaxed">
-      Empower your school with instant gate arrival WhatsApp notices to parents, bus transport tracking, the Principal’s 8:15 AM Morning Strength Dashboard, and 1-click CBSE/SEBA official registers.
+      Empower your school with 14-paise Transactional SMS gate alerts, eliminate 15 minutes of wasted morning roll-call, and generate ₹2,00,000+ in annual school profit from standard parent digital fees.
     </p>
 
     <!-- CTAs -->
@@ -57,18 +57,84 @@
     </div>
   </section>
 
+  <!-- Interactive School SMS Profit & ROI Calculator -->
+  <section class="max-w-4xl mx-auto px-6 py-10">
+    <div class="glass-panel rounded-3xl p-8 border border-indigo-500/30 relative overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between pb-6 border-b border-white/10 mb-6">
+        <div>
+          <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+            <span>💰</span> School Annual Profit & SMS Economics Calculator
+          </h2>
+          <p class="text-xs text-gray-400 mt-1">See how the SmartSchool Kiosk pays for itself and generates surplus revenue for your school.</p>
+        </div>
+        <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-mono font-bold">14 Paise / SMS</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Controls -->
+        <div class="space-y-5 text-xs">
+          <div>
+            <label class="block text-gray-300 font-semibold mb-2 flex justify-between">
+              <span>Total School Student Strength:</span>
+              <span class="text-indigo-400 font-bold font-mono text-sm" id="studentCountLabel">1,500 Students</span>
+            </label>
+            <input type="range" id="studentSlider" min="300" max="3000" step="100" value="1500" class="w-full accent-indigo-500 cursor-pointer" oninput="updateProfitCalc()">
+          </div>
+
+          <div>
+            <label class="block text-gray-300 font-semibold mb-2 flex justify-between">
+              <span>Annual Parent Digital / SMS Fee:</span>
+              <span class="text-emerald-400 font-bold font-mono text-sm" id="feeLabel">₹200 / Student / Year</span>
+            </label>
+            <input type="range" id="feeSlider" min="100" max="350" step="25" value="200" class="w-full accent-emerald-500 cursor-pointer" oninput="updateProfitCalc()">
+          </div>
+
+          <div class="p-3.5 bg-slate-900/80 rounded-xl border border-white/5 space-y-1.5 text-[11px] text-gray-400">
+            <p>• <strong>Working School Days:</strong> 220 Days / Academic Session</p>
+            <p>• <strong>Cost per Transactional SMS:</strong> ₹0.14 (Fast2SMS / DLT Route)</p>
+            <p>• <strong>Parent Delivery:</strong> 100% Guaranteed over cellular network</p>
+          </div>
+        </div>
+
+        <!-- Profit Summary Card -->
+        <div class="bg-gradient-to-br from-indigo-950/60 to-slate-900/90 rounded-2xl p-6 border border-emerald-500/30 flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex justify-between items-center text-xs text-gray-300">
+              <span>Total Annual Fee Collected:</span>
+              <span class="font-bold text-white font-mono" id="totalFeeCollected">₹3,00,000</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-gray-400">
+              <span>Actual Annual SMS Cost (220 Days):</span>
+              <span class="font-mono text-red-400" id="totalSmsCost">-₹46,200</span>
+            </div>
+            <div class="flex justify-between items-center text-xs text-gray-400">
+              <span>One-Time Kiosk Setup:</span>
+              <span class="font-mono text-amber-400">-₹24,999</span>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-white/10">
+            <p class="text-[11px] text-emerald-400 uppercase tracking-wider font-semibold">Net School Profit (Year 1)</p>
+            <h3 class="text-3xl font-black text-emerald-400 mt-1 font-mono" id="netProfitNumber">+₹2,28,801</h3>
+            <p class="text-[11px] text-gray-400 mt-1">Surplus fund generated for school infrastructure.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- High-Value Pillars Grid -->
-  <section class="max-w-6xl mx-auto px-6 py-12">
+  <section class="max-w-6xl mx-auto px-6 py-8">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       
       <!-- Pillar 1 -->
       <div class="glass-panel rounded-3xl p-8 border border-white/5 relative overflow-hidden group hover:border-emerald-500/40 transition-all">
         <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl font-bold mb-6">
-          💬
+          📱
         </div>
-        <h3 class="text-lg font-bold text-white mb-2">Multi-Language Parent WhatsApp</h3>
+        <h3 class="text-lg font-bold text-white mb-2">14-Paise Transactional SMS</h3>
         <p class="text-sm text-gray-400 leading-relaxed">
-          Instant Gate-In arrival alerts, Gate-Out departure notifications, and Late warnings sent in English, Assamese (অসমীয়া), and Hindi.
+          Instant Gate-In arrival alerts, Gate-Out departure notices, and 08:30 AM Absence alerts delivered over cellular towers in &lt; 2.5 seconds.
         </p>
       </div>
 
@@ -90,92 +156,49 @@
         </div>
         <h3 class="text-lg font-bold text-white mb-2">School Bus & Transport Mode</h3>
         <p class="text-sm text-gray-400 leading-relaxed">
-          Conductors scan students as they board the morning school bus. Parents receive instant notification: *"Aman has boarded Bus Route #4 at 07:15 AM"*.
+          Conductors scan students as they board the morning school bus. Parents receive instant SMS: *"Aman has boarded Bus Route #4 at 07:15 AM"*.
         </p>
       </div>
 
     </div>
   </section>
 
-  <!-- School Pricing & Subscription Calculator -->
-  <section class="max-w-4xl mx-auto px-6 py-12">
-    <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-indigo-500/30 bg-gradient-to-b from-slate-900/90 to-indigo-950/30 shadow-2xl">
-      <div class="text-center mb-8">
-        <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-widest">Commercial Pricing Model</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">School Subscription & Revenue Calculator</h2>
-        <p class="text-xs text-gray-400 mt-1">Calculate monthly school software fee based on enrolled student strength</p>
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
-        <!-- Controls -->
-        <div class="space-y-6">
-          <div>
-            <div class="flex justify-between text-xs font-bold text-gray-300 mb-2">
-              <span>Total School Student Strength</span>
-              <span id="school-calc-students" class="font-mono text-indigo-400 text-sm">850 Students</span>
-            </div>
-            <input type="range" id="school-calc-slider" min="100" max="3000" step="50" value="850" class="w-full accent-indigo-500">
-          </div>
-
-          <div>
-            <div class="flex justify-between text-xs font-bold text-gray-300 mb-2">
-              <span>Rate per Student / Month</span>
-              <span class="font-mono text-emerald-400 text-sm">₹20 / student / mo</span>
-            </div>
-            <p class="text-[11px] text-gray-400">Includes unlimited WhatsApp parent alerts, Gate Kiosk, Bus app, ID badges, and CBSE registers.</p>
-          </div>
-        </div>
-
-        <!-- Output Cards -->
-        <div class="space-y-4">
-          <div class="bg-slate-900/90 border border-emerald-500/30 p-5 rounded-2xl">
-            <div class="text-xs text-emerald-400 font-semibold uppercase tracking-wider">Monthly School SaaS Subscription</div>
-            <div id="school-calc-monthly-fee" class="text-3xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">₹17,000 / mo</div>
-            <div class="text-[11px] text-gray-400 mt-1">Billed to School Administration / Trustees</div>
-          </div>
-
-          <div class="bg-slate-900/90 border border-white/10 p-4 rounded-2xl flex items-center justify-between">
-            <div>
-              <div class="text-xs text-gray-400 uppercase tracking-wider">Annual Contract Value</div>
-              <div id="school-calc-annual-fee" class="text-lg font-bold text-white font-mono mt-0.5">₹2,04,000 / year</div>
-            </div>
-            <span class="px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 font-mono text-xs font-bold">100% Turnkey</span>
-          </div>
-        </div>
+  <!-- Live Gate Kiosk Simulator Preview -->
+  <section class="max-w-4xl mx-auto px-6 py-8">
+    <div class="glass-panel rounded-3xl p-8 border border-white/10 text-center space-y-4">
+      <h2 class="text-2xl font-black text-white">Experience the 1.2-Second School Gate Kiosk</h2>
+      <p class="text-xs text-gray-400 max-w-xl mx-auto">Test scanning student QR cards or entering Roll Numbers to watch the sub-second parent SMS trigger live.</p>
+      <div class="pt-2">
+        <a href="/kiosk" target="_blank" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/20 inline-flex items-center gap-2 hover:opacity-90 transition-all">
+          <span>⚡</span> Launch Interactive Kiosk Screen
+        </a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-white/10 py-10 text-center text-xs text-gray-500 font-mono">
-    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between px-6 gap-4">
-      <div>Smart School Attendance, Safety & Parent WhatsApp OS</div>
-      <div class="flex gap-4">
-        <a href="/" class="text-indigo-400 hover:underline">Principal Dashboard</a>
-        <a href="/kiosk" class="text-emerald-400 hover:underline">Gate Kiosk</a>
-        <a href="/bus" class="text-amber-400 hover:underline">Bus App</a>
-        <a href="/badges" class="text-gray-400 hover:underline">ID Studio</a>
-      </div>
-    </div>
+  <footer class="border-t border-white/10 py-8 text-center text-xs text-gray-500">
+    SmartSchool OS &bull; Built for High-Performance Private Schools across Assam & Northeast India &bull; Pure Python Architecture
   </footer>
 
   <script>
-    const slider = document.getElementById('school-calc-slider');
-    const studentsDisp = document.getElementById('school-calc-students');
-    const monthlyDisp = document.getElementById('school-calc-monthly-fee');
-    const annualDisp = document.getElementById('school-calc-annual-fee');
+    function updateProfitCalc() {
+      const students = parseInt(document.getElementById("studentSlider").value);
+      const fee = parseInt(document.getElementById("feeSlider").value);
 
-    function updateSchoolCalc() {
-      const count = parseInt(slider.value, 10);
-      studentsDisp.textContent = `${count} Students`;
-      const monthly = count * 20;
-      const annual = monthly * 12;
-      monthlyDisp.textContent = `₹${monthly.toLocaleString('en-IN')} / mo`;
-      annualDisp.textContent = `₹${annual.toLocaleString('en-IN')} / year`;
+      document.getElementById("studentCountLabel").innerText = `${students.toLocaleString('en-IN')} Students`;
+      document.getElementById("feeLabel").innerText = `₹${fee} / Student / Year`;
+
+      const totalCollected = students * fee;
+      const smsCost = Math.round(students * 220 * 0.14);
+      const setupFee = 24999;
+      const netProfit = totalCollected - smsCost - setupFee;
+
+      document.getElementById("totalFeeCollected").innerText = `₹${totalCollected.toLocaleString('en-IN')}`;
+      document.getElementById("totalSmsCost").innerText = `-₹${smsCost.toLocaleString('en-IN')}`;
+      document.getElementById("netProfitNumber").innerText = `+₹${netProfit.toLocaleString('en-IN')}`;
     }
 
-    slider.addEventListener('input', updateSchoolCalc);
-    updateSchoolCalc();
+    updateProfitCalc();
   </script>
 </body>
 </html>
