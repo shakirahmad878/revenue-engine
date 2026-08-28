@@ -574,6 +574,7 @@ def record_student_gate_scan(identifier, scan_mode="auto", scanned_by="Main Gate
             "success": True,
             "action": "already_completed",
             "student": student,
+            "notification": {"status": "Verified", "channel": "SMS", "message": "Gate check-in and check-out already completed for today."},
             "message": f"{student['student_name']} has completed Gate In ({existing['gate_in_time'][:5]}) and Gate Out ({existing['gate_out_time'][:5]}) today."
         }
 

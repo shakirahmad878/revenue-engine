@@ -142,20 +142,20 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
             elif path == "/api/school/bus-routes":
                 return self.send_json_response(list_bus_routes())
 
-            elif path in ["/api/school/students", "/api/employees"]:
+            elif path in ["/api/school/students", "/api/students", "/api/employees"]:
                 class_id = query.get("class_id", [None])[0]
                 bus_route = query.get("bus_route", [None])[0]
                 search = query.get("search", [None])[0]
                 return self.send_json_response(list_students(class_id, bus_route, search))
 
-            elif path.startswith("/api/school/students/"):
+            elif path.startswith("/api/school/students/") or path.startswith("/api/students/"):
                 st_id = path.split("/")[-1]
                 st = get_student(st_id)
                 if st:
                     return self.send_json_response(st)
                 return self.send_json_response({"error": "Student not found"}, 404)
 
-            elif path == "/api/school/cbse-register":
+            elif path in ["/api/school/cbse-register", "/api/cbse-register", "/api/reports/cbse-register"]:
                 month = query.get("month", [None])[0]
                 class_id = query.get("class_id", [None])[0]
                 return self.send_json_response(get_cbse_seba_monthly_register(month, class_id))
@@ -198,6 +198,7 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
                 conn.close()
                 return self.send_json_response(logs)
 
+            # 3. Dynamic Gate Token for anti-proxy QR
             elif path == "/api/kiosk/token":
                 settings = get_school_settings()
                 secret = settings.get("dynamic_qr_secret", "mvm_secret")
@@ -225,7 +226,7 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
 
         try:
             # 1. Student Gate Scan (1.2s Throughput)
-            if path in ["/api/school/gate-scan", "/api/attendance/quick-toggle"]:
+            if path in ["/api/school/gate-scan", "/api/scan/gate", "/api/attendance/quick-toggle"]:
                 identifier = body.get("identifier") or body.get("admission_no") or body.get("token") or body.get("rfid_card_id")
                 if not identifier:
                     return self.send_json_response({"success": False, "message": "Identifier required"}, 400)
