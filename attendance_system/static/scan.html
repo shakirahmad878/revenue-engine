@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mobile Staff QR Scanner & Digital Badge</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <!-- Html5-QRCode Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="min-h-screen bg-[#070a12] text-gray-100 flex flex-col justify-between p-4 max-w-md mx-auto">
+
+  <!-- Mobile Top Bar -->
+  <header class="flex items-center justify-between border-b border-white/10 pb-4">
+    <div class="flex items-center gap-2.5">
+      <div class="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-600/30">
+        ✦
+      </div>
+      <div>
+        <h1 class="text-sm font-bold text-white tracking-tight" id="scan-company-name">Apex Innovations</h1>
+        <p class="text-[10px] text-gray-400 font-mono">Mobile Attendance Pass</p>
+      </div>
+    </div>
+
+    <!-- Mode Selector: Scan Kiosk QR vs My ID Badge -->
+    <div class="flex bg-slate-900 p-1 rounded-xl border border-white/10 text-xs">
+      <button id="tab-scan-camera" class="px-3 py-1.5 rounded-lg bg-indigo-600 text-white font-bold transition-all">Scan Kiosk</button>
+      <button id="tab-my-badge" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white font-bold transition-all">My Badge</button>
+    </div>
+  </header>
+
+  <!-- Employee Selection Bar -->
+  <div class="my-3 bg-slate-900/90 border border-white/10 rounded-2xl p-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <img id="active-emp-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="">
+      <div>
+        <select id="emp-select-dropdown" class="glass-input bg-transparent border-0 font-bold text-white text-xs focus:ring-0 cursor-pointer">
+          <!-- Populated dynamically -->
+        </select>
+        <div id="active-emp-role" class="text-[10px] text-indigo-300 font-mono">Principal Systems Architect</div>
+      </div>
+    </div>
+    <span id="active-emp-code" class="px-2 py-0.5 rounded bg-white/5 border border-white/10 font-mono text-[11px] font-bold text-indigo-400">EMP-101</span>
+  </div>
+
+  <!-- Center Workspace -->
+  <main class="my-auto py-2 flex flex-col items-center">
+    
+    <!-- VIEW 1: MOBILE CAMERA SCANNER (Point at Office Screen) -->
+    <div id="view-camera-scanner" class="w-full flex flex-col items-center text-center">
+      <p class="text-xs text-gray-300 mb-3">Point phone camera at the <strong class="text-indigo-400">Office Kiosk QR Code</strong></p>
+      
+      <!-- Camera Viewport -->
+      <div class="relative w-72 h-72 rounded-3xl overflow-hidden bg-slate-900 border-2 border-indigo-500/40 shadow-2xl flex items-center justify-center">
+        <div id="mobile-qr-reader" class="w-full h-full object-cover"></div>
+        <div class="scan-line pointer-events-none"></div>
+      </div>
+
+      <!-- Action Status Banner -->
+      <div id="scan-status-banner" class="mt-4 w-full bg-slate-900/80 border border-white/10 rounded-2xl p-3 text-xs text-gray-300 flex items-center justify-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span>Camera active & ready to scan...</span>
+      </div>
+
+      <!-- Manual Action Buttons -->
+      <div class="grid grid-cols-2 gap-3 w-full mt-4">
+        <button id="btn-manual-checkin" class="py-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5">
+          <span>✓</span> 1-Tap Check In
+        </button>
+        <button id="btn-manual-checkout" class="py-3 rounded-xl bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/30 text-xs font-bold transition-all shadow-lg flex items-center justify-center gap-1.5">
+          <span>⇥</span> 1-Tap Check Out
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW 2: MY DIGITAL ID BADGE (Present to Reception Webcam) -->
+    <div id="view-my-badge" class="w-full hidden flex flex-col items-center">
+      <div class="id-badge-card p-6 flex flex-col items-center justify-between text-center mx-auto scale-90 sm:scale-100">
+        <div class="w-full flex items-center justify-between border-b border-white/10 pb-3">
+          <div class="flex items-center gap-1.5">
+            <span class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">✦</span>
+            <span class="text-xs font-bold text-white tracking-wide" id="badge-company-name">Apex Innovations</span>
+          </div>
+          <span class="text-[10px] text-gray-400 font-mono">DIGITAL PASS</span>
+        </div>
+
+        <div class="my-3 flex flex-col items-center">
+          <img id="badge-emp-avatar" src="" class="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-xl mb-2" alt="">
+          <h4 id="badge-emp-name" class="text-lg font-bold text-white">Marcus Vance</h4>
+          <div id="badge-emp-role" class="text-xs text-indigo-400 font-medium">Principal Systems Architect</div>
+          <div id="badge-emp-dept" class="text-[11px] text-gray-400 mt-0.5">Software Engineering</div>
+          <div id="badge-emp-code" class="text-xs font-mono font-bold text-gray-300 mt-1 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10">EMP-101</div>
+        </div>
+
+        <div class="bg-white p-2.5 rounded-xl shadow-inner mb-2" id="mobile-badge-qr-holder"></div>
+        
+        <div class="text-[10px] text-gray-400 font-mono uppercase tracking-wider">
+          Present to Reception Camera
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Mobile Bottom Links -->
+  <footer class="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] text-gray-500 font-mono">
+    <a href="/portal" class="text-indigo-400 hover:underline">Self-Service Portal</a>
+    <a href="/kiosk" class="text-gray-400 hover:underline">Kiosk Screen</a>
+    <a href="/" class="text-gray-400 hover:underline">Admin Dashboard</a>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let employeesList = [];
+    let activeEmployee = null;
+    let mobileQrScanner = null;
+    let isProcessingScan = false;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadEmployees();
+      setupTabs();
+      setupManualButtons();
+      startMobileCamera();
+      checkUrlQueryParams();
+    });
+
+    async function loadEmployees() {
+      try {
+        const settings = await API.getSettings();
+        document.getElementById('scan-company-name').textContent = settings.name;
+        document.getElementById('badge-company-name').textContent = settings.name;
+
+        employeesList = await API.getEmployees();
+        const select = document.getElementById('emp-select-dropdown');
+        select.innerHTML = employeesList.map(e => `
+          <option value="${e.id}">${e.first_name} ${e.last_name}</option>
+        `).join('');
+
+        select.addEventListener('change', (e) => {
+          const emp = employeesList.find(x => x.id === parseInt(e.target.value, 10));
+          setActiveEmployee(emp);
+        });
+
+        if (employeesList.length) {
+          setActiveEmployee(employeesList[0]);
+        }
+      } catch (err) {
+        console.error('Error loading employees:', err);
+      }
+    }
+
+    function setActiveEmployee(emp) {
+      if (!emp) return;
+      activeEmployee = emp;
+      document.getElementById('active-emp-avatar').src = emp.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${emp.employee_code}`;
+      document.getElementById('active-emp-role').textContent = `${emp.designation} • ${emp.department_name || 'Staff'}`;
+      document.getElementById('active-emp-code').textContent = emp.employee_code;
+
+      // Update Digital Badge View
+      document.getElementById('badge-emp-avatar').src = emp.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${emp.employee_code}`;
+      document.getElementById('badge-emp-name').textContent = `${emp.first_name} ${emp.last_name}`;
+      document.getElementById('badge-emp-role').textContent = emp.designation;
+      document.getElementById('badge-emp-dept').textContent = emp.department_name || 'General';
+      document.getElementById('badge-emp-code').textContent = emp.employee_code;
+
+      renderBadgeQr(emp.qr_token);
+    }
+
+    function renderBadgeQr(token) {
+      const holder = document.getElementById('mobile-badge-qr-holder');
+      if (!holder) return;
+      holder.innerHTML = '';
+      if (window.QRCode) {
+        new QRCode(holder, {
+          text: token,
+          width: 110,
+          height: 110,
+          colorDark: "#090d16",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      }
+    }
+
+    function setupTabs() {
+      const btnCam = document.getElementById('tab-scan-camera');
+      const btnBadge = document.getElementById('tab-my-badge');
+      const vCam = document.getElementById('view-camera-scanner');
+      const vBadge = document.getElementById('view-my-badge');
+
+      btnCam.addEventListener('click', () => {
+        btnCam.classList.add('bg-indigo-600', 'text-white');
+        btnCam.classList.remove('text-gray-400');
+        btnBadge.classList.remove('bg-indigo-600', 'text-white');
+        btnBadge.classList.add('text-gray-400');
+        vCam.classList.remove('hidden');
+        vBadge.classList.add('hidden');
+        startMobileCamera();
+      });
+
+      btnBadge.addEventListener('click', () => {
+        btnBadge.classList.add('bg-indigo-600', 'text-white');
+        btnBadge.classList.remove('text-gray-400');
+        btnCam.classList.remove('bg-indigo-600', 'text-white');
+        btnCam.classList.add('text-gray-400');
+        vBadge.classList.remove('hidden');
+        vCam.classList.add('hidden');
+        stopMobileCamera();
+      });
+    }
+
+    async function startMobileCamera() {
+      if (mobileQrScanner) return;
+      try {
+        mobileQrScanner = new Html5Qrcode("mobile-qr-reader");
+        await mobileQrScanner.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          onScanSuccess,
+          (err) => {}
+        );
+      } catch (err) {
+        console.warn('Mobile camera start error:', err);
+      }
+    }
+
+    function stopMobileCamera() {
+      if (mobileQrScanner) {
+        mobileQrScanner.stop().then(() => {
+          mobileQrScanner.clear();
+          mobileQrScanner = null;
+        }).catch(err => console.warn(err));
+      }
+    }
+
+    async function onScanSuccess(decodedText) {
+      if (isProcessingScan || !activeEmployee) return;
+      isProcessingScan = true;
+
+      try {
+        let kioskToken = decodedText.trim();
+        if (kioskToken.startsWith('http')) {
+          const url = new URL(kioskToken);
+          kioskToken = url.searchParams.get('kiosk_token') || kioskToken;
+        }
+
+        // Send check-in / check-out with dynamic kiosk token
+        const res = await API.quickToggle(activeEmployee.employee_code, 'mobile_scan');
+        if (res.success) {
+          AudioChime.playSuccess();
+          Toast.show(res.message, 'success', 5000);
+        } else {
+          AudioChime.playError();
+          Toast.show(res.message, 'error');
+        }
+      } catch (err) {
+        AudioChime.playError();
+        Toast.show('Check-in error: ' + err.message, 'error');
+      } finally {
+        setTimeout(() => { isProcessingScan = false; }, 4000);
+      }
+    }
+
+    function setupManualButtons() {
+      document.getElementById('btn-manual-checkin').addEventListener('click', async () => {
+        if (!activeEmployee) return;
+        try {
+          const res = await API.checkIn({ employee_id: activeEmployee.id, check_in_type: 'mobile_scan' });
+          AudioChime.playSuccess();
+          Toast.show(res.message, 'success');
+        } catch (err) {
+          AudioChime.playError();
+          Toast.show(err.message, 'error');
+        }
+      });
+
+      document.getElementById('btn-manual-checkout').addEventListener('click', async () => {
+        if (!activeEmployee) return;
+        try {
+          const res = await API.checkOut({ employee_id: activeEmployee.id, check_out_type: 'mobile_scan' });
+          AudioChime.playSuccess();
+          Toast.show(res.message, 'success');
+        } catch (err) {
+          AudioChime.playError();
+          Toast.show(err.message, 'error');
+        }
+      });
+    }
+
+    // Handle deep-link scan URL from generic camera app (e.g. /scan?kiosk_token=KIOSK-...)
+    function checkUrlQueryParams() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('kiosk_token');
+      if (token) {
+        Toast.show(`Scanned Live Kiosk Token: ${token.slice(0, 12)}... Click Check In/Out!`, 'info', 4000);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Print Employee ID QR Badges</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    @media print {
+      body { background: white !important; color: black !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .badge-sheet-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; margin: 0 auto !important; }
+      .id-badge-card {
+        background: #ffffff !important;
+        border: 2px solid #0f172a !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        width: 320px !important;
+        height: 480px !important;
+        margin: 10px auto !important;
+      }
+      .badge-text-white { color: #0f172a !important; }
+      .badge-text-gray { color: #475569 !important; }
+      .badge-bg-subtle { background: #f1f5f9 !important; border-color: #cbd5e1 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#090d16] text-gray-100 p-6 sm:p-10">
+
+  <!-- Control Header (Hidden on Print) -->
+  <div class="no-print max-w-6xl mx-auto mb-8 bg-slate-900 border border-white/10 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
+    <div>
+      <h1 class="text-xl font-bold text-white flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-xs">✦</span>
+        Printable Employee ID Cards (Batch Sheet)
+      </h1>
+      <p class="text-xs text-gray-400 mt-1">Formatted for standard CR80 physical card printing and A4 multi-card sheets</p>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <select id="dept-filter-select" class="glass-input px-3 py-2 rounded-xl text-xs">
+        <option value="">All Departments</option>
+      </select>
+
+      <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+        Print All Badges
+      </button>
+
+      <a href="/" class="px-4 py-2.5 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10">
+        Back
+      </a>
+    </div>
+  </div>
+
+  <!-- Cards Grid Container -->
+  <div id="badges-container" class="badge-sheet-grid max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+    <!-- Populated dynamically -->
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let employeesList = [];
+    let companySettings = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      companySettings = await API.getSettings();
+      employeesList = await API.getEmployees();
+      
+      const depts = await API.getDepartments();
+      const select = document.getElementById('dept-filter-select');
+      depts.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.id;
+        opt.textContent = d.name;
+        select.appendChild(opt);
+      });
+
+      select.addEventListener('change', (e) => {
+        const dId = e.target.value ? parseInt(e.target.value, 10) : null;
+        const filtered = dId ? employeesList.filter(x => x.department_id === dId) : employeesList;
+        renderBadges(filtered);
+      });
+
+      renderBadges(employeesList);
+    });
+
+    function renderBadges(list) {
+      const container = document.getElementById('badges-container');
+      container.innerHTML = '';
+
+      list.forEach((emp, index) => {
+        const card = document.createElement('div');
+        card.className = "id-badge-card p-6 flex flex-col items-center justify-between text-center";
+        
+        card.innerHTML = `
+          <!-- Header -->
+          <div class="w-full flex items-center justify-between border-b border-white/10 pb-3">
+            <div class="flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">✦</span>
+              <span class="text-xs font-bold text-white tracking-wide badge-text-white">${companySettings?.name || 'Apex Company'}</span>
+            </div>
+            <span class="text-[10px] text-gray-400 font-mono badge-text-gray">STAFF PASS</span>
+          </div>
+
+          <!-- Employee Photo & Name -->
+          <div class="my-3 flex flex-col items-center">
+            <img src="${emp.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + emp.employee_code}" class="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-xl mb-2" alt="">
+            <h4 class="text-lg font-bold text-white badge-text-white">${emp.first_name} ${emp.last_name}</h4>
+            <div class="text-xs text-indigo-400 font-semibold">${emp.designation}</div>
+            <div class="text-[11px] text-gray-400 mt-0.5 badge-text-gray">${emp.department_name || 'General'}</div>
+            <div class="text-xs font-mono font-bold text-gray-300 mt-1 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10 badge-text-white badge-bg-subtle">${emp.employee_code}</div>
+          </div>
+
+          <!-- Scannable Badge QR Code -->
+          <div class="bg-white p-2 rounded-xl shadow-inner mb-2 flex items-center justify-center" id="qr-target-${emp.id}"></div>
+          
+          <!-- Bottom Security Instruction -->
+          <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase badge-text-gray">
+            Hold badge to Reception Kiosk
+          </div>
+        `;
+
+        container.appendChild(card);
+
+        // Generate QR code for badge
+        setTimeout(() => {
+          const qrTarget = document.getElementById(`qr-target-${emp.id}`);
+          if (qrTarget && window.QRCode) {
+            new QRCode(qrTarget, {
+              text: emp.qr_token,
+              width: 105,
+              height: 105,
+              colorDark: "#090d16",
+              colorLight: "#ffffff",
+              correctLevel: QRCode.CorrectLevel.H
+            });
+          }
+        }, 50);
+      });
+    }
+  </script>
+</body>
+</html>

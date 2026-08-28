@@ -482,7 +482,42 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
         except Exception:
             body = {}
 
-        if path == "/api/leads/discover":
+        if path == "/api/leads/import-bulk":
+            leads_data = body.get("leads", [])
+            with lock:
+                prospects = load_json(PROSPECTS_FILE, [])
+                existing_emails = {p["email"].lower() for p in prospects if p.get("email")}
+                added = []
+                for item in leads_data:
+                    email = item.get("email", "").strip().lower()
+                    if email and email not in existing_emails:
+                        new_lead = {
+                            "id": f"lead-{len(prospects) + 1:03d}",
+                            "business_name": item.get("business_name", "Unknown Business").strip(),
+                            "contact_name": item.get("contact_name", "Business Owner").strip(),
+                            "title": item.get("title", "Owner / Decision Maker").strip(),
+                            "email": email,
+                            "phone": item.get("phone", "").strip(),
+                            "city": item.get("city", "USA").strip(),
+                            "niche": item.get("niche", "Home Services").strip(),
+                            "estimated_ticket": item.get("estimated_ticket", "$1,500").strip(),
+                            "identified_pain": item.get("identified_pain", "Missed emergency inbound calls.").strip(),
+                            "status": "Ready for Outreach",
+                            "outreach_stage": 0,
+                            "last_contact_date": None,
+                            "notes": "Imported direct decision-maker lead."
+                        }
+                        prospects.append(new_lead)
+                        existing_emails.add(email)
+                        added.append(new_lead)
+                
+                if added:
+                    save_json(PROSPECTS_FILE, prospects)
+                    log_activity("BULK_IMPORT", f"Imported {len(added)} direct decision-maker leads into pipeline.")
+                
+                return self._send_json({"success": True, "added_count": len(added), "leads": added})
+
+        elif path == "/api/leads/discover":
             city = body.get("city", "Houston, TX")
             niche = body.get("niche", "HVAC")
             limit = int(body.get("limit", 3))

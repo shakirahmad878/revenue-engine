@@ -1,5 +1,125 @@
 [
   {
+    "timestamp": "2026-08-28 11:41:08",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dispatch Team (Air Pros USA Miami) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:40:46",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dispatch Manager (Day & Night Air Conditioning) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:40:27",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Operations Lead (Howard Air Phoenix) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:40:07",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Customer Care (Village Plumbing & Air) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:39:48",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Service Team (Moncrief Heating & Air Conditioning) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:39:29",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Customer Support (Anchor Heating & Air Atlanta) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:39:09",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Service Team (Richmond Air Conditioning Houston) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:38:48",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to David Houston (Mission Air Conditioning & Plumbing) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:38:29",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Management Team (HVAC Services Pro Dallas) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:38:09",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Office Dispatcher (Service Wizard Heating & AC) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:37:49",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dispatch Team (Cool Crew ATX) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:37:29",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Customer Care Team (Christianson Air Conditioning & Plumbing) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:37:10",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Operations Lead (Austin Commercial HVAC) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:37:00",
+    "type": "LEAD_DISCOVERY",
+    "message": "Auto-discovered and injected 6 verified Plumbing prospects for Atlanta, GA"
+  },
+  {
+    "timestamp": "2026-08-28 11:36:50",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Service Dispatcher (Austin Air Conditioning) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 11:36:44",
+    "type": "PIPELINE_RESET",
+    "message": "Purged stale leads and restored 100% verified active contractor prospects."
+  },
+  {
+    "timestamp": "2026-08-28 02:13:06",
+    "type": "CALENDAR_BOOKED",
+    "message": "Scheduled demo with Service Dispatcher (Austin Air Conditioning) for 2026-08-29 14:00"
+  },
+  {
+    "timestamp": "2026-08-28 01:13:51",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Service Team (Moncrief Heating & Air Conditioning) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:13:32",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Customer Support (Anchor Heating & Air Atlanta) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:13:14",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dispatch Manager (Day & Night Air Conditioning) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:12:55",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Operations Lead (Howard Air Phoenix) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:12:36",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Customer Care (Village Plumbing & Air) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:12:17",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dispatch Team (Air Pros USA Miami) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 01:12:07",
+    "type": "LEAD_DISCOVERY",
+    "message": "Auto-discovered and injected 6 verified HVAC prospects for Miami, FL"
+  },
+  {
     "timestamp": "2026-08-28 00:33:45",
     "type": "LIVE_OUTREACH",
     "message": "Sent Touch 1 to Service Team (Richmond Air Conditioning Houston) - Email delivered via live SMTP relay."

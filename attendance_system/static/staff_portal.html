@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staff Self-Service Portal & Timesheets</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- QRCode.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="min-h-screen bg-[#090d16] text-gray-100 flex flex-col">
+
+  <!-- Portal Header -->
+  <header class="glass-panel sticky top-0 z-40 border-b border-white/10 px-4 sm:px-8 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-white shadow-lg">✦</div>
+        <div>
+          <h1 class="text-base font-bold text-white tracking-tight" id="portal-company-name">Apex Innovations</h1>
+          <p class="text-xs text-gray-400 font-mono">Employee Self-Service & Payslip Portal</p>
+        </div>
+      </div>
+
+      <!-- Employee Switcher -->
+      <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-xl border border-white/10">
+        <span class="text-xs text-gray-400 pl-2">Staff Profile:</span>
+        <select id="portal-emp-select" class="glass-input bg-transparent border-0 text-xs font-bold text-indigo-300 focus:ring-0 cursor-pointer">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-8 py-8 space-y-8">
+    
+    <!-- Employee Profile Banner -->
+    <div class="glass-panel rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6 relative overflow-hidden">
+      <div class="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
+        <img id="portal-avatar" src="" class="w-24 h-24 rounded-3xl object-cover border-2 border-indigo-500/40 shadow-2xl" alt="">
+        <div>
+          <div class="flex items-center justify-center sm:justify-start gap-2">
+            <h2 id="portal-emp-name" class="text-2xl font-extrabold text-white">--</h2>
+            <span id="portal-emp-code" class="px-2.5 py-0.5 rounded-full font-mono text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">EMP-101</span>
+          </div>
+          <p id="portal-emp-role" class="text-sm text-indigo-300 font-medium mt-1">--</p>
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 text-xs text-gray-400 mt-2 font-mono">
+            <span id="portal-emp-dept">Department</span>
+            <span>•</span>
+            <span id="portal-emp-email">email@apex.com</span>
+            <span>•</span>
+            <span id="portal-emp-salary">Monthly</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-3">
+        <button onclick="document.getElementById('leave-modal').classList.remove('hidden')" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+          Request Leave
+        </button>
+      </div>
+    </div>
+
+    <!-- Monthly Summary Stats -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="glass-card rounded-2xl p-5 border border-white/5">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Days Present</div>
+        <div id="stat-my-present" class="text-2xl font-extrabold text-emerald-400 font-mono mt-1">--</div>
+        <div class="text-[10px] text-gray-500 mt-1">This Month</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 border border-white/5">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Total Work Hours</div>
+        <div id="stat-my-hours" class="text-2xl font-extrabold text-white font-mono mt-1">--h</div>
+        <div class="text-[10px] text-gray-500 mt-1">Accumulated Hours</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 border border-white/5">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Overtime Hours</div>
+        <div id="stat-my-ot" class="text-2xl font-extrabold text-amber-400 font-mono mt-1">--h</div>
+        <div class="text-[10px] text-gray-500 mt-1">Eligible for 1.5x pay</div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-5 border border-white/5">
+        <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Punctuality Score</div>
+        <div id="stat-my-punctuality" class="text-2xl font-extrabold text-indigo-400 font-mono mt-1">--%</div>
+        <div class="text-[10px] text-gray-500 mt-1">On-Time Percentage</div>
+      </div>
+    </div>
+
+    <!-- Timesheet Table & Payslips Split Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Left 2 Cols: Personal Attendance History -->
+      <div class="lg:col-span-2 glass-panel rounded-3xl overflow-hidden">
+        <div class="p-5 border-b border-white/10 flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white">Recent Attendance Logs & Timecards</h3>
+          <span class="text-xs text-gray-400 font-mono">Last 30 Days</span>
+        </div>
+        <div class="overflow-x-auto max-h-96 overflow-y-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 font-bold uppercase tracking-wider">
+                <th class="px-4 py-3">Date</th>
+                <th class="px-4 py-3">Check-In</th>
+                <th class="px-4 py-3">Check-Out</th>
+                <th class="px-4 py-3">Total Time</th>
+                <th class="px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="my-attendance-tbody">
+              <!-- Populated dynamically -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Right 1 Col: Payslips & Leave History -->
+      <div class="space-y-6">
+        
+        <!-- My Payslips Card -->
+        <div class="glass-panel rounded-3xl p-5">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+            <h3 class="text-sm font-bold text-white">Salary Payslips</h3>
+            <span class="text-[10px] text-gray-400 font-mono">PDF & Print</span>
+          </div>
+          <div id="my-payslips-list" class="space-y-2.5">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- My Leave Requests -->
+        <div class="glass-panel rounded-3xl p-5">
+          <div class="flex items-center justify-between border-b border-white/10 pb-3 mb-3">
+            <h3 class="text-sm font-bold text-white">My Leave Requests</h3>
+            <button onclick="document.getElementById('leave-modal').classList.remove('hidden')" class="text-xs text-indigo-400 hover:underline">+ New</button>
+          </div>
+          <div id="my-leaves-list" class="space-y-2">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: REQUEST LEAVE -->
+  <!-- ============================================================ -->
+  <div id="leave-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="glass-panel bg-slate-900 border border-white/10 rounded-3xl w-full max-w-md p-6 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+        <h3 class="text-base font-bold text-white">Submit Leave Request</h3>
+        <button onclick="document.getElementById('leave-modal').classList.add('hidden')" class="text-gray-400 hover:text-white text-lg">✕</button>
+      </div>
+
+      <form id="leave-request-form" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Leave Category</label>
+          <select name="leave_type" class="glass-input w-full px-3 py-2.5 rounded-xl">
+            <option value="vacation">🌴 Annual Vacation</option>
+            <option value="sick">🩺 Medical / Sick Leave</option>
+            <option value="casual">☕ Casual Leave</option>
+            <option value="maternity">👶 Maternity / Parental Leave</option>
+            <option value="unpaid">📋 Unpaid Time-Off</option>
+          </select>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">Start Date</label>
+            <input type="date" name="start_date" required class="glass-input w-full px-3 py-2 rounded-xl font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-300 mb-1">End Date</label>
+            <input type="date" name="end_date" required class="glass-input w-full px-3 py-2 rounded-xl font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-300 mb-1">Reason / Notes for Manager</label>
+          <textarea name="reason" rows="3" placeholder="Briefly describe the reason for time-off..." required class="glass-input w-full px-3 py-2 rounded-xl"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-white/10 flex justify-end gap-2">
+          <button type="button" onclick="document.getElementById('leave-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 font-semibold">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/30">Submit Application</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Payslip Render Container -->
+  <div id="payslip-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto hidden">
+    <div class="w-full max-w-2xl my-auto">
+      <div id="payslip-modal-content"></div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/payroll.js"></script>
+  <script>
+    let employees = [];
+    let currentEmp = null;
+    let companySettings = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      companySettings = await API.getSettings();
+      document.getElementById('portal-company-name').textContent = companySettings.name;
+      PayrollModule.init(companySettings.currency_symbol);
+
+      employees = await API.getEmployees();
+      const select = document.getElementById('portal-emp-select');
+      select.innerHTML = employees.map(e => `<option value="${e.id}">${e.first_name} ${e.last_name}</option>`).join('');
+
+      select.addEventListener('change', (e) => {
+        const emp = employees.find(x => x.id === parseInt(e.target.value, 10));
+        loadEmployeeData(emp);
+      });
+
+      if (employees.length) {
+        loadEmployeeData(employees[0]);
+      }
+
+      setupLeaveForm();
+    });
+
+    async function loadEmployeeData(emp) {
+      if (!emp) return;
+      currentEmp = emp;
+
+      document.getElementById('portal-avatar').src = emp.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${emp.employee_code}`;
+      document.getElementById('portal-emp-name').textContent = `${emp.first_name} ${emp.last_name}`;
+      document.getElementById('portal-emp-code').textContent = emp.employee_code;
+      document.getElementById('portal-emp-role').textContent = emp.designation;
+      document.getElementById('portal-emp-dept').textContent = emp.department_name || 'General';
+      document.getElementById('portal-emp-email').textContent = emp.email;
+      document.getElementById('portal-emp-salary').textContent = emp.salary_type === 'hourly' ? `${formatCurrency(emp.hourly_rate, companySettings.currency_symbol)}/hr` : `${formatCurrency(emp.monthly_salary, companySettings.currency_symbol)}/mo`;
+
+      // Load History
+      try {
+        const history = await API.getAttendanceHistory({ employee_id: emp.id });
+        renderHistoryTable(history);
+        renderStats(history);
+      } catch (err) {
+        console.error('History error:', err);
+      }
+
+      // Load Payslips
+      try {
+        const curMonth = new Date().toISOString().slice(0, 7);
+        const payslipNum = `PAY-${curMonth.replace('-', '')}-${emp.employee_code}`;
+        const container = document.getElementById('my-payslips-list');
+        container.innerHTML = `
+          <div class="p-3 bg-slate-800/40 border border-white/5 rounded-2xl flex items-center justify-between text-xs">
+            <div>
+              <div class="font-bold text-white font-mono">${curMonth} Payslip</div>
+              <div class="text-[10px] text-gray-400 font-mono">Ref: ${payslipNum}</div>
+            </div>
+            <button onclick="PayrollModule.viewPayslip('${payslipNum}')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-[11px] transition-all">
+              View & Print
+            </button>
+          </div>
+        `;
+      } catch (e) {}
+
+      // Load Leaves
+      try {
+        const leaves = await API.getLeaves({ employee_id: emp.id });
+        const listContainer = document.getElementById('my-leaves-list');
+        if (!leaves.length) {
+          listContainer.innerHTML = `<div class="text-xs text-gray-500 py-2">No leave requests logged.</div>`;
+        } else {
+          listContainer.innerHTML = leaves.slice(0, 4).map(l => `
+            <div class="p-2.5 rounded-xl bg-slate-800/30 border border-white/5 text-xs flex items-center justify-between">
+              <div>
+                <div class="font-semibold text-white uppercase text-[10px] tracking-wider">${l.leave_type} (${l.total_days}d)</div>
+                <div class="text-[10px] text-gray-400 font-mono">${l.start_date} to ${l.end_date}</div>
+              </div>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                l.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                l.status === 'rejected' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+              }">${l.status}</span>
+            </div>
+          `).join('');
+        }
+      } catch (e) {}
+    }
+
+    function renderHistoryTable(records) {
+      const tbody = document.getElementById('my-attendance-tbody');
+      if (!records.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center text-gray-500">No attendance logs found.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = records.map(r => `
+        <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+          <td class="px-4 py-3 font-mono text-gray-300">${formatDate(r.date)}</td>
+          <td class="px-4 py-3 font-mono text-emerald-400 font-medium">${formatTime(r.check_in_time)}</td>
+          <td class="px-4 py-3 font-mono text-indigo-400 font-medium">${formatTime(r.check_out_time)}</td>
+          <td class="px-4 py-3 font-mono text-gray-200">${r.total_hours || 0} hrs</td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded-full font-semibold text-[10px] ${
+              r.status === 'on_time' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+              r.status === 'late' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+              'bg-blue-500/10 text-blue-400 border border-blue-500/20'
+            }">
+              ${r.status}
+            </span>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderStats(records) {
+      const presentCount = records.filter(r => r.check_in_time).length;
+      const totalHours = records.reduce((acc, r) => acc + (r.total_hours || 0), 0);
+      const totalOt = records.reduce((acc, r) => acc + (r.overtime_hours || 0), 0);
+      const onTimeCount = records.filter(r => r.status === 'on_time').length;
+      const punctuality = presentCount > 0 ? Math.round((onTimeCount / presentCount) * 100) : 100;
+
+      document.getElementById('stat-my-present').textContent = `${presentCount} Days`;
+      document.getElementById('stat-my-hours').textContent = `${round(totalHours, 1)}h`;
+      document.getElementById('stat-my-ot').textContent = `${round(totalOt, 1)}h`;
+      document.getElementById('stat-my-punctuality').textContent = `${punctuality}%`;
+    }
+
+    function round(val, d = 1) {
+      return Number(Math.round(val + 'e' + d) + 'e-' + d);
+    }
+
+    function setupLeaveForm() {
+      const f = document.getElementById('leave-request-form');
+      f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!currentEmp) return;
+        try {
+          await API.submitLeave({
+            employee_id: currentEmp.id,
+            leave_type: f.leave_type.value,
+            start_date: f.start_date.value,
+            end_date: f.end_date.value,
+            reason: f.reason.value
+          });
+          Toast.show('Leave request submitted to management!', 'success');
+          AudioChime.playSuccess();
+          document.getElementById('leave-modal').classList.add('hidden');
+          f.reset();
+          loadEmployeeData(currentEmp);
+        } catch (err) {
+          Toast.show('Error submitting leave: ' + err.message, 'error');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

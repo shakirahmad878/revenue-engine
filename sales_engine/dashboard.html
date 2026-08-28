@@ -133,11 +133,14 @@
               <p class="text-xs text-slate-400">High-Ticket Emergency HVAC, Plumbing & Restoration Contractors</p>
             </div>
             <div class="flex items-center gap-2">
+              <button onclick="openBulkImportModal()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow-md shadow-blue-600/20 flex items-center gap-1.5">
+                <i class="fa-solid fa-file-import"></i> Bulk Import
+              </button>
               <button onclick="openDiscoverModal()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 font-bold text-xs rounded-lg transition shadow-md shadow-emerald-600/20 flex items-center gap-1.5">
-                <i class="fa-solid fa-magnifying-glass-plus"></i> Auto-Discover Leads
+                <i class="fa-solid fa-wand-magic-sparkles"></i> Auto-Discover
               </button>
               <button onclick="openAddLeadModal()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5">
-                <i class="fa-solid fa-plus"></i> Add Lead
+                <i class="fa-solid fa-plus"></i> Add Single
               </button>
               <button onclick="sendBatchTouch(1)" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-lg transition border border-slate-700 flex items-center gap-1.5">
                 <i class="fa-solid fa-play"></i> Send Batch
@@ -241,6 +244,35 @@
     </div>
 
   </main>
+
+  <!-- Bulk Import Modal -->
+  <div id="bulkImportModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-700 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-file-csv text-blue-400"></i> Bulk Import Direct Decision-Maker Leads
+        </h3>
+        <button onclick="closeBulkImportModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <p class="text-xs text-slate-300">Paste your verified lead list below (one per line). Format: <br><code class="text-emerald-400 font-mono">Business Name, Contact Name, Email, Phone, City, Niche</code></p>
+
+      <div>
+        <textarea id="bulkImportText" rows="6" placeholder="Lone Star HVAC, John Miller, john@lonestarhvac.com, (512) 555-0199, Austin TX, HVAC
+Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dallas TX, Plumbing" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500"></textarea>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-800">
+        <span class="text-[11px] text-slate-500">Ensure emails are direct personal inboxes.</span>
+        <div class="flex gap-2">
+          <button onclick="closeBulkImportModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
+          <button onclick="submitBulkImport()" id="bulkImportBtn" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-cloud-arrow-up"></i> Import Leads
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Auto Discover Modal -->
   <div id="discoverModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -521,6 +553,62 @@
       if (confirm("Are you sure you want to reset all prospects to initial outreach status?")) {
         await fetch('/api/reset', { method: 'POST' });
         fetchState();
+      }
+    }
+
+    function openBulkImportModal() {
+      document.getElementById("bulkImportModal").classList.remove("hidden");
+    }
+
+    function closeBulkImportModal() {
+      document.getElementById("bulkImportModal").classList.add("hidden");
+    }
+
+    async function submitBulkImport() {
+      const text = document.getElementById("bulkImportText").value.trim();
+      if (!text) return alert("Please paste at least one lead.");
+
+      const lines = text.split("\n");
+      const leads = [];
+
+      for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+        const parts = line.split(",").map(s => s.trim());
+        if (parts.length >= 3) {
+          leads.push({
+            business_name: parts[0] || "Contractor Business",
+            contact_name: parts[1] || "Business Owner",
+            email: parts[2] || "",
+            phone: parts[3] || "",
+            city: parts[4] || "USA",
+            niche: parts[5] || "Home Services",
+            estimated_ticket: "$1,800"
+          });
+        }
+      }
+
+      if (!leads.length) return alert("Could not parse any leads. Please check format: Business, Name, Email, Phone, City, Niche");
+
+      const btn = document.getElementById("bulkImportBtn");
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Importing...`;
+
+      try {
+        const res = await fetch('/api/leads/import-bulk', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ leads: leads })
+        });
+        const data = await res.json();
+        closeBulkImportModal();
+        document.getElementById("bulkImportText").value = "";
+        fetchState();
+      } catch (err) {
+        console.error("Import error:", err);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Import Leads`;
       }
     }
 
