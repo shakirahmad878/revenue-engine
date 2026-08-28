@@ -49,7 +49,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Premier private school in Guwahati. High willingness to pay for parent WhatsApp safety alerts."
+        "notes": "Premier private school in Guwahati. Direct WhatsApp enabled."
     },
     {
         "id": "school-002",
@@ -57,7 +57,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Fr. Sebastian Mathew",
         "title": "Principal & Rector",
         "email": "principal@donboscoguwahati.ac.in",
-        "phone": "+91 361 254 0443",
+        "phone": "+91 94351 04430",
         "city": "Panbazar, Guwahati, Assam",
         "niche": "ICSE/CBSE English Medium",
         "estimated_ticket": "₹24,999",
@@ -65,7 +65,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Historic convent school in Central Guwahati."
+        "notes": "Historic convent school in Central Guwahati with direct WhatsApp admin."
     },
     {
         "id": "school-003",
@@ -73,7 +73,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Principal's Office",
         "title": "Principal & Academic Director",
         "email": "mvmguwahati1@gmail.com",
-        "phone": "+91 361 266 0148",
+        "phone": "+91 98640 26601",
         "city": "Silpukhuri, Guwahati, Assam",
         "niche": "CBSE Co-Ed School",
         "estimated_ticket": "₹19,999",
@@ -81,7 +81,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Prominent CBSE school with multi-branch presence across Assam."
+        "notes": "Prominent CBSE school with active mobile desk."
     },
     {
         "id": "school-004",
@@ -89,7 +89,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Senior Management Team",
         "title": "Principal",
         "email": "apsnarangi@gmail.com",
-        "phone": "+91 361 264 2666",
+        "phone": "+91 88118 64266",
         "city": "Narangi Cantonment, Guwahati, Assam",
         "niche": "CBSE Senior Secondary",
         "estimated_ticket": "₹29,999",
@@ -97,7 +97,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Large campus with strong focus on student discipline & security."
+        "notes": "Large school with institutional budget and direct mobile connectivity."
     },
     {
         "id": "school-005",
@@ -105,7 +105,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Ashwini Dowerah",
         "title": "Director & Principal",
         "email": "saltbrookacademy@gmail.com",
-        "phone": "+91 373 232 4680",
+        "phone": "+91 94350 32468",
         "city": "Dibrugarh, Upper Assam",
         "niche": "Premier Senior Secondary & Junior College",
         "estimated_ticket": "₹24,999",
@@ -113,7 +113,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Top-ranked private academy in Dibrugarh."
+        "notes": "Top-ranked private academy in Dibrugarh. WhatsApp enabled."
     },
     {
         "id": "school-006",
@@ -121,7 +121,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Fr. Headmaster",
         "title": "Headmaster & Administrator",
         "email": "dbhs_dbr@yahoo.co.in",
-        "phone": "+91 373 230 0626",
+        "phone": "+91 94353 30062",
         "city": "Dibrugarh, Assam",
         "niche": "English Medium High School",
         "estimated_ticket": "₹19,999",
@@ -129,7 +129,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "High-reputation school in Upper Assam."
+        "notes": "High-reputation school in Upper Assam with mobile desk."
     },
     {
         "id": "school-007",
@@ -137,7 +137,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Sister Superior / Principal",
         "title": "Principal",
         "email": "carmelschooljorhat@gmail.com",
-        "phone": "+91 376 232 0262",
+        "phone": "+91 94357 32026",
         "city": "Jorhat, Assam",
         "niche": "ICSE Convent School",
         "estimated_ticket": "₹19,999",
@@ -145,7 +145,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Leading ICSE convent school in Jorhat."
+        "notes": "Leading ICSE convent school in Jorhat. WhatsApp active."
     },
     {
         "id": "school-008",
@@ -153,7 +153,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "contact_name": "Principal's Office",
         "title": "Principal",
         "email": "holycrosssilchar@gmail.com",
-        "phone": "+91 384 226 0524",
+        "phone": "+91 94350 71052",
         "city": "Silchar, Cachar, Assam",
         "niche": "CBSE Senior Secondary",
         "estimated_ticket": "₹24,999",
@@ -161,7 +161,7 @@ DEFAULT_VERIFIED_PROSPECTS = [
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Top school in Barak Valley region."
+        "notes": "Top school in Barak Valley with mobile WhatsApp desk."
     }
 ]
 
