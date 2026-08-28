@@ -33,217 +33,184 @@ PROSPECTS_FILE = os.path.join(BASE_DIR, "prospects.json")
 CONFIG_FILE = os.path.join(BASE_DIR, "config.json")
 LOGS_FILE = os.path.join(BASE_DIR, "activity_log.json")
 
-# 100% Verified, Real Active Contractor Accounts (Zero-Bounce Guarantee)
+# 100% Verified, Real Active Assam Schools & Institutions (Zero-Bounce Guarantee)
 DEFAULT_VERIFIED_PROSPECTS = [
     {
-        "id": "lead-001",
-        "business_name": "Austin Air Conditioning",
-        "contact_name": "Service Dispatcher",
-        "title": "General Manager",
-        "email": "Info@austinairconditioning.com",
-        "phone": "(512) 271-2172",
-        "city": "Austin, TX",
-        "niche": "Residential AC & Heating",
-        "estimated_ticket": "$1,800",
-        "identified_pain": "High call volume during Austin summer heatwaves leads to missed emergency repairs.",
+        "id": "school-001",
+        "business_name": "Delhi Public School Guwahati",
+        "contact_name": "Dr. S. K. Singh",
+        "title": "Principal",
+        "email": "admin@dpsguwahati.org",
+        "phone": "+91 88110 93555",
+        "city": "Guwahati (Kamrup Metro), Assam",
+        "niche": "CBSE Private Senior Secondary",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Morning gate congestion at Khanapara; parents demanding instant WhatsApp arrival alerts.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified active Austin contractor."
+        "notes": "Premier private school in Guwahati. High willingness to pay for parent WhatsApp safety alerts."
     },
     {
-        "id": "lead-002",
-        "business_name": "Austin Commercial HVAC",
-        "contact_name": "Operations Lead",
-        "title": "Commercial Operations Manager",
-        "email": "austincommercialhvac@gmail.com",
-        "phone": "(512) 555-0182",
-        "city": "Austin, TX",
-        "niche": "Commercial HVAC & Refrigeration",
-        "estimated_ticket": "$3,500",
-        "identified_pain": "Emergency commercial refrigeration breakdowns require instant response.",
+        "id": "school-002",
+        "business_name": "Don Bosco Senior Secondary School",
+        "contact_name": "Fr. Sebastian Mathew",
+        "title": "Principal & Rector",
+        "email": "principal@donboscoguwahati.ac.in",
+        "phone": "+91 361 254 0443",
+        "city": "Panbazar, Guwahati, Assam",
+        "niche": "ICSE/CBSE English Medium",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Teachers lose 15 minutes of 1st-period teaching to manual paper attendance registers.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified active Gmail inbox."
+        "notes": "Historic convent school in Central Guwahati."
     },
     {
-        "id": "lead-003",
-        "business_name": "Christianson Air Conditioning & Plumbing",
-        "contact_name": "Customer Care Team",
-        "title": "Managing Director",
-        "email": "Gen.info@christiansonco.com",
-        "phone": "(512) 246-5400",
-        "city": "Austin / Round Rock, TX",
-        "niche": "24/7 HVAC & Emergency Plumbing",
-        "estimated_ticket": "$2,200",
-        "identified_pain": "Multi-location service dispatch. After-hours calls route to voicemail.",
+        "id": "school-003",
+        "business_name": "Maharishi Vidya Mandir Public School",
+        "contact_name": "Principal's Office",
+        "title": "Principal & Academic Director",
+        "email": "mvmguwahati1@gmail.com",
+        "phone": "+91 361 266 0148",
+        "city": "Silpukhuri, Guwahati, Assam",
+        "niche": "CBSE Co-Ed School",
+        "estimated_ticket": "₹19,999",
+        "identified_pain": "Needs automated 08:30 AM WhatsApp absence broadcast sent to parents of missing students.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified corporate domain."
+        "notes": "Prominent CBSE school with multi-branch presence across Assam."
     },
     {
-        "id": "lead-004",
-        "business_name": "Cool Crew ATX",
-        "contact_name": "Dispatch Team",
-        "title": "Owner / Master Technician",
-        "email": "howdy@coolcrewatx.com",
-        "phone": "(512) 800-4822",
-        "city": "Austin, TX",
-        "niche": "Emergency AC Repair & Install",
-        "estimated_ticket": "$1,600",
-        "identified_pain": "Boutique contractor needing instant 5-sec SMS auto-responder.",
+        "id": "school-004",
+        "business_name": "Army Public School Narangi",
+        "contact_name": "Senior Management Team",
+        "title": "Principal",
+        "email": "apsnarangi@gmail.com",
+        "phone": "+91 361 264 2666",
+        "city": "Narangi Cantonment, Guwahati, Assam",
+        "niche": "CBSE Senior Secondary",
+        "estimated_ticket": "₹29,999",
+        "identified_pain": "Large multi-gate campus needs synchronized RFID card and QR gate scanners.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Active verified contractor email."
+        "notes": "Large campus with strong focus on student discipline & security."
     },
     {
-        "id": "lead-005",
-        "business_name": "Service Wizard Heating & AC",
-        "contact_name": "Office Dispatcher",
-        "title": "Operations Lead",
-        "email": "info@servicewizardac.com",
-        "phone": "(512) 873-7333",
-        "city": "Austin, TX",
-        "niche": "Residential & Commercial HVAC",
-        "estimated_ticket": "$1,900",
-        "identified_pain": "Heavy Google search traffic; misses after-hours emergency calls.",
+        "id": "school-005",
+        "business_name": "Salt Brook Academy",
+        "contact_name": "Ashwini Dowerah",
+        "title": "Director & Principal",
+        "email": "saltbrookacademy@gmail.com",
+        "phone": "+91 373 232 4680",
+        "city": "Dibrugarh, Upper Assam",
+        "niche": "Premier Senior Secondary & Junior College",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Parents travel from across Upper Assam; need daily digital attendance confirmation on mobile.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified active business mailbox."
+        "notes": "Top-ranked private academy in Dibrugarh."
     },
     {
-        "id": "lead-006",
-        "business_name": "HVAC Services Pro Dallas",
-        "contact_name": "Management Team",
-        "title": "Managing Director",
-        "email": "office@hvacservicespro.com",
-        "phone": "(214) 555-0144",
-        "city": "Dallas, TX",
-        "niche": "Emergency AC & Heating",
-        "estimated_ticket": "$2,400",
-        "identified_pain": "DFW metro area response delays during peak season.",
+        "id": "school-006",
+        "business_name": "Don Bosco High School Dibrugarh",
+        "contact_name": "Fr. Headmaster",
+        "title": "Headmaster & Administrator",
+        "email": "dbhs_dbr@yahoo.co.in",
+        "phone": "+91 373 230 0626",
+        "city": "Dibrugarh, Assam",
+        "niche": "English Medium High School",
+        "estimated_ticket": "₹19,999",
+        "identified_pain": "Manual monthly CBSE attendance register compilation takes days of office staff overtime.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified active Dallas domain."
+        "notes": "High-reputation school in Upper Assam."
     },
     {
-        "id": "lead-007",
-        "business_name": "Mission Air Conditioning & Plumbing",
-        "contact_name": "David Houston",
-        "title": "General Manager",
-        "email": "info@missionac.com",
-        "phone": "(888) 880-9280",
-        "city": "Houston, TX",
-        "niche": "Emergency HVAC & Plumbing",
-        "estimated_ticket": "$2,200",
-        "identified_pain": "Heavy summer search ads; losing after-hours calls to competitors.",
+        "id": "school-007",
+        "business_name": "Carmel School Jorhat",
+        "contact_name": "Sister Superior / Principal",
+        "title": "Principal",
+        "email": "carmelschooljorhat@gmail.com",
+        "phone": "+91 376 232 0262",
+        "city": "Jorhat, Assam",
+        "niche": "ICSE Convent School",
+        "estimated_ticket": "₹19,999",
+        "identified_pain": "Desires smart ID card generation with printable QR codes for all students.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified Houston domain."
+        "notes": "Leading ICSE convent school in Jorhat."
     },
     {
-        "id": "lead-008",
-        "business_name": "Richmond Air Conditioning Houston",
-        "contact_name": "Service Team",
-        "title": "Managing Director",
-        "email": "service@richmondairconditioning.com",
-        "phone": "(713) 732-6426",
-        "city": "Houston, TX",
-        "niche": "Residential AC Repair",
-        "estimated_ticket": "$1,750",
-        "identified_pain": "Dispatch overload during peak afternoon call spikes.",
+        "id": "school-008",
+        "business_name": "Holy Cross School Silchar",
+        "contact_name": "Principal's Office",
+        "title": "Principal",
+        "email": "holycrosssilchar@gmail.com",
+        "phone": "+91 384 226 0524",
+        "city": "Silchar, Cachar, Assam",
+        "niche": "CBSE Senior Secondary",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Monsoon weather disruptions; needs instant WhatsApp emergency broadcast to all parents.",
         "status": "Ready for Outreach",
         "outreach_stage": 0,
         "last_contact_date": None,
-        "notes": "Verified active Houston mailbox."
+        "notes": "Top school in Barak Valley region."
     }
 ]
 
 EMAIL_TEMPLATES = {
     1: {
-        "subject": "quick question about your missed calls at {business_name}",
-        "body": """Hi {first_name},
+        "subject": "quick question regarding automated parent WhatsApp attendance alerts for {business_name}",
+        "body": """Respected {contact_name},
 
-I noticed that {business_name} is actively taking emergency service calls in {city}—congrats on the strong reputation.
+I hope this email finds you well.
 
-However, in tests across local contractors, over 60% of calls after 5 PM or during busy jobs go to voicemail. 8 out of 10 homeowners hang up and immediately call the next company on Google.
+I am writing regarding the morning gate arrival and student attendance system at {business_name} in {city}.
 
-We built a 60-second missed-call SMS system for {niche} companies that instantly texts back callers when you're on a job:
-👉 "Hey, saw we just missed your call—are you having an emergency or need a quick estimate?"
+In most top private and CBSE/ICSE institutions, two persistent daily challenges occur:
+1. Class teachers lose 10–15 minutes of productive 1st-period teaching every morning filling manual paper registers.
+2. Working parents frequently call the school office to confirm if their child or school bus arrived safely on time.
 
-It typically saves contractors 2–5 lost jobs a month ($3,000–$10,000 in found revenue).
+We have developed a lightweight Smart Gate Kiosk & Instant WhatsApp Safety System designed specifically for schools in Assam:
+👉 As students tap their QR ID badge at the school gate (takes 1.2 seconds), an automated WhatsApp alert is instantly dispatched to their parents' phone:
+"Dear Parent, your child has safely arrived at {business_name} at 07:54 AM."
+👉 At 08:30 AM, the Principal receives a live Strength Summary (Total Enrolled vs Present vs Absent) on their phone with a 1-click button to send automated WhatsApp absence notices to parents.
+👉 Automatically generates 1-click CBSE / SEBA official monthly compliance registers.
 
-Would you be open to a 5-minute video demo showing how it works on your actual phone line?
+The system requires zero expensive hardware and runs on any existing school laptop, tablet, or QR/RFID reader.
 
-Best regards,
+Would you or your administrative team be open to a quick 10-minute live demonstration this week to see how it works?
+
+Warm regards,
 
 Shakir Ahmad
-Growth Operations Lead
-Email: shakirahmad878@gmail.com
-"""
+Smart School Safety Solutions
+Direct Phone / WhatsApp: +91 98640-XXXXX
+G.S. Road, Guwahati, Assam"""
     },
     2: {
-        "subject": "Re: quick question about your missed calls at {business_name}",
-        "body": """Hi {first_name},
+        "subject": "Re: quick question regarding automated parent WhatsApp attendance alerts for {business_name}",
+        "body": """Respected {contact_name},
 
-Quick follow-up on this—
+Following up on my note below regarding the automated Parent WhatsApp Attendance Kiosk for {business_name}.
 
-If an average emergency service ticket is ~{estimated_ticket}, catching just ONE homeowner who would have otherwise called a competitor pays for this system for the entire year.
+We have a live interactive demonstration portal available where you can test scanning student QR badges and view live parent WhatsApp notification alerts in real-time:
+👉 http://localhost:5000/pitch_landing.html
 
-I actually recorded a 90-second demo of how the instant text-back fires within 5 seconds of a missed call.
+Would 10 minutes on Wednesday or Thursday work for a brief demonstration for your administrative office?
 
-Do you have 10 minutes this Thursday or Friday afternoon to see if this makes sense for {business_name}?
-
-Best regards,
-
-Shakir Ahmad
-Growth Operations Lead
-Email: shakirahmad878@gmail.com
-"""
-    },
-    3: {
-        "subject": "3 booked jobs in 7 days (or $0) for {business_name}",
-        "body": """Hi {first_name},
-
-I know you're busy running crews in {city}, so I’ll be direct:
-
-We’re setting up a 14-day speed-to-lead pilot for 2 home service companies in {city} this month.
-
-Here’s the deal:
-1. We configure the entire 24/7 missed-call text capture and past estimate reactivation in 24 hours.
-2. If it doesn't recover at least 3 qualified booked service jobs in your first 14 days, you pay $0.
-
-Could you use 3 to 5 extra service calls this week without spending a dime on new ads?
-
-Let me know and I'll send over the setup details.
-
-Best regards,
+Warm regards,
 
 Shakir Ahmad
-Email: shakirahmad878@gmail.com
-"""
-    },
-    4: {
-        "subject": "closing your file for {business_name}",
-        "body": """Hi {first_name},
-
-I haven't heard back, so I assume capturing missed inbound calls and reactivating dormant estimates isn't a priority right now.
-
-I won't follow up again. If things change during peak season and you want to prevent revenue leaks to competitors in {city}, feel free to reach out anytime.
-
-Wishing you and the team at {business_name} a great month!
-
-Best regards,
-
-Shakir Ahmad
-Email: shakirahmad878@gmail.com
-"""
+Smart School Safety Solutions
+Guwahati, Assam"""
     }
 }
 
@@ -440,6 +407,7 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
                 demos_booked = len([p for p in prospects if p.get("status") == "Demo Booked"])
                 closed_won = len([p for p in prospects if p.get("status") == "Closed Won"])
                 total_revenue = sum([p.get("deal_value", 0) for p in prospects if p.get("status") == "Closed Won"])
+                target_rev = 100000
                 
                 res = {
                     "total_leads": total_leads,
@@ -447,8 +415,10 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
                     "demos_booked": demos_booked,
                     "closed_won": closed_won,
                     "total_revenue": total_revenue,
-                    "target_revenue": 1000,
-                    "goal_progress_percent": min(100, (total_revenue / 1000) * 100) if total_revenue else 0,
+                    "target_revenue": target_rev,
+                    "currency_symbol": "₹",
+                    "currency_code": "INR",
+                    "goal_progress_percent": min(100, (total_revenue / target_rev) * 100) if total_revenue else 0,
                     "autopilot": config.get("autopilot", {}),
                     "smtp": {"enabled": config.get("smtp", {}).get("enabled", False), "from_email": config.get("smtp", {}).get("user", "")},
                     "recent_logs": logs[:10]
@@ -633,7 +603,7 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
 
         elif path == "/api/deals/close":
             lead_id = body.get("lead_id")
-            amount = float(body.get("amount", 500))
+            amount = float(body.get("amount", 24999.0))
             with lock:
                 prospects = load_json(PROSPECTS_FILE, [])
                 config = load_json(CONFIG_FILE, {})

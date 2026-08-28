@@ -1,5 +1,5 @@
 /**
- * Client API Layer & Utility Helpers for Staff Attendance SaaS
+ * Unified School Attendance, Safety, Parent WhatsApp & Faculty Payroll API Client
  */
 
 const API_BASE = '/api';
@@ -63,60 +63,51 @@ const API = {
     }
   },
 
-  async delete(endpoint) {
-    try {
-      const res = await fetch(endpoint, {
-        method: 'DELETE',
-        headers: { 'Accept': 'application/json' }
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || data.message || 'API request failed');
-      return data;
-    } catch (err) {
-      console.error(`DELETE ${endpoint} Error:`, err);
-      throw err;
-    }
-  },
-
-  // Specific API calls
-  getStatus: () => API.get(`${API_BASE}/status`),
-  getKioskToken: () => API.get(`${API_BASE}/kiosk/token`),
-  getSettings: () => API.get(`${API_BASE}/settings`),
-  updateSettings: (data) => API.post(`${API_BASE}/settings`, data),
-  getDashboardStats: () => API.get(`${API_BASE}/dashboard/stats`),
-  getChartData: () => API.get(`${API_BASE}/dashboard/charts`),
+  // 1. School & Settings
+  getStatus: () => API.get(`${API_BASE}/school/status`),
+  getSettings: () => API.get(`${API_BASE}/school/settings`),
+  updateSettings: (data) => API.post(`${API_BASE}/school/settings`, data),
+  getMorningStrength: (date) => API.get(`${API_BASE}/school/morning-strength`, { date }),
   
-  // Attendance
-  getTodayAttendance: () => API.get(`${API_BASE}/attendance/today`),
-  getAttendanceHistory: (params) => API.get(`${API_BASE}/attendance/history`, params),
-  getMonthlyMatrix: (month) => API.get(`${API_BASE}/attendance/monthly-matrix`, { month }),
-  checkIn: (data) => API.post(`${API_BASE}/attendance/check-in`, data),
-  checkOut: (data) => API.post(`${API_BASE}/attendance/check-out`, data),
-  quickToggle: (identifier, method = 'badge_scan', lat = null, lng = null) => 
-    API.post(`${API_BASE}/attendance/quick-toggle`, { identifier, method, lat, lng }),
+  // 2. Student Gate & Bus Scanning
+  gateScan: (identifier, scanned_by = 'Main Gate Kiosk Laser') => 
+    API.post(`${API_BASE}/school/gate-scan`, { identifier, scanned_by }),
+  busScan: (identifier, bus_route = 'Route #4', scan_type = 'board', conductor = 'Bus Conductor') =>
+    API.post(`${API_BASE}/school/bus-scan`, { identifier, bus_route, scan_type, conductor_name: conductor }),
+  
+  // 3. Parent WhatsApp Broadcasts
+  send830AbsenceBroadcast: (date) => API.post(`${API_BASE}/school/send-830-absence`, { date }),
+  sendEmergencyBroadcast: (title, message, target = 'all_parents', class_id = null, bus_route = null) =>
+    API.post(`${API_BASE}/school/emergency-broadcast`, { title, message, target, class_id, bus_route }),
+  getNotifications: () => API.get(`${API_BASE}/school/notifications`),
 
-  // Employees & Depts
-  getEmployees: (params) => API.get(`${API_BASE}/employees`, params),
-  getEmployee: (id) => API.get(`${API_BASE}/employees/${id}`),
-  getEmployeeHistory: (id) => API.get(`${API_BASE}/employees/${id}/history`),
-  createEmployee: (data) => API.post(`${API_BASE}/employees`, data),
-  updateEmployee: (id, data) => API.put(`${API_BASE}/employees/${id}`, data),
-  deleteEmployee: (id) => API.delete(`${API_BASE}/employees/${id}`),
-  getDepartments: () => API.get(`${API_BASE}/departments`),
+  // 4. Students & Classes
+  getClasses: () => API.get(`${API_BASE}/school/classes`),
+  getBusRoutes: () => API.get(`${API_BASE}/school/bus-routes`),
+  getStudents: (params) => API.get(`${API_BASE}/school/students`, params),
+  getStudent: (id) => API.get(`${API_BASE}/school/students/${id}`),
+  getCbseRegister: (month, class_id) => API.get(`${API_BASE}/school/cbse-register`, { month, class_id }),
 
-  // Leaves
-  getLeaves: (params) => API.get(`${API_BASE}/leaves`, params),
+  // 5. Teachers & Staff Attendance
+  getTeachers: (search) => API.get(`${API_BASE}/teachers`, { search }),
+  getTeacherTodayAttendance: () => API.get(`${API_BASE}/teachers/today`),
+  staffScan: (identifier) => API.post(`${API_BASE}/school/staff-scan`, { identifier }),
+  createTeacher: (data) => API.post(`${API_BASE}/teachers`, data),
+  updateTeacher: (id, data) => API.put(`${API_BASE}/teachers/${id}`, data),
+
+  // 6. Teacher Leaves
+  getLeaves: (status) => API.get(`${API_BASE}/leaves`, { status }),
   submitLeave: (data) => API.post(`${API_BASE}/leaves`, data),
-  reviewLeave: (id, status, reviewer = 'Admin') => API.put(`${API_BASE}/leaves/${id}/status`, { status, reviewer_name: reviewer }),
+  reviewLeave: (id, status, reviewer = 'Principal') => API.put(`${API_BASE}/leaves/${id}/status`, { status, reviewer }),
 
-  // Payroll
+  // 7. Teacher & Staff Payroll
   getPayrollSummary: (month) => API.get(`${API_BASE}/payroll/summary`, { month }),
   generatePayroll: (month) => API.post(`${API_BASE}/payroll/generate`, { month }),
-  getPayslip: (idOrRef) => API.get(`${API_BASE}/payroll/payslip/${idOrRef}`),
+  getPayslip: (ref) => API.get(`${API_BASE}/payroll/payslip/${ref}`),
   updatePayrollStatus: (id, status) => API.put(`${API_BASE}/payroll/${id}/status`, { status }),
 
-  // Demo
-  loadDemoPreset: (preset) => API.post(`${API_BASE}/demo/preset`, { preset })
+  // 8. Demo reset
+  resetDemo: () => API.post(`${API_BASE}/school/reset-demo`, {})
 };
 
 // Global Toast Notifications
@@ -161,7 +152,7 @@ const Toast = {
   }
 };
 
-// Web Audio API Synthesizer (No external audio file downloads required!)
+// Web Audio API Synthesizer (High-quality Ding Chime)
 const AudioChime = {
   ctx: null,
 
@@ -179,7 +170,6 @@ const AudioChime = {
       if (this.ctx.state === 'suspended') this.ctx.resume();
 
       const now = this.ctx.currentTime;
-      // Elegant 2-tone chime (523.25Hz C5 -> 659.25Hz E5 -> 783.99Hz G5)
       const osc1 = this.ctx.createOscillator();
       const osc2 = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
@@ -187,13 +177,13 @@ const AudioChime = {
       osc1.type = 'sine';
       osc2.type = 'triangle';
 
-      osc1.frequency.setValueAtTime(523.25, now);
-      osc1.frequency.exponentialRampToValueAtTime(783.99, now + 0.18);
+      osc1.frequency.setValueAtTime(587.33, now);
+      osc1.frequency.exponentialRampToValueAtTime(880.00, now + 0.18);
 
-      osc2.frequency.setValueAtTime(659.25, now);
-      osc2.frequency.exponentialRampToValueAtTime(1046.50, now + 0.22);
+      osc2.frequency.setValueAtTime(739.99, now);
+      osc2.frequency.exponentialRampToValueAtTime(1174.66, now + 0.22);
 
-      gain.gain.setValueAtTime(0.3, now);
+      gain.gain.setValueAtTime(0.35, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
 
       osc1.connect(gain);
@@ -221,9 +211,9 @@ const AudioChime = {
 
       osc.type = 'sawtooth';
       osc.frequency.setValueAtTime(220, now);
-      osc.frequency.setValueAtTime(180, now + 0.15);
+      osc.frequency.setValueAtTime(160, now + 0.2);
 
-      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.setValueAtTime(0.3, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
 
       osc.connect(gain);
@@ -237,26 +227,7 @@ const AudioChime = {
   }
 };
 
-// Formatting helpers
-function formatCurrency(amount, symbol = '$') {
-  if (isNaN(amount) || amount === null) return `${symbol}0.00`;
-  return `${symbol}${Number(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-}
-
-function formatTime(timeStr) {
-  if (!timeStr) return '--:--';
-  const parts = timeStr.split(':');
-  if (parts.length < 2) return timeStr;
-  let h = parseInt(parts[0], 10);
-  const m = parts[1];
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12;
-  h = h ? h : 12;
-  return `${h}:${m} ${ampm}`;
-}
-
-function formatDate(dateStr) {
-  if (!dateStr) return '';
-  const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+function formatCurrency(val, symbol = '₹') {
+  if (val === null || val === undefined) return `${symbol}0.00`;
+  return `${symbol}${Number(val).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }

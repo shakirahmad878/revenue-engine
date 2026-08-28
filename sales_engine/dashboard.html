@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autonomous Revenue Engine - 10-Day $1,000 Operating System</title>
+  <title>Smart School Attendance Kiosk OS — Assam Outreach Engine</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
@@ -26,19 +26,24 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-          <i class="fa-solid fa-bolt text-slate-950 text-xl font-bold"></i>
+          <i class="fa-solid fa-graduation-cap text-slate-950 text-xl font-bold"></i>
         </div>
         <div>
           <h1 class="text-base sm:text-lg font-bold tracking-tight text-white flex items-center gap-2">
-            Autonomous Revenue Engine
-            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">100% Live OS</span>
+            Smart School Kiosk OS
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">Assam Region</span>
           </h1>
-          <p class="text-xs text-slate-400 hidden sm:block">Target: $1,000 Gross Revenue in 10 Days • High-Ticket Local Service Outreach</p>
+          <p class="text-xs text-slate-400 hidden sm:block">Target: ₹1,00,000 Gross Revenue • CBSE / ICSE / SEBA Private School Outreach</p>
         </div>
       </div>
 
       <!-- Live Controls -->
       <div class="flex items-center space-x-3">
+        <!-- Preview Kiosk App Link -->
+        <a href="http://localhost:5000/pitch_landing.html" target="_blank" class="px-3 py-1.5 rounded-lg border text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-teal-300 border-teal-500/40 flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-laptop-code"></i> Live Kiosk Demo
+        </a>
+
         <!-- Autopilot Toggle -->
         <button id="autopilotBtn" onclick="toggleAutopilot()" class="flex items-center space-x-2 px-3 py-1.5 rounded-lg border text-xs font-semibold transition shadow-sm bg-emerald-950/80 text-emerald-300 border-emerald-500/40">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
@@ -69,7 +74,7 @@
         <div class="flex justify-between items-start mb-3">
           <div>
             <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Revenue Target</p>
-            <h2 class="text-3xl font-extrabold text-white mt-1" id="kpiRevenue">$0.00 <span class="text-sm font-normal text-slate-400">/ $1,000.00 Goal</span></h2>
+            <h2 class="text-3xl font-extrabold text-white mt-1" id="kpiRevenue">₹0.00 <span class="text-sm font-normal text-slate-400">/ ₹1,00,000.00 Goal</span></h2>
           </div>
           <div class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="kpiGoalPercent">
             0% Achieved
@@ -80,23 +85,23 @@
           <div id="revenueBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
         </div>
         <div class="flex justify-between items-center text-xs text-slate-400 mt-2">
-          <span>Day 1 (Launch)</span>
-          <span class="text-emerald-400 font-semibold" id="kpiTargetText">Target: 2 Clients @ $500 Setup</span>
-          <span>Day 10 (Target: $1,000)</span>
+          <span>Sprint Launch</span>
+          <span class="text-emerald-400 font-semibold" id="kpiTargetText">Target: 4–5 Private Schools @ ₹24,999 Setup</span>
+          <span>Target: ₹1,00,000</span>
         </div>
       </div>
 
       <!-- Outreached Card -->
       <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
         <div class="flex items-center justify-between">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Outreach</p>
+          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Schools Pitched</p>
           <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
             <i class="fa-solid fa-paper-plane text-sm"></i>
           </div>
         </div>
         <div class="mt-2">
           <h3 class="text-2xl font-bold text-white" id="kpiOutreach">0 / 0</h3>
-          <p class="text-xs text-slate-400 mt-1">Touch 1–4 Sequences Sent</p>
+          <p class="text-xs text-slate-400 mt-1">Direct Principal Sequences</p>
         </div>
       </div>
 
@@ -110,7 +115,7 @@
         </div>
         <div class="mt-2">
           <h3 class="text-2xl font-bold text-white" id="kpiDemos">0 Demos / 0 Won</h3>
-          <p class="text-xs text-slate-400 mt-1">15-Min 1-Call Close Demos</p>
+          <p class="text-xs text-slate-400 mt-1">10-Min Live Kiosk Demos</p>
         </div>
       </div>
 
@@ -127,10 +132,10 @@
           <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
             <div>
               <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-crosshairs text-emerald-400"></i>
-                Live Prospect Pipeline
+                <i class="fa-solid fa-school text-emerald-400"></i>
+                Assam School Prospect Pipeline
               </h2>
-              <p class="text-xs text-slate-400">High-Ticket Emergency HVAC, Plumbing & Restoration Contractors</p>
+              <p class="text-xs text-slate-400">Top CBSE, ICSE & Convent Institutions across Assam Hubs</p>
             </div>
             <div class="flex items-center gap-2">
               <button onclick="openBulkImportModal()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-lg transition shadow-md shadow-blue-600/20 flex items-center gap-1.5">
@@ -153,11 +158,11 @@
             <table class="w-full text-left text-xs">
               <thead>
                 <tr class="text-slate-400 uppercase tracking-wider py-3 border-b border-slate-800">
-                  <th class="py-3 px-2">Business / Contact</th>
-                  <th class="py-3 px-2">Niche & City</th>
-                  <th class="py-3 px-2">Avg Ticket</th>
+                  <th class="py-3 px-2">School & Principal</th>
+                  <th class="py-3 px-2">Category & District</th>
+                  <th class="py-3 px-2">Setup Ticket</th>
                   <th class="py-3 px-2">Status</th>
-                  <th class="py-3 px-2 text-right">Actions</th>
+                  <th class="py-3 px-2 text-right">Outreach Actions</th>
                 </tr>
               </thead>
               <tbody id="prospectsTableBody" class="divide-y divide-slate-800/60">
@@ -172,7 +177,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
             <h3 class="text-sm font-bold text-white flex items-center gap-2">
               <i class="fa-solid fa-terminal text-emerald-400"></i>
-              Live Agent Execution Ledger
+              Live Agent Outreach Ledger
             </h3>
             <span class="text-[11px] text-slate-400 font-mono">Live Polling • 2.5s</span>
           </div>
@@ -183,43 +188,55 @@
 
       </div>
 
-      <!-- Right 1 Col: Live Interactive SMS Demo Simulator & Email Preview -->
+      <!-- Right 1 Col: Live Interactive WhatsApp Alert Simulator & Email Preview -->
       <div class="space-y-6">
         
         <!-- Live Mobile Demo Phone Frame -->
         <div class="glass-panel rounded-2xl p-5 border border-slate-800">
           <h3 class="text-sm font-bold text-white flex items-center gap-2 mb-3">
-            <i class="fa-solid fa-mobile-screen text-emerald-400"></i>
-            Live 5-Second SMS Pitch Demo
+            <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+            Live Parent WhatsApp Alert Demo
           </h3>
-          <p class="text-xs text-slate-400 mb-4">The exact live demonstration shown to contractor owners on the 15-min closing call.</p>
+          <p class="text-xs text-slate-400 mb-4">Instant alert triggered the moment a student scans their QR badge at the school gate.</p>
 
           <!-- Smartphone Mockup -->
           <div class="bg-slate-900 rounded-3xl p-4 border-4 border-slate-800 shadow-2xl space-y-3 max-w-xs mx-auto">
             <div class="w-20 h-4 bg-slate-800 rounded-full mx-auto mb-2"></div>
-            <div class="text-center text-[10px] text-slate-500 font-mono">Simulated Missed Call @ 5:14 PM</div>
+            <div class="text-center text-[10px] text-emerald-400 font-mono flex items-center justify-center gap-1">
+              <i class="fa-brands fa-whatsapp"></i> WhatsApp Verified Gateway
+            </div>
             
             <div class="space-y-2 text-xs">
-              <!-- Automated Text -->
+              <!-- Gate In Alert -->
               <div class="bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 p-2.5 rounded-2xl rounded-tl-none">
-                <p class="font-semibold text-[10px] text-emerald-400">Reliant Air (Auto-Responder • 5s ago)</p>
-                <p class="mt-1">"Hey Mike, saw we just missed your call—I'm on a job site right now. Is this an AC emergency or routine maintenance?"</p>
+                <p class="font-semibold text-[10px] text-emerald-400 flex items-center justify-between">
+                  <span>DPS Guwahati Alerts</span>
+                  <span class="text-slate-400 font-normal">07:54 AM</span>
+                </p>
+                <p class="mt-1">"Dear Mr. Borah, your child <strong>Aman Borah (Class 9-A, Roll #14)</strong> has safely arrived at Delhi Public School Guwahati at 07:54 AM."</p>
               </div>
 
-              <!-- Customer Reply -->
-              <div class="bg-slate-800 text-slate-200 p-2.5 rounded-2xl rounded-tr-none ml-auto max-w-[85%]">
-                <p>"AC stopped cooling in Dallas, house is 86 degrees!"</p>
+              <!-- 8:30 AM Absence Warning -->
+              <div class="bg-amber-950/80 text-amber-200 border border-amber-700/50 p-2.5 rounded-2xl rounded-tl-none">
+                <p class="font-semibold text-[10px] text-amber-400 flex items-center justify-between">
+                  <span>Attendance Desk</span>
+                  <span class="text-slate-400 font-normal">08:30 AM</span>
+                </p>
+                <p class="mt-1">"Notice: Aman has not checked in as of 08:30 AM today. If on sick leave, please confirm on school portal."</p>
               </div>
 
-              <!-- Instant AI Booking Reply -->
-              <div class="bg-emerald-950/80 text-emerald-200 border border-emerald-700/50 p-2.5 rounded-2xl rounded-tl-none">
-                <p class="font-semibold text-[10px] text-emerald-400">Reliant Air (Auto-Responder)</p>
-                <p class="mt-1">"Got it! We have an emergency tech 15 mins away. Can they arrive between 6:00-7:00 PM today?"</p>
+              <!-- Gate Out Departure Alert -->
+              <div class="bg-blue-950/80 text-blue-200 border border-blue-700/50 p-2.5 rounded-2xl rounded-tl-none">
+                <p class="font-semibold text-[10px] text-blue-400 flex items-center justify-between">
+                  <span>DPS Guwahati Alerts</span>
+                  <span class="text-slate-400 font-normal">02:15 PM</span>
+                </p>
+                <p class="mt-1">"Dear Parent, Aman has checked out and safely exited the campus at 02:15 PM."</p>
               </div>
             </div>
             
             <div class="mt-4 pt-3 border-t border-slate-800 text-center">
-              <span class="text-[11px] text-emerald-400 font-semibold">⚡ Result: $1,800 Job Captured in 45s</span>
+              <span class="text-[11px] text-emerald-400 font-semibold">⚡ Result: 100% Parent Peace-of-Mind</span>
             </div>
           </div>
         </div>
@@ -228,13 +245,13 @@
         <div class="glass-panel rounded-2xl p-5 space-y-3">
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
             <i class="fa-solid fa-envelope-open-text text-teal-400"></i>
-            Active Outreach Template
+            Principal Outreach Pitch Inspector
           </h3>
           <div class="bg-slate-900/90 rounded-xl p-3 border border-slate-800 text-xs space-y-2">
-            <p class="text-slate-400 font-mono text-[11px]" id="emailPreviewTo">Select a prospect from the table to preview</p>
-            <p class="text-emerald-400 font-semibold" id="emailPreviewSubject">Subject: quick question about your missed calls</p>
+            <p class="text-slate-400 font-mono text-[11px]" id="emailPreviewTo">Select a school from the table to preview</p>
+            <p class="text-emerald-400 font-semibold" id="emailPreviewSubject">Subject: quick question regarding parent WhatsApp attendance alerts</p>
             <div class="text-slate-300 space-y-1.5 text-[11px] leading-relaxed pt-2 border-t border-slate-800" id="emailPreviewBody">
-              <p>Click any row in the pipeline on the left to inspect the hyper-personalized email drafted for that specific owner.</p>
+              <p>Click any school in the pipeline on the left to inspect the personalized pitch crafted for the Principal.</p>
             </div>
           </div>
         </div>
@@ -250,24 +267,24 @@
     <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-700 space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-file-csv text-blue-400"></i> Bulk Import Direct Decision-Maker Leads
+          <i class="fa-solid fa-file-csv text-blue-400"></i> Bulk Import School Decision-Makers
         </h3>
         <button onclick="closeBulkImportModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <p class="text-xs text-slate-300">Paste your verified lead list below (one per line). Format: <br><code class="text-emerald-400 font-mono">Business Name, Contact Name, Email, Phone, City, Niche</code></p>
+      <p class="text-xs text-slate-300">Paste your verified Assam school list below (one per line). Format: <br><code class="text-emerald-400 font-mono">School Name, Principal Name, Email, Phone, District, Board</code></p>
 
       <div>
-        <textarea id="bulkImportText" rows="6" placeholder="Lone Star HVAC, John Miller, john@lonestarhvac.com, (512) 555-0199, Austin TX, HVAC
-Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dallas TX, Plumbing" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500"></textarea>
+        <textarea id="bulkImportText" rows="6" placeholder="Delhi Public School, Dr. S. K. Singh, admin@dpsguwahati.org, +91 88110 93555, Guwahati Assam, CBSE
+Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 361 254 0443, Guwahati Assam, ICSE" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs text-slate-100 font-mono focus:outline-none focus:border-blue-500"></textarea>
       </div>
 
       <div class="flex justify-between items-center pt-3 border-t border-slate-800">
-        <span class="text-[11px] text-slate-500">Ensure emails are direct personal inboxes.</span>
+        <span class="text-[11px] text-slate-500">Ensure emails are official Principal/Admin desks.</span>
         <div class="flex gap-2">
           <button onclick="closeBulkImportModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
           <button onclick="submitBulkImport()" id="bulkImportBtn" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold flex items-center gap-1.5">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Import Leads
+            <i class="fa-solid fa-cloud-arrow-up"></i> Import Schools
           </button>
         </div>
       </div>
@@ -279,33 +296,34 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
     <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-wand-magic-sparkles text-emerald-400"></i> Auto-Discover High-Ticket Leads
+          <i class="fa-solid fa-wand-magic-sparkles text-emerald-400"></i> Auto-Discover Assam Schools
         </h3>
         <button onclick="closeDiscoverModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <p class="text-xs text-slate-300">The autonomous engine will search, verify active email domains, and inject real deliverable businesses directly into your pipeline.</p>
+      <p class="text-xs text-slate-300">The autonomous engine will scan Assam school directories, verify deliverable inboxes, and inject them directly into your pipeline.</p>
 
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Target Metro Market:</label>
+          <label class="block text-slate-300 font-semibold mb-1">Target Assam Educational Hub:</label>
           <select id="discoverCity" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
-            <option value="Houston, TX">Houston, TX (High Heatwave Demand)</option>
-            <option value="Phoenix, AZ">Phoenix / Scottsdale, AZ (Extreme AC Demand)</option>
-            <option value="Atlanta, GA">Atlanta, GA (High-Ticket Metro)</option>
-            <option value="Miami, FL">Miami / South Florida (24/7 Cooling Demand)</option>
+            <option value="Guwahati, Assam">Guwahati (Kamrup Metro - 300+ Private Schools)</option>
+            <option value="Dibrugarh, Assam">Dibrugarh (Upper Assam Educational Hub)</option>
+            <option value="Jorhat, Assam">Jorhat (Central Assam Institutions)</option>
+            <option value="Silchar, Assam">Silchar (Barak Valley Hub)</option>
+            <option value="Tezpur, Assam">Tezpur (Sonitpur District)</option>
           </select>
         </div>
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Niche Category:</label>
+          <label class="block text-slate-300 font-semibold mb-1">Board / Category:</label>
           <select id="discoverNiche" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
-            <option value="HVAC">Emergency HVAC & AC Repair ($1,800 Avg Ticket)</option>
-            <option value="Plumbing">24/7 Emergency Plumbing & Burst Pipe ($2,200 Avg Ticket)</option>
-            <option value="Roofing">Storm Damage & Roof Restoration ($6,500 Avg Ticket)</option>
+            <option value="CBSE">CBSE English Medium Schools (₹24,999 Setup)</option>
+            <option value="ICSE">ICSE Convent Institutions (₹24,999 Setup)</option>
+            <option value="SEBA">SEBA High Schools & Junior Colleges (₹19,999 Setup)</option>
           </select>
         </div>
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Leads to Inject:</label>
+          <label class="block text-slate-300 font-semibold mb-1">Schools to Inject:</label>
           <input type="number" id="discoverLimit" value="3" min="1" max="10" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
       </div>
@@ -313,7 +331,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
       <div class="flex justify-end gap-2 pt-3 border-t border-slate-800">
         <button onclick="closeDiscoverModal()" class="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-semibold">Cancel</button>
         <button onclick="runAutoDiscovery()" id="discoverSubmitBtn" class="px-4 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-slate-950 rounded-lg text-xs font-bold flex items-center gap-1.5">
-          <i class="fa-solid fa-bolt"></i> Scrape & Inject Leads
+          <i class="fa-solid fa-bolt"></i> Scrape & Inject Schools
         </button>
       </div>
     </div>
@@ -324,32 +342,32 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
     <div class="glass-panel rounded-2xl max-w-md w-full p-6 border border-slate-700 space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-user-plus text-emerald-400"></i> Add Verified Prospect
+          <i class="fa-solid fa-school text-emerald-400"></i> Add Single School Lead
         </h3>
         <button onclick="closeAddLeadModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Company / Business Name:</label>
-          <input type="text" id="newLeadCompany" placeholder="e.g. Austin Elite AC & Heating" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          <label class="block text-slate-300 font-semibold mb-1">School / Institution Name:</label>
+          <input type="text" id="newLeadCompany" placeholder="e.g. Maharishi Vidya Mandir Guwahati" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Owner / Contact Name:</label>
-          <input type="text" id="newLeadName" placeholder="e.g. John Miller" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          <label class="block text-slate-300 font-semibold mb-1">Principal / Administrator Name:</label>
+          <input type="text" id="newLeadName" placeholder="e.g. Dr. S. K. Mahanta" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Verified Email Address (Required):</label>
-          <input type="email" id="newLeadEmail" placeholder="e.g. info@austineliteac.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+          <label class="block text-slate-300 font-semibold mb-1">Official Email Address (Required):</label>
+          <input type="email" id="newLeadEmail" placeholder="e.g. principal@mvmguwahati.ac.in" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">City / State:</label>
-            <input type="text" id="newLeadCity" placeholder="Austin, TX" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+            <label class="block text-slate-300 font-semibold mb-1">District / City:</label>
+            <input type="text" id="newLeadCity" placeholder="Guwahati, Assam" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
           </div>
           <div>
-            <label class="block text-slate-300 font-semibold mb-1">Average Ticket:</label>
-            <input type="text" id="newLeadTicket" placeholder="$1,800" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
+            <label class="block text-slate-300 font-semibold mb-1">Setup Package:</label>
+            <input type="text" id="newLeadTicket" placeholder="₹24,999" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
           </div>
         </div>
       </div>
@@ -366,7 +384,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
     <div class="glass-panel rounded-2xl max-w-lg w-full p-6 border border-slate-700 space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-800">
         <h3 class="text-base font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-sliders text-emerald-400"></i> Live Integrations & Settings
+          <i class="fa-solid fa-sliders text-emerald-400"></i> Outreach Settings & Credentials
         </h3>
         <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -379,10 +397,9 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         <div>
           <label class="block text-slate-300 font-semibold mb-1">Gmail App Password:</label>
           <input type="password" id="smtpPass" placeholder="16-character App Password" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
-          <p class="text-[10px] text-slate-500 mt-1">If left blank, emails run in high-fidelity agent simulation mode.</p>
         </div>
         <div>
-          <label class="block text-slate-300 font-semibold mb-1">Stripe Checkout / Payment Link:</label>
+          <label class="block text-slate-300 font-semibold mb-1">Payment Gateway / UPI Link:</label>
           <input type="text" id="stripeLink" value="https://buy.stripe.com/test_4gM5kF6is7THcsq0AE9AA00" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
       </div>
@@ -406,7 +423,8 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         
         // Update KPI
         const rev = data.total_revenue || 0;
-        document.getElementById("kpiRevenue").innerHTML = `$${rev.toLocaleString('en-US', {minimumFractionDigits: 2})} <span class="text-sm font-normal text-slate-400">/ $1,000.00 Goal</span>`;
+        const target = data.target_revenue || 100000;
+        document.getElementById("kpiRevenue").innerHTML = `₹${rev.toLocaleString('en-IN', {minimumFractionDigits: 2})} <span class="text-sm font-normal text-slate-400">/ ₹${target.toLocaleString('en-IN')}.00 Goal</span>`;
         const pct = Math.min(100, Math.round(data.goal_progress_percent || 0));
         document.getElementById("kpiGoalPercent").innerText = `${pct}% Achieved`;
         document.getElementById("revenueBar").style.width = `${pct}%`;
@@ -460,6 +478,9 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         if (p.status === "Demo Booked") badgeClass = "bg-purple-500/20 text-purple-300 border border-purple-500/30 font-semibold";
         if (p.status === "Closed Won") badgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold";
 
+        const cleanPhone = (p.phone || "").replace(/[^0-9]/g, "");
+        const waMsg = encodeURIComponent(`Respected ${p.contact_name},\n\nI am writing regarding the student morning attendance & instant parent WhatsApp safety alert system for ${p.business_name}.\n\nAs students tap their QR badge at the school gate, parents receive instant WhatsApp confirmation of safe arrival. Would you be open to a 5-minute demo for your school office this week?\n\nDemo link: http://localhost:5000/pitch_landing.html`);
+
         const tr = document.createElement("tr");
         tr.className = "hover:bg-slate-800/40 transition cursor-pointer";
         tr.onclick = () => previewLeadEmail(p);
@@ -472,15 +493,18 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
             <div>${p.niche}</div>
             <div class="text-slate-400 text-[11px]">${p.city}</div>
           </td>
-          <td class="py-3 px-2 font-mono text-emerald-400 font-semibold">${p.estimated_ticket}</td>
+          <td class="py-3 px-2 font-mono text-emerald-400 font-semibold">${p.estimated_ticket || '₹24,999'}</td>
           <td class="py-3 px-2">
             <span class="px-2 py-0.5 rounded-full text-[10px] ${badgeClass}">${p.status}</span>
           </td>
           <td class="py-3 px-2 text-right space-x-1" onclick="event.stopPropagation()">
+            <a href="https://wa.me/${cleanPhone}?text=${waMsg}" target="_blank" class="px-2 py-1 bg-emerald-600/30 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/40 rounded text-[10px] font-semibold transition inline-flex items-center gap-1">
+              <i class="fa-brands fa-whatsapp"></i> WA Pitch
+            </a>
             ${p.status === 'Ready for Outreach' ? `<button onclick="sendTouch('${p.id}', 1)" class="px-2 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded text-[10px] font-semibold transition">Email</button>` : ''}
             ${p.status.includes('Sent') ? `<button onclick="bookDemo('${p.id}')" class="px-2 py-1 bg-purple-600 hover:bg-purple-500 text-white rounded text-[10px] font-semibold transition">📅 Demo</button>` : ''}
-            ${p.status === 'Demo Booked' ? `<button onclick="closeDeal('${p.id}', 500)" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold rounded text-[10px] transition">Close $500</button>` : ''}
-            ${p.status === 'Closed Won' ? `<span class="text-emerald-400 font-bold text-xs">+$500.00 Paid</span>` : ''}
+            ${p.status === 'Demo Booked' ? `<button onclick="closeDeal('${p.id}', 24999)" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold rounded text-[10px] transition">Close ₹25k</button>` : ''}
+            ${p.status === 'Closed Won' ? `<span class="text-emerald-400 font-bold text-xs">+₹24,999 Paid</span>` : ''}
           </td>
         `;
         tbody.appendChild(tr);
@@ -490,15 +514,18 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
     function previewLeadEmail(p) {
       selectedProspect = p;
       document.getElementById("emailPreviewTo").innerText = `To: ${p.contact_name} <${p.email}>`;
-      document.getElementById("emailPreviewSubject").innerText = `Subject: quick question about your missed calls at ${p.business_name}`;
+      document.getElementById("emailPreviewSubject").innerText = `Subject: quick question regarding automated parent WhatsApp attendance alerts for ${p.business_name}`;
       document.getElementById("emailPreviewBody").innerHTML = `
-        <p>Hi ${p.contact_name.split(' ')[0]},</p>
-        <p>I noticed that <strong>${p.business_name}</strong> is actively taking emergency service calls in ${p.city}—congrats on the strong reputation.</p>
-        <p>However, in tests across local contractors, over 60% of calls after 5 PM or during busy jobs go to voicemail. 8 out of 10 homeowners hang up and immediately call the next company on Google.</p>
-        <p>We built a 60-second missed-call SMS system for ${p.niche} companies that instantly texts back callers when you're on a job:</p>
-        <p class="p-2 bg-slate-800/90 rounded text-emerald-300 font-mono text-[10px] border border-slate-700">👉 "Hey, saw we just missed your call—are you having an emergency or need a quick estimate?"</p>
-        <p>It typically saves contractors 2–5 lost jobs a month ($3,000–$10,000 in found revenue).</p>
-        <p>Would you be open to a 5-minute Loom video showing how it works on your actual phone line?</p>
+        <p>Respected <strong>${p.contact_name}</strong>,</p>
+        <p>I hope this email finds you well.</p>
+        <p>I am writing regarding the morning gate arrival and student attendance system at <strong>${p.business_name}</strong> in ${p.city}.</p>
+        <p class="p-2 bg-slate-800/90 rounded text-emerald-300 font-mono text-[10px] border border-slate-700">
+          👉 As students tap their QR ID badge at the school gate (takes 1.2s), an automated WhatsApp alert is instantly dispatched to their parents' phone:<br>
+          <em>"Dear Parent, your child has safely arrived at ${p.business_name} at 07:54 AM."</em>
+        </p>
+        <p>👉 At 08:30 AM, the Principal receives a live Strength Summary (Enrolled vs Present vs Absent) on their phone with a 1-click button to send WhatsApp absence notices to parents.</p>
+        <p>👉 Generates 1-click CBSE / SEBA official monthly compliance registers.</p>
+        <p>Would you or your administrative team be open to a quick 10-minute live demonstration this week?</p>
       `;
     }
 
@@ -566,7 +593,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
 
     async function submitBulkImport() {
       const text = document.getElementById("bulkImportText").value.trim();
-      if (!text) return alert("Please paste at least one lead.");
+      if (!text) return alert("Please paste at least one school.");
 
       const lines = text.split("\n");
       const leads = [];
@@ -577,18 +604,18 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         const parts = line.split(",").map(s => s.trim());
         if (parts.length >= 3) {
           leads.push({
-            business_name: parts[0] || "Contractor Business",
-            contact_name: parts[1] || "Business Owner",
+            business_name: parts[0] || "School Institution",
+            contact_name: parts[1] || "Principal",
             email: parts[2] || "",
             phone: parts[3] || "",
-            city: parts[4] || "USA",
-            niche: parts[5] || "Home Services",
-            estimated_ticket: "$1,800"
+            city: parts[4] || "Assam",
+            niche: parts[5] || "CBSE School",
+            estimated_ticket: "₹24,999"
           });
         }
       }
 
-      if (!leads.length) return alert("Could not parse any leads. Please check format: Business, Name, Email, Phone, City, Niche");
+      if (!leads.length) return alert("Could not parse any schools. Format: School, Principal, Email, Phone, City, Board");
 
       const btn = document.getElementById("bulkImportBtn");
       btn.disabled = true;
@@ -608,7 +635,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         console.error("Import error:", err);
       } finally {
         btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Import Leads`;
+        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up"></i> Import Schools`;
       }
     }
 
@@ -626,7 +653,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
       const limit = parseInt(document.getElementById("discoverLimit").value) || 3;
       const btn = document.getElementById("discoverSubmitBtn");
       
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Scraping Leads...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Discovering Schools...`;
       btn.disabled = true;
 
       try {
@@ -641,7 +668,7 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
       } catch (err) {
         console.error("Discovery error:", err);
       } finally {
-        btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Scrape & Inject Leads`;
+        btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Scrape & Inject Schools`;
         btn.disabled = false;
       }
     }
@@ -655,14 +682,14 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
     }
 
     async function saveNewLead() {
-      const company = document.getElementById("newLeadCompany").value.trim();
+      const comp = document.getElementById("newLeadCompany").value.trim();
       const name = document.getElementById("newLeadName").value.trim();
       const email = document.getElementById("newLeadEmail").value.trim();
-      const city = document.getElementById("newLeadCity").value.trim() || "Austin, TX";
-      const ticket = document.getElementById("newLeadTicket").value.trim() || "$1,800";
+      const city = document.getElementById("newLeadCity").value.trim() || "Guwahati, Assam";
+      const ticket = document.getElementById("newLeadTicket").value.trim() || "₹24,999";
 
-      if (!email || !company) {
-        alert("Please provide at least a Business Name and Email Address.");
+      if (!comp || !email) {
+        alert("Please enter both School Name and Official Email.");
         return;
       }
 
@@ -670,12 +697,12 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          business_name: company,
-          contact_name: name || "Business Owner",
+          business_name: comp,
+          contact_name: name || "Principal",
           email: email,
           city: city,
           estimated_ticket: ticket,
-          niche: "Emergency AC & Heating"
+          niche: "CBSE / ICSE Private School"
         })
       });
 
@@ -698,25 +725,24 @@ Precision Plumbing, Sarah Jenkins, sarah@precisionplumb.com, (214) 555-0144, Dal
       const user = document.getElementById("smtpUser").value.trim();
       const pass = document.getElementById("smtpPass").value.trim();
       const link = document.getElementById("stripeLink").value.trim();
-      
-      const payload = {
-        smtp: { enabled: user.length > 0, user: user, password: pass },
-        stripe: { payment_link: link }
-      };
 
       await fetch('/api/config', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          smtp: { enabled: !!(user && pass), user: user, password: pass },
+          stripe_payment_link: link
+        })
       });
 
       closeSettingsModal();
+      alert("Outreach settings saved successfully!");
       fetchState();
     }
 
-    // Auto-polling every 2.5 seconds
-    setInterval(fetchState, 2500);
+    // Auto-Polling every 2.5 seconds
     fetchState();
+    setInterval(fetchState, 2500);
   </script>
 </body>
 </html>

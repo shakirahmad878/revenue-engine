@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>School Bus Conductor App - Transport Safety</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Html5-QRCode Scanner Library -->
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="min-h-screen bg-[#070a13] text-gray-100 flex flex-col justify-between p-4 max-w-lg mx-auto">
+
+  <!-- Conductor Top Bar -->
+  <header class="flex items-center justify-between border-b border-white/10 pb-4">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center font-bold text-white shadow-lg shadow-amber-600/30">
+        🚌
+      </div>
+      <div>
+        <h1 class="text-sm font-extrabold text-white tracking-tight">School Bus Transport App</h1>
+        <p class="text-[10px] text-amber-300 font-mono">Conductor & Driver Terminal</p>
+      </div>
+    </div>
+
+    <!-- Morning Boarding vs Afternoon Drop Toggle -->
+    <div class="flex bg-slate-900 p-1 rounded-xl border border-white/10 text-xs">
+      <button id="btn-mode-board" class="px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold transition-all">Pick-up</button>
+      <button id="btn-mode-drop" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white font-bold transition-all">Drop-off</button>
+    </div>
+  </header>
+
+  <!-- Route Selection Card -->
+  <div class="my-3 bg-slate-900/90 border border-white/10 rounded-2xl p-4 space-y-2">
+    <div class="flex items-center justify-between">
+      <span class="text-xs font-semibold text-gray-400">Assigned Bus Route:</span>
+      <select id="bus-route-select" class="glass-input bg-transparent border-0 font-bold text-amber-300 text-xs focus:ring-0 cursor-pointer">
+        <!-- Populated dynamically -->
+      </select>
+    </div>
+    <div class="flex items-center justify-between text-xs font-mono text-gray-300 pt-2 border-t border-white/5">
+      <span>Vehicle: <strong class="text-white" id="bus-vehicle-no">AS-01-FC-7833</strong></span>
+      <span class="text-emerald-400 font-bold" id="bus-boarded-count">0 Boarded</span>
+    </div>
+  </div>
+
+  <!-- Camera Scanner Area -->
+  <main class="my-auto py-2 flex flex-col items-center">
+    <p class="text-xs text-gray-300 mb-3 text-center">Scan student ID card as they board the school bus</p>
+
+    <!-- Camera Viewport -->
+    <div class="relative w-72 h-72 rounded-3xl overflow-hidden bg-slate-900 border-2 border-amber-500/40 shadow-2xl flex items-center justify-center">
+      <div id="bus-camera-reader" class="w-full h-full object-cover"></div>
+      <div class="scan-line pointer-events-none"></div>
+    </div>
+
+    <!-- Manual Quick Tap Boarding List -->
+    <div class="w-full mt-5">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-bold text-white">Route Students (1-Tap Check)</span>
+        <span class="text-[10px] text-gray-400 font-mono">Tap name to mark</span>
+      </div>
+      <div id="route-students-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] text-gray-500 font-mono">
+    <a href="/" class="text-indigo-400 hover:underline">Principal Dashboard</a>
+    <a href="/kiosk" class="text-gray-400 hover:underline">Main Gate Kiosk</a>
+  </footer>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let activeRoute = "Route #4";
+    let scanType = "board";
+    let routeStudents = [];
+    let html5Qr = null;
+    let scanLock = false;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadBusRoutes();
+      setupToggles();
+      initBusCamera();
+    });
+
+    async function loadBusRoutes() {
+      try {
+        const routes = await API.getBusRoutes();
+        const select = document.getElementById('bus-route-select');
+        select.innerHTML = routes.map(r => `
+          <option value="${r.route_no}">${r.route_no} (${r.route_name})</option>
+        `).join('');
+
+        select.addEventListener('change', (e) => {
+          activeRoute = e.target.value;
+          const found = routes.find(r => r.route_no === activeRoute);
+          if (found) {
+            document.getElementById('bus-vehicle-no').textContent = found.bus_number || 'AS-01-FC-7833';
+          }
+          loadRouteStudents();
+        });
+
+        if (routes.length) {
+          activeRoute = routes[0].route_no;
+          select.value = activeRoute;
+          document.getElementById('bus-vehicle-no').textContent = routes[0].bus_number;
+          loadRouteStudents();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function loadRouteStudents() {
+      try {
+        routeStudents = await API.getStudents({ bus_route_no: activeRoute });
+        const list = document.getElementById('route-students-list');
+        if (!routeStudents.length) {
+          list.innerHTML = `<div class="text-xs text-gray-500 py-3 text-center">No students assigned to ${activeRoute}</div>`;
+          return;
+        }
+
+        list.innerHTML = routeStudents.map(s => `
+          <div class="p-2.5 rounded-xl bg-slate-800/60 border border-white/5 flex items-center justify-between text-xs">
+            <div class="flex items-center gap-2.5">
+              <img src="${s.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-8 h-8 rounded-full object-cover border border-white/10" alt="">
+              <div>
+                <div class="font-bold text-white">${s.student_name}</div>
+                <div class="text-[10px] text-gray-400 font-mono">${s.class_grade}-${s.section} • Roll #${s.roll_no}</div>
+              </div>
+            </div>
+            <button onclick="handleManualBusBoard(${s.id}, '${s.student_name}')" class="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow transition-all">
+              Mark ${scanType === 'board' ? 'Boarded' : 'Dropped'}
+            </button>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function setupToggles() {
+      const btnBoard = document.getElementById('btn-mode-board');
+      const btnDrop = document.getElementById('btn-mode-drop');
+
+      btnBoard.addEventListener('click', () => {
+        scanType = 'board';
+        btnBoard.classList.add('bg-amber-600', 'text-white');
+        btnBoard.classList.remove('text-gray-400');
+        btnDrop.classList.remove('bg-amber-600', 'text-white');
+        btnDrop.classList.add('text-gray-400');
+        loadRouteStudents();
+      });
+
+      btnDrop.addEventListener('click', () => {
+        scanType = 'drop';
+        btnDrop.classList.add('bg-amber-600', 'text-white');
+        btnDrop.classList.remove('text-gray-400');
+        btnBoard.classList.remove('bg-amber-600', 'text-white');
+        btnBoard.classList.add('text-gray-400');
+        loadRouteStudents();
+      });
+    }
+
+    async function initBusCamera() {
+      if (typeof Html5Qrcode === 'undefined') return;
+      try {
+        html5Qr = new Html5Qrcode("bus-camera-reader");
+        await html5Qr.start(
+          { facingMode: "environment" },
+          { fps: 12, qrbox: { width: 220, height: 220 } },
+          (decodedText) => handleBusScan(decodedText),
+          (err) => {}
+        );
+      } catch (err) {
+        console.warn('Camera error:', err);
+      }
+    }
+
+    async function handleBusScan(identifier) {
+      if (scanLock) return;
+      scanLock = true;
+
+      try {
+        const res = await API.busScan(identifier, activeRoute, scanType, "Bus Conductor");
+        if (res.success) {
+          AudioChime.playSuccess();
+          Toast.show(`✓ ${res.message} (WhatsApp alert sent to Parent)`, 'success', 4000);
+        } else {
+          AudioChime.playError();
+          Toast.show(res.message, 'error');
+        }
+      } catch (err) {
+        AudioChime.playError();
+        Toast.show(err.message, 'error');
+      } finally {
+        setTimeout(() => { scanLock = false; }, 3000);
+      }
+    }
+
+    async function handleManualBusBoard(studentId, name) {
+      try {
+        const res = await API.busScan(studentId, activeRoute, scanType, "Bus Conductor");
+        if (res.success) {
+          AudioChime.playSuccess();
+          Toast.show(`✓ ${res.message} (WhatsApp alert sent to Parent)`, 'success', 4000);
+        } else {
+          AudioChime.playError();
+          Toast.show(res.message, 'error');
+        }
+      } catch (err) {
+        AudioChime.playError();
+        Toast.show(err.message, 'error');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official CBSE / SEBA Monthly Attendance Register</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    @media print {
+      body { background: white !important; color: black !important; padding: 0 !important; font-size: 10px !important; }
+      .no-print { display: none !important; }
+      .print-table { border: 1px solid #000 !important; color: #000 !important; width: 100% !important; }
+      .print-table th, .print-table td { border: 1px solid #000 !important; padding: 2px 4px !important; }
+      .bg-slate-900, .glass-panel { background: white !important; border: none !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#070b14] text-gray-100 p-4 sm:p-8">
+
+  <!-- Controls Bar -->
+  <div class="no-print max-w-7xl mx-auto mb-6 glass-panel rounded-3xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border border-emerald-500/30">
+    <div>
+      <h1 class="text-lg font-extrabold text-white flex items-center gap-2">
+        <span class="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center font-bold text-xs">📋</span>
+        CBSE / SEBA Official Monthly Attendance Register
+      </h1>
+      <p class="text-xs text-gray-400 mt-1">Government Board Inspection Format • 75% Minimum Attendance Compliance Engine</p>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-3">
+      <select id="reg-class-select" class="glass-input px-3 py-2 rounded-xl text-xs">
+        <option value="">All Classes</option>
+      </select>
+
+      <select id="reg-month-select" class="glass-input px-3 py-2 rounded-xl text-xs font-mono">
+        <!-- Populated dynamically -->
+      </select>
+
+      <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 transition-all">
+        <span>🖨️</span> Print Inspection Sheet
+      </button>
+
+      <a href="/" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10">
+        Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Printable Register Sheet -->
+  <div id="register-container" class="max-w-7xl mx-auto glass-panel rounded-3xl p-6 sm:p-8 overflow-x-auto space-y-6">
+    <!-- Header for Print -->
+    <div class="text-center border-b border-white/10 pb-4">
+      <h2 class="text-xl sm:text-2xl font-black text-white" id="reg-school-title">MAHARISHI VIDYA MANDIR PUBLIC SCHOOL</h2>
+      <p class="text-xs text-gray-400 font-mono" id="reg-affiliation-line">Affiliated to CBSE, New Delhi • Affiliation No: CBSE/AFF/AS/2026/89401</p>
+      <div class="flex items-center justify-between text-xs font-mono text-indigo-300 font-bold mt-2 pt-2 border-t border-white/5">
+        <span id="reg-class-badge">CLASS: CLASS 9-A</span>
+        <span id="reg-period-badge">MONTH: AUGUST 2026</span>
+        <span id="reg-days-badge">TOTAL WORKING DAYS: 26</span>
+      </div>
+    </div>
+
+    <!-- 31-Day Matrix Table -->
+    <table class="w-full text-center border-collapse text-[10px] print-table">
+      <thead>
+        <tr id="register-thead-tr" class="bg-slate-900 border-b border-white/10 text-gray-300 font-mono">
+          <!-- Populated dynamically -->
+        </tr>
+      </thead>
+      <tbody id="register-tbody">
+        <!-- Populated dynamically -->
+      </tbody>
+    </table>
+
+    <!-- Board Compliance Summary & Signatures -->
+    <div class="pt-8 border-t border-white/10 flex items-center justify-between text-xs font-mono">
+      <div>
+        <div class="text-gray-400">Class Teacher's Signature: __________________</div>
+        <div class="text-[10px] text-gray-500 mt-1">Verified on: 28 Aug 2026</div>
+      </div>
+      <div class="text-right">
+        <div class="font-bold text-white" id="reg-principal-sign">Dr. S. K. Mahanta, M.Sc, Ph.D, B.Ed</div>
+        <div class="text-gray-400">Principal & Head of Institution</div>
+        <div class="text-[10px] text-emerald-400 mt-1">● Official School Stamp Affixed</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    let curMonth = new Date().toISOString().slice(0, 7);
+    let curClassId = null;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadFilters();
+      await loadRegister();
+    });
+
+    async function loadFilters() {
+      // Month options
+      const mSel = document.getElementById('reg-month-select');
+      const now = new Date();
+      for (let i = 0; i < 4; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const val = d.toISOString().slice(0, 7);
+        const label = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        const opt = document.createElement('option');
+        opt.value = val;
+        opt.textContent = label;
+        mSel.appendChild(opt);
+      }
+      mSel.value = curMonth;
+      mSel.addEventListener('change', (e) => {
+        curMonth = e.target.value;
+        loadRegister();
+      });
+
+      // Classes
+      const classes = await API.getClasses();
+      const cSel = document.getElementById('reg-class-select');
+      classes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id;
+        opt.textContent = `${c.grade}-${c.section}`;
+        cSel.appendChild(opt);
+      });
+      cSel.addEventListener('change', (e) => {
+        curClassId = e.target.value ? parseInt(e.target.value, 10) : null;
+        loadRegister();
+      });
+    }
+
+    async function loadRegister() {
+      try {
+        const data = await API.getCbseRegister(curMonth, curClassId);
+        renderRegister(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderRegister(data) {
+      document.getElementById('reg-school-title').textContent = data.school.name.toUpperCase();
+      document.getElementById('reg-affiliation-line').textContent = `${data.school.affiliation_board} • Affiliation No: ${data.school.affiliation_no}`;
+      document.getElementById('reg-period-badge').textContent = `PERIOD: ${data.year_month}`;
+      document.getElementById('reg-days-badge').textContent = `TOTAL WORKING DAYS: ${data.total_working_days}`;
+      document.getElementById('reg-principal-sign').textContent = data.school.principal_signature;
+
+      // Render Head
+      const theadTr = document.getElementById('register-thead-tr');
+      let thHtml = `<th class="p-2 text-left">Roll</th><th class="p-2 text-left w-36">Student Name</th>`;
+      for (let d = 1; d <= data.num_days; d++) {
+        const h = data.day_headers[d];
+        thHtml += `<th class="p-1 font-mono ${h.is_holiday ? 'bg-rose-950/40 text-rose-300' : ''}"><div>${d}</div><div class="text-[8px] text-gray-500">${h.weekday[0]}</div></th>`;
+      }
+      thHtml += `<th class="p-2">Present</th><th class="p-2">Absent</th><th class="p-2">% Strength</th><th class="p-2">CBSE Status</th>`;
+      theadTr.innerHTML = thHtml;
+
+      // Render Body
+      const tbody = document.getElementById('register-tbody');
+      tbody.innerHTML = data.matrix.map(row => {
+        const s = row.student;
+        let trHtml = `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="p-2 text-left font-mono font-bold text-gray-300">${s.roll_no}</td>
+            <td class="p-2 text-left font-semibold text-white truncate max-w-xs">${s.student_name}</td>
+        `;
+
+        for (let d = 1; d <= data.num_days; d++) {
+          const cell = row.days[d];
+          trHtml += `<td class="p-1 font-mono font-bold ${cell.color}">${cell.marker}</td>`;
+        }
+
+        const isShortage = row.attendance_percentage < 75.0;
+        trHtml += `
+            <td class="p-2 font-mono text-emerald-400 font-bold">${row.total_present}</td>
+            <td class="p-2 font-mono text-rose-400">${row.total_absent}</td>
+            <td class="p-2 font-mono font-bold ${isShortage ? 'text-rose-400' : 'text-emerald-400'}">${row.attendance_percentage}%</td>
+            <td class="p-2 font-bold ${isShortage ? 'text-rose-400' : 'text-emerald-400'}">${row.cbse_compliance}</td>
+          </tr>
+        `;
+        return trHtml;
+      }).join('');
+    }
+  </script>
+</body>
+</html>

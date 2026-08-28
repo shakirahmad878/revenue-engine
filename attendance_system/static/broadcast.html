@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emergency Parent WhatsApp Broadcast Center - Maharishi Vidya Mandir</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="min-h-screen bg-[#070a13] text-gray-100 p-4 sm:p-8">
+
+  <!-- Header -->
+  <header class="max-w-5xl mx-auto glass-panel rounded-3xl p-6 mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-rose-500/30 bg-rose-950/10">
+    <div class="flex items-center gap-3.5">
+      <div class="w-12 h-12 rounded-2xl bg-rose-600 flex items-center justify-center font-bold text-white text-2xl shadow-xl shadow-rose-600/30">
+        📢
+      </div>
+      <div>
+        <h1 class="text-xl font-extrabold text-white">Emergency Parent WhatsApp Broadcast Center</h1>
+        <p class="text-xs text-rose-300 font-mono">Dispatches instant safety, flood, bandh, and weather alerts to 1,000+ parents in 30 seconds</p>
+      </div>
+    </div>
+
+    <a href="/" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/10 self-start sm:self-auto">
+      Back to Principal Dashboard
+    </a>
+  </header>
+
+  <main class="max-w-5xl mx-auto space-y-8">
+    
+    <!-- Quick Preset Broadcast Buttons -->
+    <div class="glass-panel rounded-3xl p-6 space-y-4">
+      <h3 class="text-sm font-bold text-white">1-Click Emergency Quick Presets</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+        <button onclick="applyPreset('flood')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-rose-900/40 border border-white/10 hover:border-rose-500/40 text-left transition-all">
+          <div class="text-lg mb-1">🌧️</div>
+          <div class="font-bold text-white text-xs">Heavy Rain / Flood Alert</div>
+          <div class="text-[10px] text-gray-400 mt-1">School declared closed due to Guwahati city waterlogging.</div>
+        </button>
+
+        <button onclick="applyPreset('bandh')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-amber-900/40 border border-white/10 hover:border-amber-500/40 text-left transition-all">
+          <div class="text-lg mb-1">🛑</div>
+          <div class="font-bold text-white text-xs">Assam Bandh Notice</div>
+          <div class="text-[10px] text-gray-400 mt-1">Buses suspended; classes will be conducted online.</div>
+        </button>
+
+        <button onclick="applyPreset('ptm')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-indigo-900/40 border border-white/10 hover:border-indigo-500/40 text-left transition-all">
+          <div class="text-lg mb-1">👨‍👩‍👧</div>
+          <div class="font-bold text-white text-xs">PTM Meeting Reminder</div>
+          <div class="text-[10px] text-gray-400 mt-1">Reminder for Saturday Parent-Teacher conference.</div>
+        </button>
+
+        <button onclick="applyPreset('heatwave')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-orange-900/40 border border-white/10 hover:border-orange-500/40 text-left transition-all">
+          <div class="text-lg mb-1">☀️</div>
+          <div class="font-bold text-white text-xs">Revised Summer Timings</div>
+          <div class="text-[10px] text-gray-400 mt-1">School shifts to 06:30 AM due to heatwave advisory.</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Message Composer Form -->
+    <form id="broadcast-form" class="glass-panel rounded-3xl p-8 space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Broadcast Title / Subject</label>
+          <input type="text" id="b-title" required placeholder="e.g. Flood Alert - School Holiday Declared" class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-bold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Target Audience</label>
+          <select id="b-target" class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-semibold">
+            <option value="all_parents">📢 All Enrolled Students' Parents (Full School)</option>
+            <option value="class_wise">🎓 Specific Class Only (e.g. Class 10 & 12 Board Exam)</option>
+            <option value="bus_route">🚌 Specific Bus Route Only</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs font-semibold text-gray-300 mb-1.5">WhatsApp Message Text (Delivered instantly to Parent phone numbers)</label>
+        <textarea id="b-message" rows="5" required placeholder="Type official alert message..." class="glass-input w-full p-4 rounded-2xl text-xs leading-relaxed"></textarea>
+      </div>
+
+      <div class="flex items-center justify-between pt-4 border-t border-white/10">
+        <div class="text-xs font-mono text-gray-400 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>WhatsApp API Gateway: 100% Operational</span>
+        </div>
+        <button type="submit" id="btn-send-broadcast" class="px-8 py-3 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/30 flex items-center gap-2 transition-all">
+          <span>🚀</span> Dispatch WhatsApp Blast
+        </button>
+      </div>
+    </form>
+
+  </main>
+
+  <script src="/js/api.js"></script>
+  <script>
+    const PRESETS = {
+      flood: {
+        title: "Heavy Rainfall Advisory - School Closed Today",
+        msg: "Dear Parents, in view of severe waterlogging caused by heavy monsoon rainfall in Guwahati and advisory from Kamrup Metro District Administration, Maharishi Vidya Mandir will remain CLOSED today. Online study material has been shared."
+      },
+      bandh: {
+        title: "Assam Bandh Notice - Online Classes Scheduled",
+        msg: "Dear Parents, due to the 12-hour Assam Bandh called today, school bus services stand suspended for student safety. Regular academic classes will be conducted via Online Classroom as per regular timetable."
+      },
+      ptm: {
+        title: "Parent-Teacher Meeting (PTM) Scheduled This Saturday",
+        msg: "Dear Parents, the Parent-Teacher Meeting (PTM) for Term Assessment review is scheduled this Saturday from 09:00 AM to 01:00 PM. Parents are requested to visit school as per their designated roll number time slot."
+      },
+      heatwave: {
+        title: "Revised Summer School Timings (06:30 AM - 11:30 AM)",
+        msg: "Dear Parents, due to extreme summer heatwave conditions in the valley, school timings are revised from tomorrow to 06:30 AM - 11:30 AM until further notice. Bus routes will commence 1 hour earlier."
+      }
+    };
+
+    function applyPreset(key) {
+      const p = PRESETS[key];
+      if (!p) return;
+      document.getElementById('b-title').value = p.title;
+      document.getElementById('b-message').value = p.msg;
+      Toast.show(`Loaded preset: ${p.title}`, 'info');
+    }
+
+    document.getElementById('broadcast-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('b-title').value;
+      const message = document.getElementById('b-message').value;
+      const target = document.getElementById('b-target').value;
+
+      if (!confirm(`CONFIRMATION: Blast WhatsApp emergency alert "${title}" to all parents?`)) return;
+
+      const btn = document.getElementById('btn-send-broadcast');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin">↻</span> Broadcasting WhatsApp alerts...`;
+
+      try {
+        const res = await API.sendEmergencyBroadcast(title, message, target);
+        Toast.show(`Successfully blasted WhatsApp message to ${res.total_delivered} parents!`, 'success', 5000);
+        AudioChime.playSuccess();
+      } catch (err) {
+        Toast.show('Broadcast error: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<span>🚀</span> Dispatch WhatsApp Blast`;
+      }
+    });
+  </script>
+</body>
+</html>

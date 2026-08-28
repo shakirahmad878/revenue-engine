@@ -3,539 +3,537 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Staff Attendance & Payroll SaaS - Executive Portal</title>
+  <title>Smart School OS - Unified Attendance, Safety & Faculty Payroll</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- QRCode.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   
   <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    @media print {
+      body { background: white !important; color: black !important; padding: 0 !important; }
+      .no-print { display: none !important; }
+      .printable-voucher { background: white !important; border: 2px solid #000 !important; color: #000 !important; box-shadow: none !important; }
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-[#0b0f19] text-gray-100 flex flex-col selection:bg-indigo-500 selection:text-white">
+<body class="min-h-screen bg-[#070b14] text-gray-100 flex flex-col selection:bg-indigo-500 selection:text-white">
 
-  <!-- Top Navigation Bar -->
-  <header class="glass-panel sticky top-0 z-40 border-b border-white/10 px-4 sm:px-8 py-3.5">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+  <!-- Top Master Navigation Bar -->
+  <header class="glass-panel sticky top-0 z-40 border-b border-white/10 px-4 sm:px-8 py-3.5 no-print">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
       
-      <!-- Brand & Company Info -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-indigo-500/30">
-          ✦
+      <!-- Brand & School Details -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-amber-500 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-indigo-600/30">
+          🏫
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-white tracking-tight company-name-display">Apex Innovations Inc.</h1>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 tracking-wider">Enterprise Pro</span>
+            <h1 class="text-base sm:text-lg font-extrabold text-white tracking-tight" id="school-name-display">Maharishi Vidya Mandir Public School</h1>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" id="school-board-badge">CBSE Affiliated</span>
           </div>
-          <p class="text-xs text-gray-400 font-mono company-tagline-display">Smart QR Attendance & Payroll Operating System</p>
+          <p class="text-xs text-gray-400 font-mono" id="school-principal-display">Principal: Dr. S. K. Mahanta • Guwahati, Assam</p>
         </div>
       </div>
 
-      <!-- Live Clock & Quick Launchers -->
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- Live Digital Clock -->
-        <div class="hidden sm:flex flex-col text-right px-3.5 py-1.5 rounded-xl bg-slate-900/80 border border-white/10 font-mono">
-          <div id="header-live-time" class="text-sm font-bold text-emerald-400">12:00:00 PM</div>
-          <div id="header-live-date" class="text-[10px] text-gray-400">Fri, Aug 28, 2026</div>
-        </div>
-
-        <!-- Quick Terminal Action Links -->
-        <a href="/kiosk" target="_blank" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 transition-all">
+      <!-- Quick Launch Action Buttons -->
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="/kiosk" target="_blank" class="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-1.5 shadow-lg shadow-indigo-600/30 transition-all">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-          Office Kiosk
+          Gate Kiosk (1.2s)
         </a>
 
-        <a href="/scan" target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
-          <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
-          Mobile Scan
+        <a href="/bus" target="_blank" class="px-3 py-2 rounded-xl bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-bold flex items-center gap-1.5 transition-all">
+          <span>🚌</span> Bus App
         </a>
 
-        <a href="/portal" target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
-          <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-          Staff Portal
+        <a href="/badges" target="_blank" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
+          <span>🪪</span> ID Studio
         </a>
 
-        <a href="/pitch" target="_blank" class="px-3 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 hover:text-white border border-amber-500/30 text-xs font-semibold flex items-center gap-1.5 transition-all" title="Pitch & Sell to Companies">
-          <span>🚀</span> B2B Sales Kit
+        <a href="/register" target="_blank" class="px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-bold flex items-center gap-1.5 transition-all">
+          <span>📋</span> CBSE Register
+        </a>
+
+        <a href="/pitch" target="_blank" class="px-3 py-2 rounded-xl bg-purple-600/20 hover:bg-purple-600 text-purple-300 hover:text-white border border-purple-500/30 text-xs font-bold flex items-center gap-1.5 transition-all">
+          <span>💡</span> Pitch Deck
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Container -->
+  <!-- Main Unified Workspace -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 space-y-6">
 
-    <!-- Metrics Summary Cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-      <!-- Total Staff -->
-      <div class="glass-card rounded-2xl p-4 border border-white/5 relative overflow-hidden">
-        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Total Staff</div>
-        <div id="stat-total-staff" class="text-2xl font-extrabold text-white mt-1 font-mono">--</div>
-        <div class="text-[10px] text-gray-500 mt-1">Active Directory</div>
+    <!-- Unified Morning Strength & Operational Alert Header -->
+    <div class="glass-panel rounded-3xl p-6 sm:p-7 border border-indigo-500/30 bg-gradient-to-r from-slate-900/95 via-indigo-950/40 to-slate-900/95 flex flex-col md:flex-row md:items-center justify-between gap-6 no-print">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></span>
+          <span class="text-xs font-mono font-bold text-emerald-400 uppercase tracking-wider">Unified School Operations & Safety Command</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">Principal's Daily Control Dashboard</h2>
+        <p class="text-xs text-gray-300 mt-1">Real-time student morning strength, parent WhatsApp alerts, teacher punctuality & payroll engine</p>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center gap-3">
+        <button id="btn-trigger-830-absence" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/30 flex items-center gap-2 transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+          <span>Send 8:30 AM Absence WhatsApp</span>
+        </button>
+
+        <button onclick="openAddTeacherModal()" class="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition-all">
+          <span>+</span> Add Faculty / Staff
+        </button>
+      </div>
+    </div>
+
+    <!-- Live Unified Counters -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 no-print">
+      <!-- Enrolled Students -->
+      <div class="glass-card rounded-2xl p-4 border border-white/5">
+        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Students Enrolled</div>
+        <div id="stat-total-students" class="text-2xl sm:text-3xl font-black text-white font-mono mt-1">--</div>
+        <div class="text-[10px] text-gray-500 mt-1">Class 6 to 12</div>
       </div>
 
       <!-- Present Today -->
-      <div class="glass-card rounded-2xl p-4 border border-emerald-500/20 bg-emerald-950/10 relative overflow-hidden">
+      <div class="glass-card rounded-2xl p-4 border border-emerald-500/20 bg-emerald-950/10">
         <div class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Present Today</div>
-        <div id="stat-present-today" class="text-2xl font-extrabold text-emerald-400 mt-1 font-mono">--</div>
-        <div class="text-[10px] text-emerald-500/80 mt-1">Checked In Today</div>
+        <div id="stat-present-students" class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono mt-1">--</div>
+        <div id="stat-strength-pct" class="text-[10px] text-emerald-400 font-bold mt-1">--% Strength</div>
       </div>
 
-      <!-- Punctuality Rate -->
-      <div class="glass-card rounded-2xl p-4 border border-indigo-500/20 bg-indigo-950/10 relative overflow-hidden">
-        <div class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">Punctuality</div>
-        <div id="stat-punctuality-rate" class="text-2xl font-extrabold text-indigo-300 mt-1 font-mono">--%</div>
-        <div class="text-[10px] text-indigo-400/80 mt-1">On-Time Arrival</div>
+      <!-- On-Time -->
+      <div class="glass-card rounded-2xl p-4 border border-indigo-500/20 bg-indigo-950/10">
+        <div class="text-[11px] font-semibold text-indigo-300 uppercase tracking-wider">On-Time Arrivals</div>
+        <div id="stat-on-time" class="text-2xl sm:text-3xl font-black text-indigo-300 font-mono mt-1">--</div>
+        <div class="text-[10px] text-indigo-400 mt-1">Before 08:00 AM</div>
       </div>
 
       <!-- Late Arrivals -->
-      <div class="glass-card rounded-2xl p-4 border border-rose-500/20 bg-rose-950/10 relative overflow-hidden">
-        <div class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider">Late Today</div>
-        <div id="stat-late-today" class="text-2xl font-extrabold text-rose-400 mt-1 font-mono">--</div>
-        <div class="text-[10px] text-rose-500/80 mt-1">Beyond Grace Period</div>
+      <div class="glass-card rounded-2xl p-4 border border-amber-500/20 bg-amber-950/10">
+        <div class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">Late Arrivals</div>
+        <div id="stat-late-students" class="text-2xl sm:text-3xl font-black text-amber-400 font-mono mt-1">--</div>
+        <div class="text-[10px] text-amber-500 mt-1">Late SMS Sent</div>
       </div>
 
-      <!-- On Leave -->
-      <div class="glass-card rounded-2xl p-4 border border-amber-500/20 bg-amber-950/10 relative overflow-hidden">
-        <div class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">On Leave</div>
-        <div id="stat-on-leave-today" class="text-2xl font-extrabold text-amber-400 mt-1 font-mono">--</div>
-        <div class="text-[10px] text-amber-500/80 mt-1">Approved Time-Off</div>
+      <!-- Unmarked Absences -->
+      <div class="glass-card rounded-2xl p-4 border border-rose-500/20 bg-rose-950/10">
+        <div class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider">Unmarked Absences</div>
+        <div id="stat-absent-students" class="text-2xl sm:text-3xl font-black text-rose-400 font-mono mt-1">--</div>
+        <div class="text-[10px] text-rose-400 mt-1">Pending WhatsApp</div>
       </div>
 
-      <!-- Total Work Hours Logged -->
-      <div class="glass-card rounded-2xl p-4 border border-white/5 relative overflow-hidden">
-        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Work Hours</div>
-        <div id="stat-total-hours" class="text-2xl font-extrabold text-white mt-1 font-mono">--h</div>
-        <div class="text-[10px] text-gray-500 mt-1">Logged Today</div>
+      <!-- Teachers on Duty -->
+      <div class="glass-card rounded-2xl p-4 border border-white/5">
+        <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Faculty on Duty</div>
+        <div id="stat-staff-present" class="text-2xl sm:text-3xl font-black text-white font-mono mt-1">--/--</div>
+        <div class="text-[10px] text-emerald-400 font-bold mt-1">100% Verified</div>
       </div>
     </div>
 
-    <!-- Navigation Tabs Bar -->
-    <div class="flex items-center justify-between border-b border-white/10 pb-2 overflow-x-auto gap-2">
-      <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-2xl border border-white/5">
-        <button data-tab="live" class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          Live Attendance
+    <!-- Unified Master Tabs Navigation -->
+    <div class="border-b border-white/10 pb-2 overflow-x-auto no-print">
+      <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-2xl border border-white/10 w-max">
+        <button data-tab="strength" class="tab-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white flex items-center gap-1.5">
+          <span>🏫</span> Student Strength & Matrix
         </button>
-
-        <button data-tab="reports" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-          Timesheets & Reports
+        <button data-tab="teachers" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>👨‍🏫</span> Teacher Attendance
         </button>
-
-        <button data-tab="payroll" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-          Payroll Engine
+        <button data-tab="payroll" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>💰</span> Faculty Payroll
         </button>
-
-        <button data-tab="staff" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-          Staff Directory
+        <button data-tab="leaves" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>🏖️</span> Teacher Leaves
         </button>
-
-        <button data-tab="leaves" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-          Leave Management
+        <button data-tab="students" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>🎓</span> Student Directory
         </button>
-
-        <button data-tab="settings" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-2">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-          Company & Shifts
+        <button data-tab="faculty" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>👥</span> Faculty Directory
+        </button>
+        <button data-tab="alerts" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>💬</span> Parent WhatsApp Logs
+        </button>
+        <button data-tab="emergency" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>📢</span> Emergency Broadcasts
+        </button>
+        <button data-tab="settings" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
+          <span>⚙️</span> School Policy
         </button>
       </div>
-
-      <!-- Print Badges Quick Action -->
-      <a href="/badges" target="_blank" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/5 transition-all">
-        <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-        Print ID Badges
-      </a>
     </div>
 
     <!-- ============================================================ -->
-    <!-- TAB 1: LIVE ATTENDANCE MONITOR -->
+    <!-- TAB 1: STUDENT MORNING STRENGTH & LIVE GATE MATRIX -->
     <!-- ============================================================ -->
-    <div id="tab-live" class="tab-pane space-y-6">
-      
-      <!-- Charts Row -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- 7-Day Trend Chart -->
-        <div class="lg:col-span-2 glass-panel rounded-2xl p-5">
-          <div class="flex items-center justify-between mb-4">
+    <div id="tab-strength" class="tab-pane space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Class Attendance Matrix (8 Cols) -->
+        <div class="lg:col-span-8 glass-panel rounded-3xl p-6 space-y-4">
+          <div class="flex items-center justify-between border-b border-white/10 pb-4">
             <div>
-              <h3 class="text-sm font-bold text-white">7-Day Attendance & Punctuality Trend</h3>
-              <p class="text-xs text-gray-400">Daily breakdown of on-time, late, and absent records</p>
+              <h3 class="text-base font-bold text-white">Class-by-Class Real-Time Attendance Matrix</h3>
+              <p class="text-xs text-gray-400">Live reporting percentage, class teachers and room allocations</p>
             </div>
-            <span class="px-2.5 py-1 rounded-full text-[10px] font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">LIVE DATA</span>
+            <button onclick="loadMorningStrength(); Toast.show('Refreshed student strength matrix', 'info');" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/10 flex items-center gap-1">
+              <span>↻</span> Refresh
+            </button>
           </div>
-          <div class="h-56 w-full">
-            <canvas id="attendance-trend-chart"></canvas>
-          </div>
+          <div id="class-matrix-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
         </div>
 
-        <!-- Department Distribution & Recent Activity Stream -->
-        <div class="glass-panel rounded-2xl p-5 flex flex-col justify-between">
-          <div>
-            <h3 class="text-sm font-bold text-white mb-1">Department Workforce</h3>
-            <p class="text-xs text-gray-400 mb-4">Staff distribution by functional team</p>
-            <div class="h-36 w-full">
-              <canvas id="department-rate-chart"></canvas>
+        <!-- Live Gate Arrivals & WhatsApp Dispatches (4 Cols) -->
+        <div class="lg:col-span-4 glass-panel rounded-3xl p-6 flex flex-col h-[560px]">
+          <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+            <div>
+              <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                Gate Arrivals & Alerts
+              </h3>
+              <p class="text-[11px] text-gray-400">Live Parent WhatsApp ticker</p>
             </div>
+            <span class="text-[10px] font-mono font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">LIVE</span>
           </div>
-          
-          <div class="mt-4 pt-3 border-t border-white/5">
-            <h4 class="text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Live Activity Stream</h4>
-            <div id="recent-activity-ticker" class="space-y-1 max-h-32 overflow-y-auto">
-              <!-- Logs populated dynamically -->
-            </div>
-          </div>
+          <div id="live-alerts-stream" class="space-y-3 flex-1 overflow-y-auto pr-1"></div>
         </div>
       </div>
+    </div>
 
-      <!-- Today's Attendance Table -->
-      <div class="glass-panel rounded-2xl overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <!-- ============================================================ -->
+    <!-- TAB 2: TEACHER & STAFF LIVE ATTENDANCE -->
+    <!-- ============================================================ -->
+    <div id="tab-teachers" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl overflow-hidden">
+        <div class="p-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 class="text-base font-bold text-white flex items-center gap-2">
-              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Today's Live Attendance Feed
-            </h3>
-            <p class="text-xs text-gray-400 mt-0.5">Real-time arrival and departure timestamps recorded via Kiosk & Badges</p>
+            <h3 class="text-base font-bold text-white">Faculty & Staff Daily Attendance Board</h3>
+            <p class="text-xs text-gray-400">Today's punch times, total hours logged, and punctuality status</p>
           </div>
-
-          <div class="flex items-center gap-2">
-            <button onclick="loadTodayAttendance(); loadDashboardStats(); Toast.show('Refreshed live feed', 'info');" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-              Refresh
+          <div class="flex items-center gap-3">
+            <button onclick="loadTeacherTodayAttendance(); Toast.show('Refreshed faculty attendance', 'info');" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/10 flex items-center gap-1">
+              <span>↻</span> Refresh
             </button>
           </div>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 text-[11px] font-bold uppercase tracking-wider">
-                <th class="px-5 py-3.5">Employee</th>
-                <th class="px-5 py-3.5">Department</th>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 uppercase font-bold tracking-wider">
+                <th class="px-5 py-3.5">Faculty Member</th>
+                <th class="px-5 py-3.5">Designation & Department</th>
                 <th class="px-5 py-3.5">Check-In</th>
                 <th class="px-5 py-3.5">Check-Out</th>
-                <th class="px-5 py-3.5">Hours</th>
+                <th class="px-5 py-3.5">Hours Logged</th>
                 <th class="px-5 py-3.5">Status</th>
                 <th class="px-5 py-3.5 text-right">Quick Action</th>
               </tr>
             </thead>
-            <tbody id="today-attendance-tbody">
-              <!-- Populated dynamically -->
-            </tbody>
+            <tbody id="teacher-attendance-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- TAB 2: TIMESHEETS & REPORTS -->
-    <!-- ============================================================ -->
-    <div id="tab-reports" class="tab-pane hidden space-y-6">
-      <!-- Filter Bar -->
-      <div class="glass-panel rounded-2xl p-5">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
-          <div>
-            <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-1">Start Date</label>
-            <input type="date" id="report-start-date" class="glass-input w-full px-3 py-2 rounded-xl text-xs">
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-1">End Date</label>
-            <input type="date" id="report-end-date" class="glass-input w-full px-3 py-2 rounded-xl text-xs">
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-1">Department</label>
-            <select id="report-dept-filter" class="glass-input dept-select w-full px-3 py-2 rounded-xl text-xs">
-              <option value="">All Departments</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-gray-400 uppercase mb-1">Search Staff</label>
-            <input type="text" id="report-search-input" placeholder="Search name / code..." class="glass-input w-full px-3 py-2 rounded-xl text-xs">
-          </div>
-          <div class="flex items-end gap-2">
-            <button id="btn-apply-report-filter" class="flex-1 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all">
-              Filter
-            </button>
-            <button id="btn-export-reports-csv" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 border border-emerald-500/30 font-semibold text-xs flex items-center gap-1 transition-all" title="Export CSV">
-              <span>📊</span> CSV
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- History Table -->
-      <div class="glass-panel rounded-2xl overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex items-center justify-between">
-          <h3 class="text-sm font-bold text-white">Attendance Records Log</h3>
-          <span class="text-xs text-gray-400">Complete Historical Audit Trail</span>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
-            <thead>
-              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 text-[11px] font-bold uppercase tracking-wider">
-                <th class="px-4 py-3">Date</th>
-                <th class="px-4 py-3">Employee</th>
-                <th class="px-4 py-3">Department</th>
-                <th class="px-4 py-3">In</th>
-                <th class="px-4 py-3">Out</th>
-                <th class="px-4 py-3">Work Time</th>
-                <th class="px-4 py-3">Late Penalty</th>
-                <th class="px-4 py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody id="reports-history-tbody">
-              <!-- Populated dynamically -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- TAB 3: PAYROLL ENGINE -->
+    <!-- TAB 3: FACULTY & STAFF PAYROLL ENGINE -->
     <!-- ============================================================ -->
     <div id="tab-payroll" class="tab-pane hidden space-y-6">
-      
-      <!-- Payroll Overview Controls -->
-      <div class="glass-panel rounded-2xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 font-bold text-xl">
-            <span class="currency-symbol-display">$</span>
-          </div>
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-6">
           <div>
-            <h3 class="text-base font-bold text-white">Automated Wage & Payroll Engine</h3>
-            <p class="text-xs text-gray-400">Auto-calculates hours, overtime rates, late penalty deductions & net wages</p>
+            <h3 class="text-base sm:text-lg font-bold text-white">Faculty & Staff Automated Payroll Engine</h3>
+            <p class="text-xs text-gray-400 mt-0.5">Calculates monthly salary, days worked, late deductions, allowances, and generates official payslips</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <input type="month" id="payroll-month-input" class="glass-input px-3.5 py-2 rounded-xl text-xs font-mono">
+            
+            <button id="btn-run-payroll" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 hover:to-indigo-500 text-white font-extrabold text-xs shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 transition-all">
+              <span>⚡</span> Run Monthly Payroll
+            </button>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-3">
-          <div class="flex items-center gap-2 bg-slate-900/90 p-1.5 rounded-xl border border-white/10">
-            <span class="text-xs text-gray-400 pl-2">Period:</span>
-            <select id="payroll-month-select" class="glass-input bg-transparent border-0 text-xs font-mono font-semibold text-indigo-300 focus:ring-0">
-              <!-- Populated dynamically -->
-            </select>
+        <!-- Payroll Summary Metrics Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="glass-card rounded-2xl p-4 border border-emerald-500/20 bg-emerald-950/10">
+            <div class="text-[11px] font-semibold text-emerald-400 uppercase tracking-wider">Total Net Monthly Payout</div>
+            <div id="pay-total-net" class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono mt-1">₹0.00</div>
+            <div class="text-[10px] text-gray-400 mt-1" id="pay-staff-count">0 Faculty Members</div>
           </div>
 
-          <button onclick="PayrollModule.generatePayroll()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white text-xs font-bold shadow-lg shadow-emerald-600/30 flex items-center gap-1.5 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-            Run Payroll Calculation
-          </button>
+          <div class="glass-card rounded-2xl p-4 border border-rose-500/20 bg-rose-950/10">
+            <div class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider">Total Deductions (Late + Tax)</div>
+            <div id="pay-total-deductions" class="text-2xl sm:text-3xl font-black text-rose-400 font-mono mt-1">₹0.00</div>
+            <div class="text-[10px] text-gray-400 mt-1">TDS & Late arrival penalties</div>
+          </div>
 
-          <button onclick="PayrollModule.exportBankCSV()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
-            <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            Bank Upload CSV
-          </button>
-        </div>
-      </div>
-
-      <!-- Payroll Metric Summary Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="glass-card rounded-2xl p-5 border border-emerald-500/20 bg-emerald-950/10">
-          <div class="text-xs text-emerald-300 font-semibold uppercase tracking-wider">Total Net Payout</div>
-          <div id="payroll-total-net" class="text-2xl sm:text-3xl font-extrabold text-emerald-400 font-mono mt-1">$0.00</div>
-          <div class="text-[10px] text-gray-400 mt-1">Direct wages to be disbursed</div>
+          <div class="glass-card rounded-2xl p-4 border border-white/5 flex flex-col justify-center">
+            <button onclick="exportBankDirectCSV()" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-white/10 flex items-center justify-center gap-2 transition-all">
+              <span>📥</span> Export Bank Direct Deposit CSV
+            </button>
+          </div>
         </div>
 
-        <div class="glass-card rounded-2xl p-5 border border-amber-500/20 bg-amber-950/10">
-          <div class="text-xs text-amber-300 font-semibold uppercase tracking-wider">Overtime Payout (1.5x)</div>
-          <div id="payroll-total-ot" class="text-2xl sm:text-3xl font-extrabold text-amber-400 font-mono mt-1">$0.00</div>
-          <div class="text-[10px] text-gray-400 mt-1">Extra compensation earned</div>
-        </div>
-
-        <div class="glass-card rounded-2xl p-5 border border-rose-500/20 bg-rose-950/10">
-          <div class="text-xs text-rose-400 font-semibold uppercase tracking-wider">Total Deductions</div>
-          <div id="payroll-total-deductions" class="text-2xl sm:text-3xl font-extrabold text-rose-400 font-mono mt-1">$0.00</div>
-          <div class="text-[10px] text-gray-400 mt-1">Late arrivals & tax withholding</div>
-        </div>
-
-        <div class="glass-card rounded-2xl p-5 border border-white/5">
-          <div class="text-xs text-gray-400 font-semibold uppercase tracking-wider">Staff Count Processed</div>
-          <div id="payroll-total-count" class="text-2xl sm:text-3xl font-extrabold text-white font-mono mt-1">0</div>
-          <div class="text-[10px] text-gray-500 mt-1">Active staff on payroll</div>
-        </div>
-      </div>
-
-      <!-- Payroll Table -->
-      <div class="glass-panel rounded-2xl overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex items-center justify-between">
-          <h3 class="text-sm font-bold text-white">Itemized Staff Payroll Register</h3>
-          <span class="text-xs text-gray-400 font-mono">100% Tax & Overtime Compliant</span>
-        </div>
+        <!-- Payroll Records Table -->
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 text-[11px] font-bold uppercase tracking-wider">
-                <th class="px-5 py-3.5">Employee</th>
-                <th class="px-5 py-3.5">Pay Structure</th>
-                <th class="px-5 py-3.5">Attendance</th>
-                <th class="px-5 py-3.5">Overtime Pay</th>
-                <th class="px-5 py-3.5">Late Deductions</th>
-                <th class="px-5 py-3.5">Net Pay</th>
-                <th class="px-5 py-3.5">Status</th>
-                <th class="px-5 py-3.5 text-right">Actions</th>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 uppercase font-bold tracking-wider">
+                <th class="px-4 py-3.5">Faculty Member</th>
+                <th class="px-4 py-3.5">Base Monthly Salary</th>
+                <th class="px-4 py-3.5">Days Worked</th>
+                <th class="px-4 py-3.5">Allowance Bonus</th>
+                <th class="px-4 py-3.5">Late / Tax Deductions</th>
+                <th class="px-4 py-3.5 font-bold text-emerald-400">Net Salary</th>
+                <th class="px-4 py-3.5">Status</th>
+                <th class="px-4 py-3.5 text-right">Payslip</th>
               </tr>
             </thead>
-            <tbody id="payroll-table-body">
-              <!-- Populated dynamically -->
-            </tbody>
+            <tbody id="payroll-records-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- TAB 4: STAFF DIRECTORY -->
-    <!-- ============================================================ -->
-    <div id="tab-staff" class="tab-pane hidden space-y-6">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 class="text-base font-bold text-white">Employee Roster & QR Badges</h3>
-          <p class="text-xs text-gray-400">Manage workforce profiles, wage structures, and scannable badges</p>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <button onclick="document.getElementById('add-employee-modal').classList.remove('hidden')" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold flex items-center gap-2 shadow-lg shadow-indigo-600/30 transition-all">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-            Add New Employee
-          </button>
-        </div>
-      </div>
-
-      <!-- Staff Cards Grid -->
-      <div id="staff-cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        <!-- Populated dynamically -->
-      </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- TAB 5: LEAVE MANAGEMENT -->
+    <!-- TAB 4: TEACHER LEAVE MANAGEMENT -->
     <!-- ============================================================ -->
     <div id="tab-leaves" class="tab-pane hidden space-y-6">
-      <div class="glass-panel rounded-2xl overflow-hidden">
-        <div class="p-5 border-b border-white/10 flex items-center justify-between">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
           <div>
-            <h3 class="text-base font-bold text-white">Time-Off & Leave Requests</h3>
-            <p class="text-xs text-gray-400">Review, approve, or reject employee leave applications</p>
+            <h3 class="text-base font-bold text-white">Faculty & Staff Leave Requests</h3>
+            <p class="text-xs text-gray-400">Review, approve or reject Casual, Medical, and Academic leave applications</p>
           </div>
+          <button onclick="openRequestLeaveModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-1.5">
+            <span>+</span> Apply for Leave
+          </button>
         </div>
 
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse text-xs">
             <thead>
-              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 text-[11px] font-bold uppercase tracking-wider">
-                <th class="px-5 py-3.5">Employee</th>
-                <th class="px-5 py-3.5">Leave Type</th>
-                <th class="px-5 py-3.5">Dates / Duration</th>
-                <th class="px-5 py-3.5">Reason</th>
-                <th class="px-5 py-3.5">Status</th>
-                <th class="px-5 py-3.5 text-right">Actions</th>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 uppercase font-bold tracking-wider">
+                <th class="px-4 py-3.5">Staff Member</th>
+                <th class="px-4 py-3.5">Leave Type</th>
+                <th class="px-4 py-3.5">Duration</th>
+                <th class="px-4 py-3.5">Reason</th>
+                <th class="px-4 py-3.5">Status</th>
+                <th class="px-4 py-3.5 text-right">Review Action</th>
               </tr>
             </thead>
-            <tbody id="leave-requests-tbody">
-              <!-- Populated dynamically -->
-            </tbody>
+            <tbody id="leaves-table-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
 
     <!-- ============================================================ -->
-    <!-- TAB 6: COMPANY & SHIFTS SETTINGS -->
+    <!-- TAB 5: STUDENT DIRECTORY & PARENT CONTACTS -->
     <!-- ============================================================ -->
-    <div id="tab-settings" class="tab-pane hidden space-y-6">
-      
-      <!-- Preset Switcher -->
-      <div class="glass-panel rounded-2xl p-5 border border-indigo-500/20 bg-indigo-950/10">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div id="tab-students" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h4 class="text-sm font-bold text-indigo-300 flex items-center gap-2">
-              <span>🏢</span> Load Industry Client Demo Presets
-            </h4>
-            <p class="text-xs text-gray-400 mt-0.5">Instantly configure system data for specific business verticals when pitching to clients</p>
+            <h3 class="text-base font-bold text-white">Enrolled Students Roster & Parent WhatsApp Contacts</h3>
+            <p class="text-xs text-gray-400">Class 6 to 12 student list with blood groups and bus routes</p>
           </div>
-          <div class="flex flex-wrap gap-2">
-            <button data-preset="tech" class="btn-load-preset px-3 py-1.5 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-semibold transition-all">
-              Tech & SaaS
-            </button>
-            <button data-preset="retail" class="btn-load-preset px-3 py-1.5 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 text-emerald-200 hover:text-white border border-emerald-500/30 text-xs font-semibold transition-all">
-              Retail & Supermarket (₦ NGN)
-            </button>
-          </div>
+          <a href="/badges" target="_blank" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition-all">
+            <span>🪪</span> Print Class ID Badges
+          </a>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 uppercase font-bold tracking-wider">
+                <th class="px-4 py-3.5">Student</th>
+                <th class="px-4 py-3.5">Class & Roll</th>
+                <th class="px-4 py-3.5">Parent / Guardian</th>
+                <th class="px-4 py-3.5">Parent WhatsApp</th>
+                <th class="px-4 py-3.5">Blood Group</th>
+                <th class="px-4 py-3.5">Bus Route</th>
+                <th class="px-4 py-3.5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="student-roster-tbody"></tbody>
+          </table>
         </div>
       </div>
+    </div>
 
-      <!-- Settings Form -->
-      <form id="company-settings-form" class="glass-panel rounded-2xl p-6 space-y-6">
+    <!-- ============================================================ -->
+    <!-- TAB 6: FACULTY & STAFF DIRECTORY -->
+    <!-- ============================================================ -->
+    <div id="tab-faculty" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-base font-bold text-white">Teachers & Staff Directory</h3>
+            <p class="text-xs text-gray-400">Teaching faculty, Subject Coordinators & Transport Staff</p>
+          </div>
+          <button onclick="openAddTeacherModal()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-1.5">
+            <span>+</span> Add Faculty Member
+          </button>
+        </div>
+
+        <div id="faculty-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 7: PARENT WHATSAPP DELIVERY LOGS -->
+    <!-- ============================================================ -->
+    <div id="tab-alerts" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl overflow-hidden">
+        <div class="p-6 border-b border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="text-base font-bold text-white">Multi-Channel Parent WhatsApp Audit Trail</h3>
+            <p class="text-xs text-gray-400">Complete delivery audit of Arrival, Departure, Late Warning & Absence notices</p>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
+            WhatsApp Gateway: Connected
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="border-b border-white/10 bg-slate-900/60 text-gray-400 uppercase font-bold tracking-wider">
+                <th class="px-4 py-3.5">Student / Recipient</th>
+                <th class="px-4 py-3.5">Phone Number</th>
+                <th class="px-4 py-3.5">Type</th>
+                <th class="px-4 py-3.5">Delivered Message</th>
+                <th class="px-4 py-3.5">Status</th>
+                <th class="px-4 py-3.5">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="whatsapp-logs-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 8: EMERGENCY WHATSAPP BROADCASTS -->
+    <!-- ============================================================ -->
+    <div id="tab-emergency" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
         <div>
-          <h3 class="text-base font-bold text-white">Work Shift & Company Policy Configuration</h3>
-          <p class="text-xs text-gray-400 mt-0.5">Define standard working hours, grace periods, and overtime rates</p>
+          <h3 class="text-base font-bold text-white">Emergency Parent WhatsApp Broadcast Center</h3>
+          <p class="text-xs text-gray-400">Blast emergency alerts for weather, Brahmaputra floods, or bandh notices to all parents</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <button onclick="applyPreset('flood')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-rose-900/40 border border-white/10 hover:border-rose-500/40 text-left transition-all">
+            <div class="text-lg mb-1">🌧️</div>
+            <div class="font-bold text-white text-xs">Heavy Rain / Flood Alert</div>
+            <div class="text-[10px] text-gray-400 mt-1">School declared closed due to Guwahati city waterlogging.</div>
+          </button>
+          <button onclick="applyPreset('bandh')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-amber-900/40 border border-white/10 hover:border-amber-500/40 text-left transition-all">
+            <div class="text-lg mb-1">🛑</div>
+            <div class="font-bold text-white text-xs">Assam Bandh Notice</div>
+            <div class="text-[10px] text-gray-400 mt-1">Buses suspended; classes conducted online.</div>
+          </button>
+          <button onclick="applyPreset('ptm')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-indigo-900/40 border border-white/10 hover:border-indigo-500/40 text-left transition-all">
+            <div class="text-lg mb-1">👨‍👩‍👧</div>
+            <div class="font-bold text-white text-xs">PTM Meeting Reminder</div>
+            <div class="text-[10px] text-gray-400 mt-1">Reminder for Saturday Parent-Teacher conference.</div>
+          </button>
+          <button onclick="applyPreset('heatwave')" class="p-3.5 rounded-2xl bg-slate-800/80 hover:bg-orange-900/40 border border-white/10 hover:border-orange-500/40 text-left transition-all">
+            <div class="text-lg mb-1">☀️</div>
+            <div class="font-bold text-white text-xs">Summer Morning Timings</div>
+            <div class="text-[10px] text-gray-400 mt-1">School shifts to 06:30 AM due to heatwave.</div>
+          </button>
+        </div>
+
+        <form id="emergency-broadcast-form" class="space-y-4 pt-4 border-t border-white/10">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Alert Subject</label>
+              <input type="text" id="b-title" required class="glass-input w-full px-4 py-2 rounded-xl text-xs font-bold" placeholder="e.g. Heavy Rain Flood Alert">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Target Audience</label>
+              <select id="b-target" class="glass-input w-full px-4 py-2 rounded-xl text-xs font-semibold">
+                <option value="all_parents">📢 All Enrolled Students' Parents (Full School)</option>
+                <option value="class_wise">🎓 Specific Class Only</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">WhatsApp Message Content</label>
+            <textarea id="b-message" rows="4" required class="glass-input w-full p-4 rounded-2xl text-xs leading-relaxed" placeholder="Type official alert message..."></textarea>
+          </div>
+
+          <div class="flex justify-end">
+            <button type="submit" id="btn-send-blast" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs shadow-lg shadow-rose-600/30">
+              Dispatch Emergency WhatsApp Blast
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 9: SCHOOL POLICY & MULTI-LANGUAGE SETTINGS -->
+    <!-- ============================================================ -->
+    <div id="tab-settings" class="tab-pane hidden space-y-6">
+      <form id="school-settings-form" class="glass-panel rounded-3xl p-8 space-y-6">
+        <div>
+          <h3 class="text-base font-bold text-white">School Timings & Parent WhatsApp Language Policy</h3>
+          <p class="text-xs text-gray-400 mt-0.5">Configure gate reporting timings, grace periods, and parent notification languages</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Company Name</label>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">School Name</label>
             <input type="text" name="name" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Tagline / Department Subtitle</label>
-            <input type="text" name="tagline" class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Board Affiliation</label>
+            <input type="text" name="affiliation_board" value="CBSE, New Delhi" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Currency Symbol</label>
-            <select name="currency_symbol" class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
-              <option value="$">$ USD (United States Dollar)</option>
-              <option value="₦">₦ NGN (Nigerian Naira)</option>
-              <option value="€">€ EUR (Euro)</option>
-              <option value="£">£ GBP (British Pound)</option>
-              <option value="₹">₹ INR (Indian Rupee)</option>
-              <option value="C$">C$ CAD (Canadian Dollar)</option>
-              <option value="A$">A$ AUD (Australian Dollar)</option>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Principal Name</label>
+            <input type="text" name="principal_name" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">School Start Time (Gate Cutoff)</label>
+            <input type="time" name="school_start_time" value="08:00" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Late Grace Period (Minutes)</label>
+            <input type="number" name="late_grace_minutes" value="10" min="0" max="30" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">WhatsApp Alert Language</label>
+            <select name="preferred_language" class="glass-input w-full px-4 py-2.5 rounded-xl text-xs">
+              <option value="en">English (Standard)</option>
+              <option value="as">Assamese (অসমীয়া)</option>
+              <option value="hi">Hindi (हिन्दी)</option>
             </select>
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Work Shift Start Time</label>
-            <input type="time" name="work_start_time" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Work Shift End Time</label>
-            <input type="time" name="work_end_time" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Late Arrival Grace Period (Minutes)</label>
-            <input type="number" name="late_grace_minutes" min="0" max="60" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Overtime Wage Multiplier (e.g. 1.5x)</label>
-            <input type="number" step="0.1" name="overtime_multiplier" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Late Deduction Rate (per 15 min late)</label>
-            <input type="number" step="0.5" name="late_deduction_rate" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
-          </div>
-
-          <div>
-            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Dynamic QR Refresh Rate (Seconds)</label>
-            <input type="number" name="qr_refresh_seconds" min="10" max="60" required class="glass-input w-full px-4 py-2.5 rounded-xl text-xs font-mono">
           </div>
         </div>
 
         <div class="pt-4 border-t border-white/10 flex justify-end">
           <button type="submit" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all">
-            Save Company Policy
+            Save School Configuration
           </button>
         </div>
       </form>
@@ -544,104 +542,764 @@
   </main>
 
   <!-- ============================================================ -->
-  <!-- MODAL: ADD EMPLOYEE -->
+  <!-- MODAL: OFFICIAL PRINTABLE PAYSLIP VOUCHER -->
   <!-- ============================================================ -->
-  <div id="add-employee-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="glass-panel bg-slate-900 border border-white/10 rounded-2xl w-full max-w-lg p-6 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-        <h3 class="text-base font-bold text-white">Register New Staff Member</h3>
-        <button onclick="document.getElementById('add-employee-modal').classList.add('hidden')" class="text-gray-400 hover:text-white text-lg">✕</button>
+  <div id="payslip-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden no-print">
+    <div class="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl printable-voucher">
+      <div id="payslip-modal-content"></div>
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-white/10 no-print">
+        <button onclick="window.print()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow">
+          Print Payslip Voucher
+        </button>
+        <button onclick="closePayslipModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 text-xs">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- MODAL: ADD FACULTY / STAFF -->
+  <!-- ============================================================ -->
+  <div id="add-teacher-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden no-print">
+    <form id="add-teacher-form" class="w-full max-w-lg bg-slate-900 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="text-base font-bold text-white">Add Teaching Faculty / Staff</h3>
+        <button type="button" onclick="closeAddTeacherModal()" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
       </div>
 
-      <form id="add-employee-form" class="space-y-4 text-xs">
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">First Name</label>
-            <input type="text" name="first_name" required class="glass-input w-full px-3 py-2 rounded-xl">
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Last Name</label>
-            <input type="text" name="last_name" required class="glass-input w-full px-3 py-2 rounded-xl">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Corporate Email</label>
-            <input type="email" name="email" required class="glass-input w-full px-3 py-2 rounded-xl">
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Phone Number</label>
-            <input type="text" name="phone" placeholder="+1 (555) 000-0000" class="glass-input w-full px-3 py-2 rounded-xl">
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Designation / Role</label>
-            <input type="text" name="designation" placeholder="e.g. Lead Engineer" required class="glass-input w-full px-3 py-2 rounded-xl">
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Department</label>
-            <select name="department_id" class="glass-input dept-select w-full px-3 py-2 rounded-xl">
-              <option value="">Select Department</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-3 gap-3">
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Salary Structure</label>
-            <select name="salary_type" class="glass-input w-full px-3 py-2 rounded-xl">
-              <option value="monthly">Monthly Fixed</option>
-              <option value="hourly">Hourly Rate</option>
-            </select>
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Monthly Salary</label>
-            <input type="number" step="10" name="monthly_salary" value="4500" class="glass-input w-full px-3 py-2 rounded-xl font-mono">
-          </div>
-          <div>
-            <label class="block font-semibold text-gray-300 mb-1">Hourly Rate</label>
-            <input type="number" step="1" name="hourly_rate" value="25" class="glass-input w-full px-3 py-2 rounded-xl font-mono">
-          </div>
-        </div>
-
+      <div class="grid grid-cols-2 gap-3">
         <div>
-          <label class="block font-semibold text-gray-300 mb-1">4-Digit PIN Code (for Kiosk PIN check-in)</label>
-          <input type="text" name="pin_code" maxlength="4" value="1234" class="glass-input w-full px-3 py-2 rounded-xl font-mono">
+          <label class="block text-xs text-gray-300 mb-1">First Name</label>
+          <input type="text" name="first_name" required class="glass-input w-full px-3 py-2 rounded-xl text-xs">
         </div>
-
-        <div class="pt-4 border-t border-white/10 flex justify-end gap-2">
-          <button type="button" onclick="document.getElementById('add-employee-modal').classList.add('hidden')" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 font-semibold">Cancel</button>
-          <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-600/30">Create Employee</button>
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Last Name</label>
+          <input type="text" name="last_name" required class="glass-input w-full px-3 py-2 rounded-xl text-xs">
         </div>
-      </form>
-    </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Email</label>
+          <input type="email" name="email" required class="glass-input w-full px-3 py-2 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Phone</label>
+          <input type="text" name="phone" value="+91 94350-00000" class="glass-input w-full px-3 py-2 rounded-xl text-xs">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Designation</label>
+          <input type="text" name="designation" placeholder="e.g. PGT Chemistry" required class="glass-input w-full px-3 py-2 rounded-xl text-xs">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Department</label>
+          <input type="text" name="subject_department" placeholder="e.g. Science" required class="glass-input w-full px-3 py-2 rounded-xl text-xs">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-300 mb-1">Monthly Salary (₹)</label>
+        <input type="number" name="monthly_salary" value="55000" required class="glass-input w-full px-3 py-2 rounded-xl text-xs font-mono">
+      </div>
+
+      <div class="flex justify-end gap-3 pt-3 border-t border-white/10">
+        <button type="button" onclick="closeAddTeacherModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 text-xs">Cancel</button>
+        <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow">Save Faculty</button>
+      </div>
+    </form>
   </div>
 
   <!-- ============================================================ -->
-  <!-- MODAL: EMPLOYEE QR BADGE PREVIEW -->
+  <!-- MODAL: REQUEST TEACHER LEAVE -->
   <!-- ============================================================ -->
-  <div id="employee-badge-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="relative">
-      <button onclick="document.getElementById('employee-badge-modal').classList.add('hidden')" class="absolute -top-10 right-0 text-white/70 hover:text-white font-mono text-sm bg-slate-800 px-3 py-1 rounded-full">✕ Close</button>
-      <div id="modal-badge-card-container"></div>
-    </div>
+  <div id="request-leave-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden no-print">
+    <form id="request-leave-form" class="w-full max-w-md bg-slate-900 border border-white/10 rounded-3xl p-6 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-white/10 pb-3">
+        <h3 class="text-base font-bold text-white">Apply for Faculty Leave</h3>
+        <button type="button" onclick="closeRequestLeaveModal()" class="text-gray-400 hover:text-white font-bold text-sm">✕</button>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-300 mb-1">Faculty Member</label>
+        <select id="leave-staff-select" required class="glass-input w-full px-3 py-2 rounded-xl text-xs"></select>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-300 mb-1">Leave Type</label>
+        <select name="leave_type" class="glass-input w-full px-3 py-2 rounded-xl text-xs">
+          <option value="Casual">Casual Leave</option>
+          <option value="Medical">Medical / Sick Leave</option>
+          <option value="Academic">Academic / Workshop Leave</option>
+          <option value="Earned">Earned Leave</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">Start Date</label>
+          <input type="date" name="start_date" required class="glass-input w-full px-3 py-2 rounded-xl text-xs font-mono">
+        </div>
+        <div>
+          <label class="block text-xs text-gray-300 mb-1">End Date</label>
+          <input type="date" name="end_date" required class="glass-input w-full px-3 py-2 rounded-xl text-xs font-mono">
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-300 mb-1">Reason / Notes</label>
+        <textarea name="reason" rows="2" class="glass-input w-full p-2.5 rounded-xl text-xs"></textarea>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-3 border-t border-white/10">
+        <button type="button" onclick="closeRequestLeaveModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 text-xs">Cancel</button>
+        <button type="submit" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow">Submit Leave</button>
+      </div>
+    </form>
   </div>
 
-  <!-- ============================================================ -->
-  <!-- MODAL: OFFICIAL PAYSLIP VIEW & PRINT -->
-  <!-- ============================================================ -->
-  <div id="payslip-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto hidden">
-    <div class="w-full max-w-2xl my-auto">
-      <div id="payslip-modal-content"></div>
-    </div>
-  </div>
-
-  <!-- Scripts -->
   <script src="/js/api.js"></script>
-  <script src="/js/payroll.js"></script>
-  <script src="/js/app.js"></script>
+  <script>
+    let morningData = null;
+    let facultyList = [];
+    let curPayrollMonth = new Date().toISOString().slice(0, 7);
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      document.getElementById('payroll-month-input').value = curPayrollMonth;
+      await loadMorningStrength();
+      setupTabs();
+      setupAbsenceTrigger();
+      setupPayrollHandlers();
+      setupLeaveHandlers();
+      setupEmergencyBroadcastForm();
+      setupSettingsForm();
+
+      setInterval(loadMorningStrength, 15000);
+    });
+
+    async function loadMorningStrength() {
+      try {
+        const data = await API.getMorningStrength();
+        morningData = data;
+        renderHeader(data.school);
+        renderSummary(data.summary);
+        renderClassMatrix(data.classes);
+        renderAlertsStream(data.recent_alerts);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function renderHeader(school) {
+      if (!school) return;
+      document.getElementById('school-name-display').textContent = school.name;
+      document.getElementById('school-board-badge').textContent = school.affiliation_board;
+      document.getElementById('school-principal-display').textContent = `Principal: ${school.principal_name} • ${school.city}`;
+    }
+
+    function renderSummary(s) {
+      if (!s) return;
+      document.getElementById('stat-total-students').textContent = s.total_students;
+      document.getElementById('stat-present-students').textContent = s.present_students;
+      document.getElementById('stat-strength-pct').textContent = `${s.strength_percentage}% Strength`;
+      document.getElementById('stat-on-time').textContent = s.on_time_students;
+      document.getElementById('stat-late-students').textContent = s.late_students;
+      document.getElementById('stat-absent-students').textContent = s.absent_students;
+      document.getElementById('stat-staff-present').textContent = `${s.staff_present}/${s.total_staff}`;
+    }
+
+    function renderClassMatrix(classes) {
+      const grid = document.getElementById('class-matrix-grid');
+      if (!grid || !classes) return;
+
+      grid.innerHTML = classes.map(c => {
+        const rate = c.attendance_rate;
+        const color = rate >= 95 ? 'text-emerald-400' : rate >= 85 ? 'text-indigo-300' : 'text-amber-400';
+        const barColor = rate >= 95 ? 'bg-emerald-400' : rate >= 85 ? 'bg-indigo-500' : 'bg-amber-400';
+
+        return `
+          <div class="glass-card rounded-2xl p-4 border border-white/5 hover:border-indigo-500/30 transition-all">
+            <div class="flex items-start justify-between">
+              <div>
+                <h4 class="text-sm font-extrabold text-white">${c.class_name}</h4>
+                <p class="text-[11px] text-gray-400">${c.class_teacher || 'Class Teacher'} • ${c.room_no || 'Room'}</p>
+              </div>
+              <span class="font-mono text-sm font-black ${color}">${rate}%</span>
+            </div>
+            <div class="mt-3 flex items-center justify-between text-xs font-mono">
+              <span class="text-gray-300">Present: <strong class="text-white">${c.present}</strong> / ${c.enrolled}</span>
+              <span class="text-rose-400">${c.absent > 0 ? `${c.absent} Absent` : '100% Attended'}</span>
+            </div>
+            <div class="w-full h-1.5 bg-slate-800 rounded-full mt-2 overflow-hidden">
+              <div class="h-full ${barColor} transition-all duration-500" style="width: ${rate}%"></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAlertsStream(alerts) {
+      const container = document.getElementById('live-alerts-stream');
+      if (!container || !alerts) return;
+
+      if (!alerts.length) {
+        container.innerHTML = `<div class="text-xs text-gray-500 py-8 text-center">No gate arrivals recorded yet today.</div>`;
+        return;
+      }
+
+      container.innerHTML = alerts.map(a => `
+        <div class="p-3 rounded-2xl bg-slate-800/50 border border-white/5 text-xs space-y-1">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-white">${a.student_name || a.recipient_name} (${a.class_grade || 'Class'}-${a.section || 'A'})</span>
+            <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              ${a.notification_type}
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-300 leading-snug">${a.message_text}</p>
+          <div class="flex items-center justify-between text-[10px] font-mono text-gray-500 pt-1 border-t border-white/5">
+            <span>WhatsApp: ${a.phone_number}</span>
+            <span>${a.timestamp.slice(11, 19)}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function setupTabs() {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const panes = document.querySelectorAll('.tab-pane');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', async () => {
+          tabs.forEach(t => {
+            t.classList.remove('active', 'bg-indigo-600', 'text-white');
+            t.classList.add('text-gray-400', 'hover:text-white', 'hover:bg-white/5');
+          });
+          tab.classList.add('active', 'bg-indigo-600', 'text-white');
+          tab.classList.remove('text-gray-400', 'hover:text-white', 'hover:bg-white/5');
+
+          const target = tab.dataset.tab;
+          panes.forEach(pane => {
+            if (pane.id === `tab-${target}`) {
+              pane.classList.remove('hidden');
+            } else {
+              pane.classList.add('hidden');
+            }
+          });
+
+          if (target === 'teachers') loadTeacherTodayAttendance();
+          if (target === 'payroll') loadPayrollSummary();
+          if (target === 'leaves') loadLeaves();
+          if (target === 'students') loadStudentRoster();
+          if (target === 'faculty') loadFacultyRoster();
+          if (target === 'alerts') loadWhatsAppLogs();
+          if (target === 'settings') loadSettingsForm();
+        });
+      });
+    }
+
+    // --- Teacher Live Attendance ---
+    async function loadTeacherTodayAttendance() {
+      try {
+        const rows = await API.getTeacherTodayAttendance();
+        const tbody = document.getElementById('teacher-attendance-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = rows.map(r => `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="px-5 py-3.5">
+              <div class="flex items-center gap-3">
+                <img src="${r.avatar_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'}" class="w-8 h-8 rounded-full object-cover border border-white/10" alt="">
+                <div>
+                  <div class="font-bold text-white">${r.first_name} ${r.last_name}</div>
+                  <div class="text-[10px] text-gray-400 font-mono">${r.employee_code}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-5 py-3.5">
+              <div class="text-indigo-300 font-semibold">${r.designation}</div>
+              <div class="text-[10px] text-gray-400">${r.subject_department}</div>
+            </td>
+            <td class="px-5 py-3.5 font-mono ${r.check_in_time ? 'text-emerald-400 font-bold' : 'text-gray-500'}">
+              ${r.check_in_time ? r.check_in_time.slice(0, 5) : '--:--'}
+            </td>
+            <td class="px-5 py-3.5 font-mono ${r.check_out_time ? 'text-indigo-300 font-bold' : 'text-gray-500'}">
+              ${r.check_out_time ? r.check_out_time.slice(0, 5) : '--:--'}
+            </td>
+            <td class="px-5 py-3.5 font-mono text-gray-300">
+              ${r.total_hours ? `${r.total_hours} hrs` : '--'}
+            </td>
+            <td class="px-5 py-3.5">
+              <span class="px-2.5 py-0.5 rounded-full font-mono text-[10px] font-bold ${
+                r.check_in_time ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+              }">${r.check_in_time ? 'Present on Duty' : 'Not Checked In'}</span>
+            </td>
+            <td class="px-5 py-3.5 text-right">
+              <button onclick="quickToggleStaffAttendance('${r.employee_code}')" class="px-3 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-semibold transition-all">
+                ${!r.check_in_time ? 'Punch In' : !r.check_out_time ? 'Punch Out' : 'Completed'}
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function quickToggleStaffAttendance(code) {
+      try {
+        const res = await API.staffScan(code);
+        Toast.show(res.message, 'success');
+        AudioChime.playSuccess();
+        loadTeacherTodayAttendance();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    // --- Faculty Payroll Engine ---
+    async function loadPayrollSummary() {
+      try {
+        const m = document.getElementById('payroll-month-input').value || curPayrollMonth;
+        const res = await API.getPayrollSummary(m);
+        document.getElementById('pay-total-net').textContent = formatCurrency(res.total_net_payout);
+        document.getElementById('pay-total-deductions').textContent = formatCurrency(res.total_deductions);
+        document.getElementById('pay-staff-count').textContent = `${res.count} Faculty & Staff Members`;
+
+        const tbody = document.getElementById('payroll-records-tbody');
+        if (!tbody) return;
+
+        if (!res.records.length) {
+          tbody.innerHTML = `<tr><td colspan="8" class="text-center py-8 text-gray-500">No payroll generated for ${m} yet. Click "Run Monthly Payroll" above.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = res.records.map(r => `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="px-4 py-3.5">
+              <div class="font-bold text-white">${r.first_name} ${r.last_name}</div>
+              <div class="text-[10px] text-gray-400 font-mono">${r.employee_code} • ${r.designation}</div>
+            </td>
+            <td class="px-4 py-3.5 font-mono text-gray-300">${formatCurrency(r.base_salary_earned)}</td>
+            <td class="px-4 py-3.5 font-mono text-indigo-300">${r.total_days_worked} days</td>
+            <td class="px-4 py-3.5 font-mono text-emerald-400">+${formatCurrency(r.bonus_allowance)}</td>
+            <td class="px-4 py-3.5 font-mono text-rose-400">-${formatCurrency(r.late_deductions + r.tax_deductions)}</td>
+            <td class="px-4 py-3.5 font-mono font-black text-emerald-400 text-sm">${formatCurrency(r.net_pay)}</td>
+            <td class="px-4 py-3.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                r.payment_status === 'paid' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+              }">${r.payment_status.toUpperCase()}</span>
+            </td>
+            <td class="px-4 py-3.5 text-right">
+              <button onclick="viewPayslipVoucher('${r.payslip_number}')" class="px-3 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-semibold">
+                Voucher
+              </button>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function setupPayrollHandlers() {
+      const btn = document.getElementById('btn-run-payroll');
+      const mInput = document.getElementById('payroll-month-input');
+
+      mInput.addEventListener('change', () => loadPayrollSummary());
+
+      btn.addEventListener('click', async () => {
+        const m = mInput.value || curPayrollMonth;
+        try {
+          btn.disabled = true;
+          btn.innerHTML = `<span class="animate-spin">↻</span> Calculating...`;
+          await API.generatePayroll(m);
+          Toast.show(`Successfully processed automated payroll for ${m}!`, 'success');
+          AudioChime.playSuccess();
+          await loadPayrollSummary();
+        } catch (err) {
+          Toast.show('Payroll error: ' + err.message, 'error');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = `<span>⚡</span> Run Monthly Payroll`;
+        }
+      });
+    }
+
+    async function viewPayslipVoucher(ref) {
+      try {
+        const data = await API.getPayslip(ref);
+        const p = data.payslip;
+        const s = data.school;
+        const content = document.getElementById('payslip-modal-content');
+
+        content.innerHTML = `
+          <div class="text-center border-b border-white/10 pb-4">
+            <h3 class="text-lg font-black text-white">${s.name.toUpperCase()}</h3>
+            <p class="text-xs text-gray-400 font-mono">${s.affiliation_board} • ${s.city}</p>
+            <div class="mt-2 text-xs font-mono font-bold text-emerald-400">OFFICIAL SALARY DISBURSEMENT VOUCHER</div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 text-xs font-mono py-3 border-b border-white/10">
+            <div>
+              <span class="text-gray-400">Employee:</span> <strong class="text-white">${p.first_name} ${p.last_name}</strong><br>
+              <span class="text-gray-400">Code:</span> <strong class="text-indigo-300">${p.employee_code}</strong><br>
+              <span class="text-gray-400">Designation:</span> <strong class="text-white">${p.designation}</strong>
+            </div>
+            <div class="text-right">
+              <span class="text-gray-400">Payslip No:</span> <strong class="text-white">${p.payslip_number}</strong><br>
+              <span class="text-gray-400">Pay Period:</span> <strong class="text-indigo-300">${p.period_month}</strong><br>
+              <span class="text-gray-400">Days Worked:</span> <strong class="text-emerald-400">${p.total_days_worked} days</strong>
+            </div>
+          </div>
+
+          <div class="space-y-2 text-xs font-mono py-2">
+            <div class="flex justify-between"><span>Basic Monthly Salary:</span> <strong>${formatCurrency(p.base_salary_earned)}</strong></div>
+            <div class="flex justify-between text-emerald-400"><span>Performance / Attendance Allowance:</span> <strong>+${formatCurrency(p.bonus_allowance)}</strong></div>
+            <div class="flex justify-between text-rose-400"><span>Late Reporting Deductions:</span> <strong>-${formatCurrency(p.late_deductions)}</strong></div>
+            <div class="flex justify-between text-rose-400"><span>TDS / Professional Tax:</span> <strong>-${formatCurrency(p.tax_deductions)}</strong></div>
+            <div class="flex justify-between text-base font-bold text-white pt-2 border-t border-white/10">
+              <span>NET PAYABLE AMOUNT:</span>
+              <span class="text-emerald-400 font-mono">${formatCurrency(p.net_pay)}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center pt-6 text-[10px] font-mono text-gray-400 border-t border-white/10">
+            <div>Verified By: Accounts In-Charge</div>
+            <div class="text-right">
+              <strong class="text-white">${s.principal_name}</strong><br>
+              Principal & Head of Institution
+            </div>
+          </div>
+        `;
+
+        document.getElementById('payslip-modal').classList.remove('hidden');
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    function closePayslipModal() {
+      document.getElementById('payslip-modal').classList.add('hidden');
+    }
+
+    function exportBankDirectCSV() {
+      const m = document.getElementById('payroll-month-input').value || curPayrollMonth;
+      API.getPayrollSummary(m).then(res => {
+        if (!res.records.length) {
+          Toast.show('No payroll records found to export', 'warning');
+          return;
+        }
+        let csv = "Employee Code,Name,Designation,Account / Ref,Net Salary (INR),Period Month\n";
+        res.records.forEach(r => {
+          csv += `"${r.employee_code}","${r.first_name} ${r.last_name}","${r.designation}","SBIN0001234",${r.net_pay},"${r.period_month}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `School_Bank_Direct_Deposit_${m}.csv`;
+        a.click();
+        Toast.show('Bank Direct Deposit CSV downloaded!', 'success');
+      });
+    }
+
+    // --- Leave Handlers ---
+    async function loadLeaves() {
+      try {
+        const list = await API.getLeaves();
+        const tbody = document.getElementById('leaves-table-tbody');
+        if (!tbody) return;
+
+        if (!list.length) {
+          tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500">No active leave requests.</td></tr>`;
+          return;
+        }
+
+        tbody.innerHTML = list.map(l => `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="px-4 py-3.5">
+              <div class="font-bold text-white">${l.first_name} ${l.last_name}</div>
+              <div class="text-[10px] text-gray-400 font-mono">${l.employee_code} • ${l.designation}</div>
+            </td>
+            <td class="px-4 py-3.5 font-semibold text-indigo-300">${l.leave_type}</td>
+            <td class="px-4 py-3.5 font-mono text-gray-300">${l.start_date} to ${l.end_date} (${l.total_days}d)</td>
+            <td class="px-4 py-3.5 text-gray-300 max-w-xs truncate">${l.reason || 'General Leave'}</td>
+            <td class="px-4 py-3.5">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${
+                l.status === 'approved' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                l.status === 'rejected' ? 'bg-rose-500/10 text-rose-400 border border-rose-500/20' :
+                'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+              }">${l.status.toUpperCase()}</span>
+            </td>
+            <td class="px-4 py-3.5 text-right space-x-1">
+              ${l.status === 'pending' ? `
+                <button onclick="reviewLeaveAction(${l.id}, 'approved')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs">Approve</button>
+                <button onclick="reviewLeaveAction(${l.id}, 'rejected')" class="px-2.5 py-1 rounded-lg bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs">Reject</button>
+              ` : `<span class="text-[10px] text-gray-500 font-mono">Reviewed</span>`}
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    async function reviewLeaveAction(id, status) {
+      try {
+        await API.reviewLeave(id, status);
+        Toast.show(`Leave request marked ${status}!`, 'success');
+        AudioChime.playSuccess();
+        loadLeaves();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    function setupLeaveHandlers() {
+      const f = document.getElementById('request-leave-form');
+      if (f) {
+        f.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            await API.submitLeave({
+              staff_id: parseInt(document.getElementById('leave-staff-select').value, 10),
+              leave_type: f.leave_type.value,
+              start_date: f.start_date.value,
+              end_date: f.end_date.value,
+              reason: f.reason.value
+            });
+            Toast.show('Leave application submitted!', 'success');
+            AudioChime.playSuccess();
+            closeRequestLeaveModal();
+            loadLeaves();
+          } catch (err) {
+            Toast.show(err.message, 'error');
+          }
+        });
+      }
+    }
+
+    async function openRequestLeaveModal() {
+      const select = document.getElementById('leave-staff-select');
+      const faculty = await API.getTeachers();
+      select.innerHTML = faculty.map(f => `<option value="${f.id}">${f.first_name} ${f.last_name} (${f.designation})</option>`).join('');
+      document.getElementById('request-leave-modal').classList.remove('hidden');
+    }
+
+    function closeRequestLeaveModal() {
+      document.getElementById('request-leave-modal').classList.add('hidden');
+    }
+
+    // --- Students Roster ---
+    async function loadStudentRoster() {
+      try {
+        const list = await API.getStudents();
+        const tbody = document.getElementById('student-roster-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = list.map(s => `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="px-4 py-3.5">
+              <div class="flex items-center gap-3">
+                <img src="${s.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-8 h-8 rounded-full object-cover border border-white/10" alt="">
+                <div>
+                  <div class="font-bold text-white">${s.student_name}</div>
+                  <div class="text-[10px] text-gray-400 font-mono">${s.admission_no}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-3.5 font-mono text-gray-300 font-bold">${s.class_grade}-${s.section} (Roll #${s.roll_no})</td>
+            <td class="px-4 py-3.5 text-gray-300">${s.parent_guardian_name}</td>
+            <td class="px-4 py-3.5 font-mono text-emerald-400 font-bold">${s.parent_whatsapp_phone}</td>
+            <td class="px-4 py-3.5 font-mono text-rose-300 font-bold">${s.blood_group}</td>
+            <td class="px-4 py-3.5 font-mono text-indigo-300">${s.bus_route_no}</td>
+            <td class="px-4 py-3.5 text-right">
+              <a href="/badges" target="_blank" class="px-3 py-1 rounded-lg bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white border border-indigo-500/30 text-xs font-semibold">
+                ID Pass
+              </a>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // --- Faculty Roster ---
+    async function loadFacultyRoster() {
+      try {
+        const list = await API.getTeachers();
+        const grid = document.getElementById('faculty-grid');
+        if (!grid) return;
+
+        grid.innerHTML = list.map(f => `
+          <div class="glass-card rounded-2xl p-5 border border-white/5 flex items-start gap-4">
+            <img src="${f.avatar_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'}" class="w-14 h-14 rounded-2xl object-cover border border-white/10" alt="">
+            <div>
+              <h4 class="text-sm font-bold text-white">${f.first_name} ${f.last_name}</h4>
+              <p class="text-xs text-indigo-300 font-semibold mt-0.5">${f.designation}</p>
+              <p class="text-[11px] text-gray-400 font-mono mt-0.5">${f.subject_department} • Salary: ${formatCurrency(f.monthly_salary)}</p>
+              <div class="mt-2 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full inline-block">● Active Faculty</div>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // --- Add Teacher Handlers ---
+    function openAddTeacherModal() {
+      document.getElementById('add-teacher-modal').classList.remove('hidden');
+    }
+    function closeAddTeacherModal() {
+      document.getElementById('add-teacher-modal').classList.add('hidden');
+    }
+    document.getElementById('add-teacher-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      try {
+        await API.createTeacher({
+          first_name: f.first_name.value,
+          last_name: f.last_name.value,
+          email: f.email.value,
+          phone: f.phone.value,
+          designation: f.designation.value,
+          subject_department: f.subject_department.value,
+          monthly_salary: parseFloat(f.monthly_salary.value)
+        });
+        Toast.show('New faculty member added!', 'success');
+        AudioChime.playSuccess();
+        closeAddTeacherModal();
+        loadFacultyRoster();
+        loadTeacherTodayAttendance();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    });
+
+    // --- WhatsApp Logs ---
+    async function loadWhatsAppLogs() {
+      try {
+        const logs = await API.getNotifications();
+        const tbody = document.getElementById('whatsapp-logs-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = logs.map(l => `
+          <tr class="border-b border-white/5 hover:bg-white/[0.02]">
+            <td class="px-4 py-3.5">
+              <div class="font-bold text-white">${l.student_name || l.recipient_name}</div>
+              <div class="text-[10px] text-gray-400 font-mono">${l.class_grade ? `${l.class_grade}-${l.section}` : 'Student'}</div>
+            </td>
+            <td class="px-4 py-3.5 font-mono text-gray-300">${l.phone_number}</td>
+            <td class="px-4 py-3.5 font-mono text-emerald-400">${l.notification_type}</td>
+            <td class="px-4 py-3.5 text-gray-300 max-w-md truncate">${l.message_text}</td>
+            <td class="px-4 py-3.5 font-mono text-emerald-400 font-bold">✓ Delivered</td>
+            <td class="px-4 py-3.5 font-mono text-gray-400">${l.timestamp}</td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    // --- 8:30 AM Absence Trigger ---
+    function setupAbsenceTrigger() {
+      const btn = document.getElementById('btn-trigger-830-absence');
+      if (btn) {
+        btn.addEventListener('click', async () => {
+          if (!confirm("Confirm broadcasting 8:30 AM Absence WhatsApp alert to parents of all unmarked students?")) return;
+          try {
+            btn.disabled = true;
+            btn.innerHTML = `<span class="animate-spin">↻</span> Broadcasting WhatsApp alerts...`;
+            const res = await API.send830AbsenceBroadcast();
+            Toast.show(`Dispatched ${res.dispatched_count} WhatsApp Absence notices to parents!`, 'success');
+            AudioChime.playSuccess();
+            await loadMorningStrength();
+          } catch (err) {
+            Toast.show(err.message, 'error');
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg><span>Send 8:30 AM Absence WhatsApp</span>`;
+          }
+        });
+      }
+    }
+
+    // --- Emergency Broadcasts ---
+    const PRESETS = {
+      flood: { title: "Heavy Rain Flood Alert - School Closed Today", msg: "Dear Parents, in view of severe waterlogging in Guwahati caused by heavy monsoon rainfall, Maharishi Vidya Mandir will remain CLOSED today. Online study material has been shared." },
+      bandh: { title: "Assam Bandh Notice - Online Classes Scheduled", msg: "Dear Parents, due to the 12-hour Assam Bandh called today, school bus services stand suspended. Regular classes will be held online." },
+      ptm: { title: "Parent-Teacher Meeting (PTM) Reminder", msg: "Dear Parents, the Parent-Teacher Meeting (PTM) for Term Assessment review is scheduled this Saturday from 09:00 AM to 01:00 PM." },
+      heatwave: { title: "Revised Summer School Timings (06:30 AM)", msg: "Dear Parents, due to extreme summer heatwave conditions in Guwahati, school timings are revised to 06:30 AM - 11:30 AM until further notice." }
+    };
+    function applyPreset(key) {
+      const p = PRESETS[key];
+      if (p) {
+        document.getElementById('b-title').value = p.title;
+        document.getElementById('b-message').value = p.msg;
+        Toast.show(`Loaded preset: ${p.title}`, 'info');
+      }
+    }
+    function setupEmergencyBroadcastForm() {
+      const f = document.getElementById('emergency-broadcast-form');
+      if (f) {
+        f.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const title = document.getElementById('b-title').value;
+          const msg = document.getElementById('b-message').value;
+          const target = document.getElementById('b-target').value;
+          if (!confirm(`CONFIRMATION: Dispatch WhatsApp alert "${title}" to parents?`)) return;
+          try {
+            const res = await API.sendEmergencyBroadcast(title, msg, target);
+            Toast.show(`Successfully blasted WhatsApp alert to ${res.total_delivered} parents!`, 'success', 5000);
+            AudioChime.playSuccess();
+          } catch (err) {
+            Toast.show(err.message, 'error');
+          }
+        });
+      }
+    }
+
+    // --- School Settings ---
+    function loadSettingsForm() {
+      if (!morningData || !morningData.school) return;
+      const s = morningData.school;
+      const f = document.getElementById('school-settings-form');
+      if (!f) return;
+      f.name.value = s.name || '';
+      f.affiliation_board.value = s.affiliation_board || 'CBSE, New Delhi';
+      f.principal_name.value = s.principal_name || 'Dr. S. K. Mahanta';
+      f.school_start_time.value = s.school_start_time || '08:00';
+      f.late_grace_minutes.value = s.late_grace_minutes || 10;
+      f.preferred_language.value = s.preferred_language || 'en';
+    }
+    function setupSettingsForm() {
+      const f = document.getElementById('school-settings-form');
+      if (f) {
+        f.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          try {
+            await API.updateSettings({
+              name: f.name.value,
+              affiliation_board: f.affiliation_board.value,
+              principal_name: f.principal_name.value,
+              school_start_time: f.school_start_time.value,
+              late_grace_minutes: parseInt(f.late_grace_minutes.value, 10),
+              preferred_language: f.preferred_language.value
+            });
+            Toast.show('School settings updated!', 'success');
+            AudioChime.playSuccess();
+            loadMorningStrength();
+          } catch (err) {
+            Toast.show(err.message, 'error');
+          }
+        });
+      }
+    }
+  </script>
 </body>
 </html>

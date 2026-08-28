@@ -1,5 +1,5 @@
 """
-Staff Attendance, QR Check-in & Payroll SaaS Application Server
+Unified Smart School Attendance, Safety, Parent WhatsApp & Faculty Payroll Server
 Pure Python Standard Library - Zero External Dependencies
 """
 
@@ -17,35 +17,32 @@ if sys.platform == "win32":
     except Exception:
         pass
 
-# Ensure attendance_system is in python path
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 if BASE_DIR not in sys.path:
     sys.path.insert(0, BASE_DIR)
 
 from database import (
-    init_db, get_connection, log_activity,
-    get_company_settings, update_company_settings,
-    get_current_kiosk_qr_token, validate_kiosk_qr_token,
-    list_departments, create_department,
-    list_employees, get_employee, create_employee, update_employee, delete_employee,
-    record_check_in, record_check_out, toggle_attendance_quick,
-    get_today_attendance, get_attendance_history, get_monthly_attendance_matrix,
-    get_dashboard_stats, get_chart_data,
-    list_leave_requests, submit_leave_request, review_leave_request,
-    generate_monthly_payroll, get_payroll_summary, get_payslip, update_payroll_status
+    init_db, get_connection,
+    get_school_settings, update_school_settings,
+    list_classes, list_bus_routes, list_students, get_student,
+    get_morning_strength_report, record_student_gate_scan, record_bus_scan,
+    send_830_absence_broadcast, send_emergency_broadcast,
+    get_cbse_seba_monthly_register, list_teachers, get_teacher, create_teacher, update_teacher,
+    record_staff_scan, get_teacher_today_attendance,
+    list_teacher_leaves, submit_teacher_leave, review_teacher_leave,
+    generate_teacher_payroll, get_teacher_payroll_summary, get_teacher_payslip, update_teacher_payroll_status
 )
-from seed_data import populate_seed_data, PRESETS
+from seed_data import populate_school_seed_data
 
 
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 
-class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
+class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=STATIC_DIR, **kwargs)
 
     def log_message(self, format, *args):
-        # Clean logging
         sys.stderr.write(f"[{datetime.now().strftime('%H:%M:%S')}] {args[0]} {args[1]}\n")
 
     def send_json_response(self, data, status_code=200):
@@ -77,12 +74,6 @@ class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
         except Exception:
             return {}
 
-    def get_client_ip(self):
-        forwarded = self.headers.get("X-Forwarded-For")
-        if forwarded:
-            return forwarded.split(",")[0].strip()
-        return self.client_address[0] if self.client_address else "127.0.0.1"
-
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
@@ -95,12 +86,18 @@ class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
             return self.serve_file(os.path.join(STATIC_DIR, "kiosk.html"), "text/html")
         elif path == "/scan":
             return self.serve_file(os.path.join(STATIC_DIR, "scan.html"), "text/html")
+        elif path == "/bus":
+            return self.serve_file(os.path.join(STATIC_DIR, "bus.html"), "text/html")
+        elif path == "/badges":
+            return self.serve_file(os.path.join(STATIC_DIR, "print_badges.html"), "text/html")
+        elif path == "/broadcast":
+            return self.serve_file(os.path.join(STATIC_DIR, "broadcast.html"), "text/html")
+        elif path == "/register":
+            return self.serve_file(os.path.join(STATIC_DIR, "register_export.html"), "text/html")
         elif path == "/portal":
             return self.serve_file(os.path.join(STATIC_DIR, "staff_portal.html"), "text/html")
         elif path == "/pitch":
             return self.serve_file(os.path.join(STATIC_DIR, "pitch_landing.html"), "text/html")
-        elif path == "/badges":
-            return self.serve_file(os.path.join(STATIC_DIR, "print_badges.html"), "text/html")
 
         # 2. REST API Routes
         if path.startswith("/api/"):
@@ -124,86 +121,96 @@ class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
 
     def handle_api_get(self, path, query):
         try:
-            if path == "/api/status":
-                settings = get_company_settings()
-                kiosk_token = get_current_kiosk_qr_token()
+            if path in ["/api/status", "/api/school/status"]:
+                settings = get_school_settings()
                 return self.send_json_response({
                     "status": "online",
-                    "system": "Staff Attendance & Payroll SaaS",
-                    "version": "2.0.0",
-                    "company": settings,
-                    "kiosk_token": kiosk_token,
+                    "system": "Smart School Attendance & Safety System",
+                    "version": "3.0.0",
+                    "school": settings,
                     "server_time": datetime.now().isoformat()
                 })
 
-            elif path == "/api/kiosk/token":
-                token_data = get_current_kiosk_qr_token()
-                return self.send_json_response(token_data)
+            elif path in ["/api/school/morning-strength", "/api/dashboard/stats"]:
+                date_val = query.get("date", [None])[0]
+                report = get_morning_strength_report(date_val)
+                return self.send_json_response(report)
 
-            elif path == "/api/settings":
-                return self.send_json_response(get_company_settings())
+            elif path in ["/api/school/classes", "/api/departments"]:
+                return self.send_json_response(list_classes())
 
-            elif path == "/api/dashboard/stats":
-                return self.send_json_response(get_dashboard_stats())
+            elif path == "/api/school/bus-routes":
+                return self.send_json_response(list_bus_routes())
 
-            elif path == "/api/dashboard/charts":
-                return self.send_json_response(get_chart_data())
-
-            elif path == "/api/attendance/today":
-                return self.send_json_response(get_today_attendance())
-
-            elif path == "/api/attendance/history":
-                start_date = query.get("start_date", [None])[0]
-                end_date = query.get("end_date", [None])[0]
-                dep_id = query.get("department_id", [None])[0]
-                emp_id = query.get("employee_id", [None])[0]
-                status = query.get("status", [None])[0]
-                return self.send_json_response(get_attendance_history(start_date, end_date, dep_id, emp_id, status))
-
-            elif path == "/api/attendance/monthly-matrix":
-                month = query.get("month", [None])[0]
-                return self.send_json_response(get_monthly_attendance_matrix(month))
-
-            elif path == "/api/departments":
-                return self.send_json_response(list_departments())
-
-            elif path == "/api/employees":
-                dep_id = query.get("department_id", [None])[0]
-                status = query.get("status", [None])[0]
+            elif path in ["/api/school/students", "/api/employees"]:
+                class_id = query.get("class_id", [None])[0]
+                bus_route = query.get("bus_route", [None])[0]
                 search = query.get("search", [None])[0]
-                return self.send_json_response(list_employees(dep_id, status, search))
+                return self.send_json_response(list_students(class_id, bus_route, search))
 
-            elif path.startswith("/api/employees/"):
-                parts = path.strip("/").split("/")
-                if len(parts) == 3:
-                    emp_id = parts[2]
-                    emp = get_employee(emp_id)
-                    if emp:
-                        return self.send_json_response(emp)
-                    return self.send_json_response({"error": "Employee not found"}, 404)
-                elif len(parts) == 4 and parts[3] == "history":
-                    emp_id = parts[2]
-                    history = get_attendance_history(employee_id=emp_id)
-                    return self.send_json_response(history)
+            elif path.startswith("/api/school/students/"):
+                st_id = path.split("/")[-1]
+                st = get_student(st_id)
+                if st:
+                    return self.send_json_response(st)
+                return self.send_json_response({"error": "Student not found"}, 404)
 
-            elif path == "/api/leaves":
-                status = query.get("status", [None])[0]
-                emp_id = query.get("employee_id", [None])[0]
-                return self.send_json_response(list_leave_requests(status, emp_id))
-
-            elif path == "/api/payroll/summary":
+            elif path == "/api/school/cbse-register":
                 month = query.get("month", [None])[0]
-                return self.send_json_response(get_payroll_summary(month))
+                class_id = query.get("class_id", [None])[0]
+                return self.send_json_response(get_cbse_seba_monthly_register(month, class_id))
+
+            # Teacher & Faculty endpoints
+            elif path in ["/api/school/teachers", "/api/teachers"]:
+                search = query.get("search", [None])[0]
+                return self.send_json_response(list_teachers(search))
+
+            elif path in ["/api/teachers/today", "/api/attendance/today"]:
+                return self.send_json_response(get_teacher_today_attendance())
+
+            elif path in ["/api/payroll/summary", "/api/school/payroll/summary"]:
+                month = query.get("month", [None])[0]
+                return self.send_json_response(get_teacher_payroll_summary(month))
 
             elif path.startswith("/api/payroll/payslip/"):
-                payslip_ref = path.split("/")[-1]
-                data = get_payslip(payslip_ref)
+                ref = path.split("/")[-1]
+                data = get_teacher_payslip(ref)
                 if data:
                     return self.send_json_response(data)
                 return self.send_json_response({"error": "Payslip not found"}, 404)
 
-            elif path == "/api/demo/presets":
-                return self.send_json_response({"presets": list(PRESETS.keys())})
+            elif path in ["/api/leaves", "/api/school/leaves"]:
+                status = query.get("status", [None])[0]
+                return self.send_json_response(list_teacher_leaves(status))
+
+            elif path in ["/api/school/settings", "/api/settings"]:
+                return self.send_json_response(get_school_settings())
+
+            elif path in ["/api/school/notifications", "/api/notifications"]:
+                conn = get_connection()
+                logs = [dict(r) for r in conn.cursor().execute("""
+                    SELECT n.*, s.student_name, s.photo_url, c.grade as class_grade, c.section
+                    FROM notification_logs n
+                    LEFT JOIN students s ON n.student_id = s.id
+                    LEFT JOIN classes c ON s.class_id = c.id
+                    ORDER BY n.id DESC LIMIT 50
+                """).fetchall()]
+                conn.close()
+                return self.send_json_response(logs)
+
+            elif path == "/api/kiosk/token":
+                settings = get_school_settings()
+                secret = settings.get("dynamic_qr_secret", "mvm_secret")
+                refresh_sec = settings.get("qr_refresh_seconds", 20)
+                cur_slot = int(time.time()) // refresh_sec
+                time_rem = refresh_sec - (int(time.time()) % refresh_sec)
+                raw = f"{secret}:{cur_slot}"
+                token_hash = hashlib.sha256(raw.encode()).hexdigest()[:16]
+                return self.send_json_response({
+                    "token": f"GATE-{token_hash}",
+                    "seconds_remaining": time_rem,
+                    "refresh_interval": refresh_sec
+                })
 
             else:
                 return self.send_json_response({"error": "Endpoint not found"}, 404)
@@ -215,133 +222,83 @@ class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
         body = self.parse_json_body()
-        ip = self.get_client_ip()
 
         try:
-            # 1. Quick Check-In / Check-Out Toggle (Webcam Badge / PIN / Kiosk)
-            if path == "/api/attendance/quick-toggle":
-                identifier = body.get("identifier") or body.get("employee_code") or body.get("token") or body.get("pin")
+            # 1. Student Gate Scan (1.2s Throughput)
+            if path in ["/api/school/gate-scan", "/api/attendance/quick-toggle"]:
+                identifier = body.get("identifier") or body.get("admission_no") or body.get("token") or body.get("rfid_card_id")
                 if not identifier:
                     return self.send_json_response({"success": False, "message": "Identifier required"}, 400)
                 
-                method = body.get("method", "badge_scan")
-                res = toggle_attendance_quick(identifier, method=method, ip_address=ip, location_lat=body.get("lat"), location_lng=body.get("lng"))
+                scanned_by = body.get("scanned_by", "Main Gate Kiosk Laser")
+                res = record_student_gate_scan(identifier, scanned_by=scanned_by)
                 return self.send_json_response(res, 200 if res.get("success") else 400)
 
-            # 2. Dynamic Kiosk QR Scan Check-In (Mobile Phone Scan)
-            elif path == "/api/attendance/check-in":
-                emp_id = body.get("employee_id")
-                emp_code = body.get("employee_code")
-                kiosk_token = body.get("kiosk_token")
-
-                # If dynamic token provided, validate it
-                if kiosk_token:
-                    if not validate_kiosk_qr_token(kiosk_token):
-                        return self.send_json_response({
-                            "success": False,
-                            "message": "Invalid or Expired Kiosk QR Code. Please scan the live screen again."
-                        }, 400)
-
-                # Resolve employee
-                if not emp_id and emp_code:
-                    emp = get_employee(emp_code)
-                    if emp:
-                        emp_id = emp["id"]
-
-                if not emp_id:
-                    return self.send_json_response({"success": False, "message": "Employee ID or Code is required"}, 400)
-
-                res = record_check_in(
-                    emp_id,
-                    check_in_type=body.get("check_in_type", "mobile_scan"),
-                    custom_time=body.get("time"),
-                    custom_date=body.get("date"),
-                    notes=body.get("notes"),
-                    ip_address=ip,
-                    location_lat=body.get("lat"),
-                    location_lng=body.get("lng")
-                )
+            # 2. School Bus Boarding Scan (Conductor Mode)
+            elif path == "/api/school/bus-scan":
+                identifier = body.get("identifier")
+                bus_route = body.get("bus_route", "Route #4")
+                scan_type = body.get("scan_type", "board")
+                conductor = body.get("conductor_name", "Bus Conductor")
+                res = record_bus_scan(identifier, bus_route, scan_type, conductor)
                 return self.send_json_response(res, 200 if res.get("success") else 400)
 
-            # 3. Check-Out
-            elif path == "/api/attendance/check-out":
-                emp_id = body.get("employee_id")
-                emp_code = body.get("employee_code")
-                kiosk_token = body.get("kiosk_token")
+            # 3. 8:30 AM Absence WhatsApp Broadcast
+            elif path == "/api/school/send-830-absence":
+                date_val = body.get("date")
+                res = send_830_absence_broadcast(date_val)
+                return self.send_json_response(res, 200)
 
-                if kiosk_token:
-                    if not validate_kiosk_qr_token(kiosk_token):
-                        return self.send_json_response({
-                            "success": False,
-                            "message": "Invalid or Expired Kiosk QR Code. Please scan the live screen again."
-                        }, 400)
+            # 4. Emergency Broadcast
+            elif path == "/api/school/emergency-broadcast":
+                title = body.get("title", "Emergency Alert")
+                message = body.get("message", "")
+                target = body.get("target", "all_parents")
+                class_id = body.get("class_id")
+                bus_route = body.get("bus_route")
+                res = send_emergency_broadcast(title, message, target, class_id, bus_route)
+                return self.send_json_response(res, 200)
 
-                if not emp_id and emp_code:
-                    emp = get_employee(emp_code)
-                    if emp:
-                        emp_id = emp["id"]
-
-                if not emp_id:
-                    return self.send_json_response({"success": False, "message": "Employee ID or Code is required"}, 400)
-
-                res = record_check_out(
-                    emp_id,
-                    check_out_type=body.get("check_out_type", "mobile_scan"),
-                    custom_time=body.get("time"),
-                    custom_date=body.get("date"),
-                    notes=body.get("notes"),
-                    ip_address=ip,
-                    location_lat=body.get("lat"),
-                    location_lng=body.get("lng")
-                )
+            # 5. Teacher Attendance Scan
+            elif path in ["/api/school/staff-scan", "/api/teachers/scan"]:
+                identifier = body.get("identifier")
+                res = record_staff_scan(identifier)
                 return self.send_json_response(res, 200 if res.get("success") else 400)
 
-            # 4. Create Employee
-            elif path == "/api/employees":
-                new_emp = create_employee(body)
-                return self.send_json_response(new_emp, 201)
+            # 6. Faculty Payroll Generation
+            elif path in ["/api/payroll/generate", "/api/school/payroll/generate"]:
+                month = body.get("month") or datetime.now().strftime("%Y-%m")
+                summary = generate_teacher_payroll(month)
+                return self.send_json_response(summary, 200)
 
-            # 5. Create Department
-            elif path == "/api/departments":
-                dep_id = create_department(body.get("name"), body.get("manager_name", ""), body.get("color", "#3B82F6"))
-                return self.send_json_response({"id": dep_id, "name": body.get("name")}, 201)
-
-            # 6. Submit Leave Request
-            elif path == "/api/leaves":
-                emp_id = body.get("employee_id")
-                if not emp_id and body.get("employee_code"):
-                    emp = get_employee(body.get("employee_code"))
-                    if emp:
-                        emp_id = emp["id"]
-                
-                leave_id = submit_leave_request(
-                    emp_id,
-                    body.get("leave_type", "vacation"),
+            # 7. Teacher Leave Submission
+            elif path in ["/api/leaves", "/api/school/leaves"]:
+                staff_id = body.get("staff_id") or body.get("employee_id")
+                leave_id = submit_teacher_leave(
+                    staff_id,
+                    body.get("leave_type", "Casual"),
                     body.get("start_date"),
                     body.get("end_date"),
                     body.get("reason", "")
                 )
                 return self.send_json_response({"success": True, "leave_id": leave_id}, 201)
 
-            # 7. Generate Payroll
-            elif path == "/api/payroll/generate":
-                month = body.get("month") or datetime.now().strftime("%Y-%m")
-                summary = generate_monthly_payroll(month)
-                return self.send_json_response(summary, 200)
+            # 8. Create Teacher
+            elif path in ["/api/teachers", "/api/school/teachers"]:
+                new_t = create_teacher(body)
+                return self.send_json_response(new_t, 201)
 
-            # 8. Update Company Settings
-            elif path == "/api/settings":
-                updated = update_company_settings(body)
+            # 9. Update Settings
+            elif path in ["/api/school/settings", "/api/settings"]:
+                updated = update_school_settings(body)
                 return self.send_json_response(updated)
 
-            # 9. Load Demo Preset
-            elif path == "/api/demo/preset":
-                preset_name = body.get("preset", "tech")
-                populate_seed_data(preset_name)
+            # 10. Reset Demo Data
+            elif path == "/api/school/reset-demo":
+                populate_school_seed_data()
                 return self.send_json_response({
                     "success": True,
-                    "message": f"Successfully loaded '{preset_name}' industry demo dataset.",
-                    "settings": get_company_settings()
+                    "message": "Successfully refreshed Maharishi Vidya Mandir School dataset."
                 })
 
             else:
@@ -356,67 +313,52 @@ class AttendanceHTTPRequestHandler(SimpleHTTPRequestHandler):
         body = self.parse_json_body()
 
         try:
-            if path.startswith("/api/employees/"):
-                emp_id = int(path.split("/")[-1])
-                updated = update_employee(emp_id, body)
-                return self.send_json_response(updated)
-
-            elif path.startswith("/api/leaves/") and path.endswith("/status"):
-                parts = path.strip("/").split("/")
-                leave_id = int(parts[2])
+            if path.startswith("/api/leaves/") and path.endswith("/status"):
+                leave_id = int(path.strip("/").split("/")[2])
                 status = body.get("status", "approved")
-                reviewer = body.get("reviewer_name", "Admin")
-                review_leave_request(leave_id, status, reviewer)
+                review_teacher_leave(leave_id, status, body.get("reviewer", "Principal"))
                 return self.send_json_response({"success": True, "status": status})
 
             elif path.startswith("/api/payroll/") and path.endswith("/status"):
-                parts = path.strip("/").split("/")
-                payroll_id = int(parts[2])
+                payroll_id = int(path.strip("/").split("/")[2])
                 status = body.get("status", "paid")
-                update_payroll_status(payroll_id, status, body.get("payment_date"))
+                update_teacher_payroll_status(payroll_id, status)
                 return self.send_json_response({"success": True, "status": status})
 
+            elif path.startswith("/api/teachers/"):
+                staff_id = int(path.split("/")[-1])
+                updated = update_teacher(staff_id, body)
+                return self.send_json_response(updated)
+
             else:
                 return self.send_json_response({"error": "Endpoint not found"}, 404)
 
-        except Exception as e:
-            return self.send_json_response({"error": str(e)}, 500)
-
-    def do_DELETE(self):
-        parsed = urllib.parse.urlparse(self.path)
-        path = parsed.path
-
-        try:
-            if path.startswith("/api/employees/"):
-                emp_id = int(path.split("/")[-1])
-                delete_employee(emp_id)
-                return self.send_json_response({"success": True})
-            else:
-                return self.send_json_response({"error": "Endpoint not found"}, 404)
         except Exception as e:
             return self.send_json_response({"error": str(e)}, 500)
 
 
 def run_server(port=5000):
     init_db()
-    # Check if empty, then seed
     conn = get_connection()
-    count = conn.cursor().execute("SELECT COUNT(*) FROM employees").fetchone()[0]
+    count = conn.cursor().execute("SELECT COUNT(*) FROM students").fetchone()[0]
     conn.close()
     if count == 0:
-        populate_seed_data("tech")
+        populate_school_seed_data()
 
     server_address = ("", port)
-    httpd = ThreadingHTTPServer(server_address, AttendanceHTTPRequestHandler)
+    httpd = ThreadingHTTPServer(server_address, UnifiedSchoolHTTPRequestHandler)
     print(f"============================================================")
-    print(f"  STAFF ATTENDANCE, QR CHECK-IN & PAYROLL SYSTEM")
+    print(f"  UNIFIED SMART SCHOOL & FACULTY PAYROLL OS")
     print(f"  Live Server Running on: http://localhost:{port}")
-    print(f"  - Admin Dashboard:       http://localhost:{port}/")
-    print(f"  - Office Kiosk Screen:   http://localhost:{port}/kiosk")
-    print(f"  - Mobile QR Scan:        http://localhost:{port}/scan")
-    print(f"  - Staff Self-Service:    http://localhost:{port}/portal")
-    print(f"  - Print ID Badges:       http://localhost:{port}/badges")
-    print(f"  - B2B Pitch Landing:     http://localhost:{port}/pitch")
+    print(f"  - Master Principal Dashboard:  http://localhost:{port}/")
+    print(f"  - High-Speed Gate Kiosk:       http://localhost:{port}/kiosk")
+    print(f"  - Mobile Gate Scanner:         http://localhost:{port}/scan")
+    print(f"  - Bus Conductor App:           http://localhost:{port}/bus")
+    print(f"  - PVC Student ID Badges:       http://localhost:{port}/badges")
+    print(f"  - Emergency WhatsApp Center:   http://localhost:{port}/broadcast")
+    print(f"  - CBSE/SEBA Official Register: http://localhost:{port}/register")
+    print(f"  - Teacher & Staff Portal:      http://localhost:{port}/portal")
+    print(f"  - School B2B Pitch Deck:       http://localhost:{port}/pitch")
     print(f"============================================================")
 
     try:

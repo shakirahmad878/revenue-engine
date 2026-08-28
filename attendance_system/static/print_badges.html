@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Batch Print Employee ID QR Badges</title>
+  <title>PVC Student ID Card Studio - Maharishi Vidya Mandir</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,7 +16,7 @@
       body { background: white !important; color: black !important; padding: 0 !important; }
       .no-print { display: none !important; }
       .badge-sheet-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 20px !important; margin: 0 auto !important; }
-      .id-badge-card {
+      .student-pvc-card {
         background: #ffffff !important;
         border: 2px solid #0f172a !important;
         box-shadow: none !important;
@@ -31,113 +31,122 @@
     }
   </style>
 </head>
-<body class="min-h-screen bg-[#090d16] text-gray-100 p-6 sm:p-10">
+<body class="min-h-screen bg-[#070a13] text-gray-100 p-6 sm:p-10">
 
   <!-- Control Header (Hidden on Print) -->
-  <div class="no-print max-w-6xl mx-auto mb-8 bg-slate-900 border border-white/10 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
+  <div class="no-print max-w-6xl mx-auto mb-8 bg-slate-900 border border-white/10 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xl">
     <div>
       <h1 class="text-xl font-bold text-white flex items-center gap-2">
-        <span class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-xs">✦</span>
-        Printable Employee ID Cards (Batch Sheet)
+        <span class="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center font-bold text-sm">🪪</span>
+        PVC Student ID Card Studio (Batch Printing)
       </h1>
-      <p class="text-xs text-gray-400 mt-1">Formatted for standard CR80 physical card printing and A4 multi-card sheets</p>
+      <p class="text-xs text-gray-400 mt-1">Class-wise multi-card sheets formatted for standard CR80 physical card printers & A4 sheets</p>
     </div>
 
-    <div class="flex items-center gap-3">
-      <select id="dept-filter-select" class="glass-input px-3 py-2 rounded-xl text-xs">
-        <option value="">All Departments</option>
+    <div class="flex flex-wrap items-center gap-3">
+      <select id="card-class-select" class="glass-input px-3 py-2 rounded-xl text-xs">
+        <option value="">All Classes</option>
       </select>
 
       <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
-        Print All Badges
+        Print Class ID Batch
       </button>
 
       <a href="/" class="px-4 py-2.5 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10">
-        Back
+        Back to Dashboard
       </a>
     </div>
   </div>
 
   <!-- Cards Grid Container -->
-  <div id="badges-container" class="badge-sheet-grid max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+  <div id="student-badges-container" class="badge-sheet-grid max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
     <!-- Populated dynamically -->
   </div>
 
   <script src="/js/api.js"></script>
   <script>
-    let employeesList = [];
-    let companySettings = null;
+    let studentsList = [];
+    let schoolSettings = null;
 
     document.addEventListener('DOMContentLoaded', async () => {
-      companySettings = await API.getSettings();
-      employeesList = await API.getEmployees();
+      schoolSettings = await API.getSettings();
+      studentsList = await API.getStudents();
       
-      const depts = await API.getDepartments();
-      const select = document.getElementById('dept-filter-select');
-      depts.forEach(d => {
+      const classes = await API.getClasses();
+      const select = document.getElementById('card-class-select');
+      classes.forEach(c => {
         const opt = document.createElement('option');
-        opt.value = d.id;
-        opt.textContent = d.name;
+        opt.value = c.id;
+        opt.textContent = `${c.grade}-${c.section}`;
         select.appendChild(opt);
       });
 
       select.addEventListener('change', (e) => {
-        const dId = e.target.value ? parseInt(e.target.value, 10) : null;
-        const filtered = dId ? employeesList.filter(x => x.department_id === dId) : employeesList;
-        renderBadges(filtered);
+        const cId = e.target.value ? parseInt(e.target.value, 10) : null;
+        const filtered = cId ? studentsList.filter(x => x.class_id === cId) : studentsList;
+        renderStudentCards(filtered);
       });
 
-      renderBadges(employeesList);
+      renderStudentCards(studentsList);
     });
 
-    function renderBadges(list) {
-      const container = document.getElementById('badges-container');
+    function renderStudentCards(list) {
+      const container = document.getElementById('student-badges-container');
       container.innerHTML = '';
 
-      list.forEach((emp, index) => {
+      list.forEach((s) => {
         const card = document.createElement('div');
-        card.className = "id-badge-card p-6 flex flex-col items-center justify-between text-center";
+        card.className = "student-pvc-card id-badge-card p-5 flex flex-col items-center justify-between text-center";
         
         card.innerHTML = `
           <!-- Header -->
-          <div class="w-full flex items-center justify-between border-b border-white/10 pb-3">
-            <div class="flex items-center gap-1.5">
-              <span class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">✦</span>
-              <span class="text-xs font-bold text-white tracking-wide badge-text-white">${companySettings?.name || 'Apex Company'}</span>
+          <div class="w-full flex items-center justify-between border-b border-white/10 pb-2.5">
+            <div class="flex items-center gap-1.5 text-left">
+              <span class="w-5 h-5 rounded bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">🏫</span>
+              <div>
+                <div class="text-[11px] font-black text-white tracking-tight badge-text-white">${schoolSettings?.name || 'Maharishi Vidya Mandir'}</div>
+                <div class="text-[8px] text-gray-400 font-mono badge-text-gray">${schoolSettings?.affiliation_board || 'CBSE'} • Guwahati, Assam</div>
+              </div>
             </div>
-            <span class="text-[10px] text-gray-400 font-mono badge-text-gray">STAFF PASS</span>
+            <span class="text-[9px] text-amber-400 font-mono font-bold">STUDENT</span>
           </div>
 
-          <!-- Employee Photo & Name -->
-          <div class="my-3 flex flex-col items-center">
-            <img src="${emp.avatar_url || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + emp.employee_code}" class="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-xl mb-2" alt="">
-            <h4 class="text-lg font-bold text-white badge-text-white">${emp.first_name} ${emp.last_name}</h4>
-            <div class="text-xs text-indigo-400 font-semibold">${emp.designation}</div>
-            <div class="text-[11px] text-gray-400 mt-0.5 badge-text-gray">${emp.department_name || 'General'}</div>
-            <div class="text-xs font-mono font-bold text-gray-300 mt-1 bg-white/5 px-2.5 py-0.5 rounded-full border border-white/10 badge-text-white badge-bg-subtle">${emp.employee_code}</div>
+          <!-- Student Photo & Core Details -->
+          <div class="my-2 flex flex-col items-center w-full">
+            <img src="${s.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-20 h-20 rounded-2xl object-cover border-2 border-indigo-500/40 shadow-xl mb-1.5" alt="">
+            <h4 class="text-base font-black text-white badge-text-white">${s.student_name}</h4>
+            <div class="text-xs font-bold text-indigo-400 font-mono">${s.class_grade}-${s.section} (Roll #${s.roll_no})</div>
+            
+            <div class="w-full grid grid-cols-2 gap-1 text-[10px] font-mono text-gray-300 badge-text-gray mt-2 pt-2 border-t border-white/5">
+              <div>Adm No: <strong class="badge-text-white">${s.admission_no}</strong></div>
+              <div>Blood: <strong class="text-rose-400 font-bold">${s.blood_group}</strong></div>
+              <div>Parent: <strong class="badge-text-white">${s.parent_guardian_name}</strong></div>
+              <div>Route: <strong class="text-amber-300">${s.bus_route_no}</strong></div>
+            </div>
           </div>
 
-          <!-- Scannable Badge QR Code -->
-          <div class="bg-white p-2 rounded-xl shadow-inner mb-2 flex items-center justify-center" id="qr-target-${emp.id}"></div>
+          <!-- High-Density Scannable QR Code -->
+          <div class="bg-white p-1.5 rounded-xl shadow-inner mb-1.5 flex items-center justify-center" id="qr-target-st-${s.id}"></div>
           
-          <!-- Bottom Security Instruction -->
-          <div class="text-[10px] text-gray-400 font-mono tracking-widest uppercase badge-text-gray">
-            Hold badge to Reception Kiosk
+          <!-- Bottom Principal Signature Stamp -->
+          <div class="w-full flex items-center justify-between border-t border-white/10 pt-2 text-[9px] font-mono text-gray-400 badge-text-gray">
+            <span>Parent Ph: ${s.parent_whatsapp_phone.slice(0, 10)}...</span>
+            <span class="font-bold text-white badge-text-white">Principal's Signature ✓</span>
           </div>
         `;
 
         container.appendChild(card);
 
-        // Generate QR code for badge
+        // Generate QR code
         setTimeout(() => {
-          const qrTarget = document.getElementById(`qr-target-${emp.id}`);
+          const qrTarget = document.getElementById(`qr-target-st-${s.id}`);
           if (qrTarget && window.QRCode) {
             new QRCode(qrTarget, {
-              text: emp.qr_token,
-              width: 105,
-              height: 105,
-              colorDark: "#090d16",
+              text: s.qr_token,
+              width: 95,
+              height: 95,
+              colorDark: "#070b14",
               colorLight: "#ffffff",
               correctLevel: QRCode.CorrectLevel.H
             });
