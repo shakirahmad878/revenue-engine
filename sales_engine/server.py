@@ -202,7 +202,7 @@ G.S. Road, Guwahati, Assam"""
 Following up on my note below regarding the automated Parent SMS Attendance Kiosk for {business_name}.
 
 We have a live interactive demonstration portal available where you can test scanning student QR badges and view live parent SMS notification alerts in real-time:
-👉 http://localhost:5000/pitch_landing.html
+👉 {demo_url}
 
 Would 10 minutes on Wednesday or Thursday work for a brief demonstration for your administrative office?
 
@@ -246,6 +246,8 @@ def log_activity(activity_type, message):
 
 
 def generate_email_content(prospect, touch_number=1):
+    config = load_json(CONFIG_FILE, {})
+    demo_url = config.get("public_demo_url", "https://shakirahmad878.github.io/revenue-engine/")
     template = EMAIL_TEMPLATES.get(touch_number, EMAIL_TEMPLATES[1])
     contact_name = prospect.get("contact_name", "Principal")
     first_name = contact_name.split()[0] if contact_name else "Principal"
@@ -255,7 +257,8 @@ def generate_email_content(prospect, touch_number=1):
         first_name=first_name,
         city=prospect.get("city", "Assam"),
         niche=prospect.get("niche", "CBSE School"),
-        estimated_ticket=prospect.get("estimated_ticket", "₹24,999")
+        estimated_ticket=prospect.get("estimated_ticket", "₹24,999"),
+        demo_url=demo_url
     )
     body = template["body"].format(
         business_name=prospect.get("business_name", "School"),
@@ -263,7 +266,8 @@ def generate_email_content(prospect, touch_number=1):
         first_name=first_name,
         city=prospect.get("city", "Assam"),
         niche=prospect.get("niche", "CBSE School"),
-        estimated_ticket=prospect.get("estimated_ticket", "₹24,999")
+        estimated_ticket=prospect.get("estimated_ticket", "₹24,999"),
+        demo_url=demo_url
     )
     return subject, body
 
@@ -423,6 +427,7 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
                     "currency_code": "INR",
                     "goal_progress_percent": min(100, (total_revenue / target_rev) * 100) if total_revenue else 0,
                     "autopilot": config.get("autopilot", {}),
+                    "public_demo_url": config.get("public_demo_url", "https://shakirahmad878.github.io/revenue-engine/"),
                     "smtp": {"enabled": config.get("smtp", {}).get("enabled", False), "from_email": config.get("smtp", {}).get("user", "")},
                     "recent_logs": logs[:10]
                 }
@@ -648,8 +653,10 @@ class LiveSalesApiHandler(SimpleHTTPRequestHandler):
                     config["smtp"].update(body["smtp"])
                 if "stripe" in body:
                     config["stripe"].update(body["stripe"])
+                if "public_demo_url" in body:
+                    config["public_demo_url"] = body["public_demo_url"]
                 save_json(CONFIG_FILE, config)
-                log_activity("CONFIG_UPDATED", "Updated system integration credentials.")
+                log_activity("CONFIG_UPDATED", "Updated system integration credentials and public demo URL.")
                 return self._send_json({"success": True, "config": config})
 
         return self._send_json({"error": "Endpoint not found"}, 404)

@@ -1,5 +1,50 @@
 [
   {
+    "timestamp": "2026-08-28 17:26:39",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Office (Holy Cross School Silchar) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:26:21",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Sr. Principal (Holy Child School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:26:02",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to School Administrative Desk (Bal Bharati Public School Bongaigaon) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:25:42",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Sister Superior / Principal (Carmel School Jorhat) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:25:24",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Fr. Headmaster (Don Bosco High School Dibrugarh) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:25:05",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Ashwini Dowerah (Salt Brook Academy) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:24:46",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Senior Management Team (Army Public School Narangi) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:24:27",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Office (Maharishi Vidya Mandir Public School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-08-28 17:24:08",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Fr. Sebastian Mathew (Don Bosco Senior Secondary School) - Email delivered via live SMTP relay."
+  },
+  {
     "timestamp": "2026-08-28 17:23:49",
     "type": "LIVE_OUTREACH",
     "message": "Sent Touch 1 to Dr. S. K. Singh (Delhi Public School Guwahati) - Email delivered via live SMTP relay."
@@ -453,50 +498,5 @@
     "timestamp": "2026-08-27 23:08:31",
     "type": "CALENDAR_BOOKING",
     "message": "Autonomously booked 15-min demo with Josh Campbell for 2026-08-29 01:08"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:31",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from Josh Campbell (Rescue Air and Plumbing): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:31",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Steve Reynolds (Emergency AC & Plumbing Inc.) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:26",
-    "type": "DEAL_CLOSED",
-    "message": "\ud83c\udf89 Closed $500 setup deal with Reliant Air Conditioning & Heating (Mike Davis)! Stripe invoice paid."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:26",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Robert Taylor (Precision Heating & Air) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:22",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to David Martinez (Efficient AC, Electric & Plumbing) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:18",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with Mike Davis for 2026-08-29 01:08"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:18",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from Mike Davis (Reliant Air Conditioning & Heating): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:18",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Josh Campbell (Rescue Air and Plumbing) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:14",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Mike Davis (Reliant Air Conditioning & Heating) - Email generated & dispatched via Autonomous Agent Simulation."
   }
 ]

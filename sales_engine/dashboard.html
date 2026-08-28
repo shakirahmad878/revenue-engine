@@ -40,7 +40,7 @@
       <!-- Live Controls -->
       <div class="flex items-center space-x-3">
         <!-- Preview Kiosk App Link -->
-        <a href="http://localhost:5000/pitch_landing.html" target="_blank" class="px-3 py-1.5 rounded-lg border text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-teal-300 border-teal-500/40 flex items-center gap-1.5 transition">
+        <a id="navDemoLink" href="https://shakirahmad878.github.io/revenue-engine/" target="_blank" class="px-3 py-1.5 rounded-lg border text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-teal-300 border-teal-500/40 flex items-center gap-1.5 transition">
           <i class="fa-solid fa-laptop-code"></i> Live Kiosk Demo
         </a>
 
@@ -391,6 +391,11 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
 
       <div class="space-y-3 text-xs">
         <div>
+          <label class="block text-slate-300 font-semibold mb-1">Public Demo URL (GitHub Pages / Live Link for Principals):</label>
+          <input type="text" id="publicDemoUrl" value="https://shakirahmad878.github.io/revenue-engine/" placeholder="https://shakirahmad878.github.io/revenue-engine/" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-emerald-400 font-mono">
+          <p class="text-[10px] text-slate-500 mt-1">This link will automatically be embedded into all WhatsApp pitches and emails.</p>
+        </div>
+        <div>
           <label class="block text-slate-300 font-semibold mb-1">Gmail SMTP Username (for live outbound emails):</label>
           <input type="text" id="smtpUser" placeholder="your_email@gmail.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2.5 text-slate-100 font-mono">
         </div>
@@ -411,10 +416,9 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
     </div>
   </div>
 
-  <!-- JavaScript API Client -->
-  <script>
     let globalProspects = [];
     let selectedProspect = null;
+    let globalPublicDemoUrl = "https://shakirahmad878.github.io/revenue-engine/";
 
     async function fetchState() {
       try {
@@ -431,6 +435,12 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
         document.getElementById("kpiOutreach").innerText = `${data.contacted} / ${data.total_leads}`;
         document.getElementById("kpiDemos").innerText = `${data.demos_booked} Demos / ${data.closed_won} Won`;
         
+        if (data.public_demo_url) {
+          globalPublicDemoUrl = data.public_demo_url;
+          const navL = document.getElementById("navDemoLink");
+          if (navL) navL.href = globalPublicDemoUrl;
+        }
+
         // Update Autopilot Button
         const ap = data.autopilot?.enabled;
         const apBtn = document.getElementById("autopilotBtn");
@@ -479,7 +489,7 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
         if (p.status === "Closed Won") badgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-bold";
 
         const cleanPhone = (p.phone || "").replace(/[^0-9]/g, "");
-        const waMsg = encodeURIComponent(`Respected ${p.contact_name},\n\nI am writing regarding the student morning gate attendance & automated parent SMS safety system for ${p.business_name}.\n\nAs students tap their ID badge at the school gate (takes 1.2s), parents receive an instant Transactional SMS confirmation (14 Paise / alert, works even with parent's mobile data OFF). This eliminates 15 minutes of teacher morning roll-call and generates ₹2,00,000+ in annual school surplus through standard parent digital fees.\n\nWould you be open to a 5-minute live demo for your school office this week?\n\nInteractive Demo Link: http://localhost:5000/pitch_landing.html`);
+        const waMsg = encodeURIComponent(`Respected ${p.contact_name},\n\nI am writing regarding the student morning gate attendance & automated parent SMS safety system for ${p.business_name}.\n\nAs students tap their ID badge at the school gate (takes 1.2s), parents receive an instant Transactional SMS confirmation (14 Paise / alert, works even with parent's mobile data OFF). This eliminates 15 minutes of teacher morning roll-call and generates ₹2,00,000+ in annual school surplus through standard parent digital fees.\n\nWould you be open to a 5-minute live demo for your school office this week?\n\nInteractive Demo Link: ${globalPublicDemoUrl}`);
 
         const tr = document.createElement("tr");
         tr.className = "hover:bg-slate-800/40 transition cursor-pointer";
@@ -525,6 +535,7 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
         </p>
         <p>👉 At 08:30 AM, the Principal receives a live Strength Summary (Enrolled vs Present vs Absent) on their phone with a 1-click button to send automated absence notices to parents.</p>
         <p>👉 100% self-funding: Generates ₹2,00,000+ in annual school surplus through standard parent digital fees.</p>
+        <p class="pt-2 text-indigo-300 font-semibold">👉 Live Interactive Demo: <a href="${globalPublicDemoUrl}" target="_blank" class="underline text-emerald-400">${globalPublicDemoUrl}</a></p>
         <p>Would you or your administrative team be open to a quick 10-minute live demonstration this week?</p>
       `;
     }
@@ -722,6 +733,7 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
     }
 
     async function saveSettings() {
+      const demoUrl = document.getElementById("publicDemoUrl").value.trim();
       const user = document.getElementById("smtpUser").value.trim();
       const pass = document.getElementById("smtpPass").value.trim();
       const link = document.getElementById("stripeLink").value.trim();
@@ -730,6 +742,7 @@ Don Bosco School, Fr. Sebastian Mathew, principal@donboscoguwahati.ac.in, +91 36
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          public_demo_url: demoUrl || "https://shakirahmad878.github.io/revenue-engine/",
           smtp: { enabled: !!(user && pass), user: user, password: pass },
           stripe_payment_link: link
         })
