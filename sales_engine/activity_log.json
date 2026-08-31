@@ -1,5 +1,10 @@
 [
   {
+    "timestamp": "2026-08-31 18:32:07",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Dr. S. K. Singh (Delhi Public School Guwahati)"
+  },
+  {
     "timestamp": "2026-08-28 17:26:39",
     "type": "LIVE_OUTREACH",
     "message": "Sent Touch 1 to Principal's Office (Holy Cross School Silchar) - Email delivered via live SMTP relay."
@@ -493,10 +498,5 @@
     "timestamp": "2026-08-27 23:08:31",
     "type": "DEAL_CLOSED",
     "message": "\ud83c\udf89 Closed $500 setup deal with Rescue Air and Plumbing (Josh Campbell)! Stripe invoice paid."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:31",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with Josh Campbell for 2026-08-29 01:08"
   }
 ]

@@ -98,6 +98,10 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
             return self.serve_file(os.path.join(STATIC_DIR, "staff_portal.html"), "text/html")
         elif path == "/pitch":
             return self.serve_file(os.path.join(STATIC_DIR, "pitch_landing.html"), "text/html")
+        elif path == "/manifest.json":
+            return self.serve_file(os.path.join(STATIC_DIR, "manifest.json"), "application/json")
+        elif path == "/sw.js":
+            return self.serve_file(os.path.join(STATIC_DIR, "sw.js"), "application/javascript")
 
         # 2. REST API Routes
         if path.startswith("/api/"):

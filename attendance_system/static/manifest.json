@@ -1,0 +1,23 @@
+{
+  "name": "SmartSchool OS — School Safety & Attendance",
+  "short_name": "SmartSchool",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#10b981",
+  "description": "Rapid 1.2s School Gate Attendance, Bus Transport Scanner & Parent SMS Safety System",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2997/2997295.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2997/2997295.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

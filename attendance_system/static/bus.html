@@ -3,221 +3,326 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>School Bus Conductor App - Transport Safety</title>
-  
-  <!-- Tailwind CSS -->
+  <title>SmartSchool Bus — Conductor Mobile Terminal</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#f59e0b">
+
+  <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Html5-QRCode Scanner Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/html5-qrcode"></script>
 
-  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+    body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .glass-card { background: rgba(15, 23, 42, 0.92); border: 1px solid rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); }
+  </style>
 </head>
-<body class="min-h-screen bg-[#070a13] text-gray-100 flex flex-col justify-between p-4 max-w-lg mx-auto">
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-3 sm:p-4 max-w-md mx-auto select-none">
 
-  <!-- Conductor Top Bar -->
-  <header class="flex items-center justify-between border-b border-white/10 pb-4">
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-amber-600 flex items-center justify-center font-bold text-white shadow-lg shadow-amber-600/30">
-        🚌
+  <!-- Header -->
+  <header class="flex items-center justify-between border-b border-slate-800 pb-3">
+    <div class="flex items-center gap-2.5">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 flex items-center justify-center text-slate-950 font-black text-lg shadow-lg shadow-amber-500/20">
+        <i class="fa-solid fa-bus"></i>
       </div>
       <div>
-        <h1 class="text-sm font-extrabold text-white tracking-tight">School Bus Transport App</h1>
-        <p class="text-[10px] text-amber-300 font-mono">Conductor & Driver Terminal</p>
+        <h1 class="text-sm font-extrabold text-white tracking-tight flex items-center gap-1.5">
+          Bus Conductor App
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        </h1>
+        <p class="text-[10px] text-amber-400 font-mono" id="schoolNameHeader">Maharishi Vidya Mandir</p>
       </div>
     </div>
 
-    <!-- Morning Boarding vs Afternoon Drop Toggle -->
-    <div class="flex bg-slate-900 p-1 rounded-xl border border-white/10 text-xs">
-      <button id="btn-mode-board" class="px-3 py-1.5 rounded-lg bg-amber-600 text-white font-bold transition-all">Pick-up</button>
-      <button id="btn-mode-drop" class="px-3 py-1.5 rounded-lg text-gray-400 hover:text-white font-bold transition-all">Drop-off</button>
+    <!-- Mode Toggle: Pick-up vs Drop-off -->
+    <div class="flex bg-slate-900 p-1 rounded-xl border border-slate-800 text-xs">
+      <button id="btnModeBoard" onclick="setScanMode('board')" class="px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition shadow">
+        Pick-up
+      </button>
+      <button id="btnModeDrop" onclick="setScanMode('drop')" class="px-3 py-1.5 rounded-lg text-slate-400 font-semibold transition">
+        Drop-off
+      </button>
     </div>
   </header>
 
-  <!-- Route Selection Card -->
-  <div class="my-3 bg-slate-900/90 border border-white/10 rounded-2xl p-4 space-y-2">
+  <!-- Route Selector Card -->
+  <div class="my-2.5 glass-card rounded-2xl p-3.5 space-y-2">
     <div class="flex items-center justify-between">
-      <span class="text-xs font-semibold text-gray-400">Assigned Bus Route:</span>
-      <select id="bus-route-select" class="glass-input bg-transparent border-0 font-bold text-amber-300 text-xs focus:ring-0 cursor-pointer">
-        <!-- Populated dynamically -->
+      <span class="text-xs font-bold text-slate-400">Assigned Bus Route:</span>
+      <select id="busRouteSelect" onchange="onRouteChanged()" class="bg-slate-900 border border-slate-700 rounded-xl px-2.5 py-1.5 font-bold text-amber-300 text-xs focus:ring-1 focus:ring-amber-400 outline-none cursor-pointer">
+        <option value="Route #4">Route #4 (Zoo Road - Chandmari)</option>
+        <option value="Route #1">Route #1 (Khanapara - Dispur)</option>
+        <option value="Route #2">Route #2 (Jalukbari - Bharalu)</option>
+        <option value="Route #3">Route #3 (Beltola - Six Mile)</option>
       </select>
     </div>
-    <div class="flex items-center justify-between text-xs font-mono text-gray-300 pt-2 border-t border-white/5">
-      <span>Vehicle: <strong class="text-white" id="bus-vehicle-no">AS-01-FC-7833</strong></span>
-      <span class="text-emerald-400 font-bold" id="bus-boarded-count">0 Boarded</span>
+    
+    <div class="flex items-center justify-between text-xs font-mono pt-2 border-t border-slate-800">
+      <span class="text-slate-300">Bus: <strong class="text-amber-300" id="busNumber">AS-01-FC-7833</strong></span>
+      <span class="text-emerald-400 font-bold" id="boardedCountText">0 / 0 Boarded</span>
     </div>
   </div>
 
   <!-- Camera Scanner Area -->
-  <main class="my-auto py-2 flex flex-col items-center">
-    <p class="text-xs text-gray-300 mb-3 text-center">Scan student ID card as they board the school bus</p>
+  <main class="my-auto flex flex-col items-center">
+    
+    <!-- Camera Viewport Box -->
+    <div class="relative w-full aspect-square max-w-[280px] rounded-3xl overflow-hidden bg-slate-900 border-2 border-amber-500/40 shadow-2xl flex flex-col items-center justify-center">
+      <div id="cameraReader" class="w-full h-full object-cover"></div>
+      
+      <!-- Scan Overlay Box -->
+      <div id="cameraPlaceholder" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+        <div class="w-16 h-16 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center text-2xl mb-2">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <button onclick="startCameraScanner()" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl shadow-lg transition">
+          Start Camera Scanner
+        </button>
+      </div>
 
-    <!-- Camera Viewport -->
-    <div class="relative w-72 h-72 rounded-3xl overflow-hidden bg-slate-900 border-2 border-amber-500/40 shadow-2xl flex items-center justify-center">
-      <div id="bus-camera-reader" class="w-full h-full object-cover"></div>
-      <div class="scan-line pointer-events-none"></div>
+      <!-- Live Success Flash Screen -->
+      <div id="scanSuccessOverlay" class="absolute inset-0 bg-emerald-950/95 flex flex-col items-center justify-center p-4 text-center transition-opacity duration-200 opacity-0 pointer-events-none z-20">
+        <div class="w-16 h-16 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-3xl mb-2 animate-bounce">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h3 class="text-base font-black text-white" id="successStudentName">Aman Borah</h3>
+        <p class="text-xs text-emerald-300 font-mono mt-0.5" id="successClass">Class 9-A • Roll #14</p>
+        <div class="mt-2 px-2.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-mono font-bold">
+          ✅ SMS Dispatched to Parent (14p)
+        </div>
+      </div>
     </div>
 
-    <!-- Manual Quick Tap Boarding List -->
-    <div class="w-full mt-5">
+    <!-- Quick Manual Student Boarding List -->
+    <div class="w-full mt-3 glass-card rounded-2xl p-3">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-bold text-white">Route Students (1-Tap Check)</span>
-        <span class="text-[10px] text-gray-400 font-mono">Tap name to mark</span>
+        <span class="text-xs font-bold text-white flex items-center gap-1.5">
+          <i class="fa-solid fa-list-check text-amber-400"></i> Route Student List
+        </span>
+        <span class="text-[10px] text-slate-400 font-mono">1-Tap manual check-in</span>
       </div>
-      <div id="route-students-list" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+
+      <div id="routeStudentsList" class="space-y-1.5 max-h-40 overflow-y-auto pr-1">
         <!-- Populated dynamically -->
       </div>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] text-gray-500 font-mono">
-    <a href="/" class="text-indigo-400 hover:underline">Principal Dashboard</a>
-    <a href="/kiosk" class="text-gray-400 hover:underline">Main Gate Kiosk</a>
+  <!-- Bottom Bar: Status and PWA Install -->
+  <footer class="mt-2 pt-2 border-t border-slate-800 flex items-center justify-between text-xs">
+    <div class="flex items-center gap-1.5 text-slate-400 text-[11px]">
+      <i class="fa-solid fa-wifi text-emerald-400"></i>
+      <span>Cloud Synced</span>
+    </div>
+
+    <button id="pwaInstallBtn" onclick="installPWA()" class="hidden px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/30 rounded-lg text-[11px] font-bold transition flex items-center gap-1">
+      <i class="fa-solid fa-download"></i> Install App
+    </button>
   </footer>
 
-  <script src="/js/api.js"></script>
   <script>
     let activeRoute = "Route #4";
-    let scanType = "board";
+    let scanMode = "board"; // 'board' or 'drop'
     let routeStudents = [];
-    let html5Qr = null;
+    let html5QrScanner = null;
     let scanLock = false;
+    let deferredPrompt = null;
+
+    // Web Audio Chime
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 880, dur = 0.15) {
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (e) {}
+    }
+
+    // Voice Feedback
+    function speakText(txt) {
+      if ('speechSynthesis' in window) {
+        const utter = new SpeechSynthesisUtterance(txt);
+        utter.rate = 1.1;
+        utter.pitch = 1.0;
+        window.speechSynthesis.speak(utter);
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      await loadBusRoutes();
-      setupToggles();
-      initBusCamera();
+      await loadRoutes();
+      await loadRouteStudents();
     });
 
-    async function loadBusRoutes() {
-      try {
-        const routes = await API.getBusRoutes();
-        const select = document.getElementById('bus-route-select');
-        select.innerHTML = routes.map(r => `
-          <option value="${r.route_no}">${r.route_no} (${r.route_name})</option>
-        `).join('');
+    // PWA Install Prompt Handler
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('pwaInstallBtn').classList.remove('hidden');
+    });
 
-        select.addEventListener('change', (e) => {
-          activeRoute = e.target.value;
-          const found = routes.find(r => r.route_no === activeRoute);
-          if (found) {
-            document.getElementById('bus-vehicle-no').textContent = found.bus_number || 'AS-01-FC-7833';
-          }
-          loadRouteStudents();
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(() => {
+          deferredPrompt = null;
+          document.getElementById('pwaInstallBtn').classList.add('hidden');
         });
+      }
+    }
 
-        if (routes.length) {
+    function setScanMode(mode) {
+      scanMode = mode;
+      const bBtn = document.getElementById('btnModeBoard');
+      const dBtn = document.getElementById('btnModeDrop');
+      if (mode === 'board') {
+        bBtn.className = "px-3 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold transition shadow";
+        dBtn.className = "px-3 py-1.5 rounded-lg text-slate-400 font-semibold transition";
+      } else {
+        dBtn.className = "px-3 py-1.5 rounded-lg bg-indigo-500 text-white font-bold transition shadow";
+        bBtn.className = "px-3 py-1.5 rounded-lg text-slate-400 font-semibold transition";
+      }
+    }
+
+    async function loadRoutes() {
+      try {
+        const res = await fetch('/api/school/bus-routes');
+        const routes = await res.json();
+        if (routes && routes.length) {
+          const select = document.getElementById('busRouteSelect');
+          select.innerHTML = routes.map(r => `
+            <option value="${r.route_no}">${r.route_no} (${r.route_name})</option>
+          `).join('');
           activeRoute = routes[0].route_no;
           select.value = activeRoute;
-          document.getElementById('bus-vehicle-no').textContent = routes[0].bus_number;
-          loadRouteStudents();
+          document.getElementById('busNumber').innerText = routes[0].bus_number || 'AS-01-FC-7833';
         }
       } catch (err) {
         console.error(err);
       }
+    }
+
+    async function onRouteChanged() {
+      activeRoute = document.getElementById('busRouteSelect').value;
+      await loadRouteStudents();
     }
 
     async function loadRouteStudents() {
       try {
-        routeStudents = await API.getStudents({ bus_route_no: activeRoute });
-        const list = document.getElementById('route-students-list');
-        if (!routeStudents.length) {
-          list.innerHTML = `<div class="text-xs text-gray-500 py-3 text-center">No students assigned to ${activeRoute}</div>`;
-          return;
-        }
-
-        list.innerHTML = routeStudents.map(s => `
-          <div class="p-2.5 rounded-xl bg-slate-800/60 border border-white/5 flex items-center justify-between text-xs">
-            <div class="flex items-center gap-2.5">
-              <img src="${s.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-8 h-8 rounded-full object-cover border border-white/10" alt="">
-              <div>
-                <div class="font-bold text-white">${s.student_name}</div>
-                <div class="text-[10px] text-gray-400 font-mono">${s.class_grade}-${s.section} • Roll #${s.roll_no}</div>
-              </div>
-            </div>
-            <button onclick="handleManualBusBoard(${s.id}, '${s.student_name}')" class="px-3 py-1 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs shadow transition-all">
-              Mark ${scanType === 'board' ? 'Boarded' : 'Dropped'}
-            </button>
-          </div>
-        `).join('');
+        const res = await fetch(`/api/school/students?bus_route=${encodeURIComponent(activeRoute)}`);
+        routeStudents = await res.json();
+        renderRouteList();
       } catch (err) {
         console.error(err);
       }
     }
 
-    function setupToggles() {
-      const btnBoard = document.getElementById('btn-mode-board');
-      const btnDrop = document.getElementById('btn-mode-drop');
-
-      btnBoard.addEventListener('click', () => {
-        scanType = 'board';
-        btnBoard.classList.add('bg-amber-600', 'text-white');
-        btnBoard.classList.remove('text-gray-400');
-        btnDrop.classList.remove('bg-amber-600', 'text-white');
-        btnDrop.classList.add('text-gray-400');
-        loadRouteStudents();
-      });
-
-      btnDrop.addEventListener('click', () => {
-        scanType = 'drop';
-        btnDrop.classList.add('bg-amber-600', 'text-white');
-        btnDrop.classList.remove('text-gray-400');
-        btnBoard.classList.remove('bg-amber-600', 'text-white');
-        btnBoard.classList.add('text-gray-400');
-        loadRouteStudents();
-      });
-    }
-
-    async function initBusCamera() {
-      if (typeof Html5Qrcode === 'undefined') return;
-      try {
-        html5Qr = new Html5Qrcode("bus-camera-reader");
-        await html5Qr.start(
-          { facingMode: "environment" },
-          { fps: 12, qrbox: { width: 220, height: 220 } },
-          (decodedText) => handleBusScan(decodedText),
-          (err) => {}
-        );
-      } catch (err) {
-        console.warn('Camera error:', err);
+    function renderRouteList() {
+      const container = document.getElementById('routeStudentsList');
+      const countLabel = document.getElementById('boardedCountText');
+      if (!routeStudents.length) {
+        container.innerHTML = `<p class="text-xs text-slate-500 text-center py-2">No students assigned to ${activeRoute}</p>`;
+        countLabel.innerText = "0 / 0 Boarded";
+        return;
       }
+
+      let boarded = 0;
+      container.innerHTML = routeStudents.map(st => {
+        const isDone = st.is_boarded;
+        if (isDone) boarded++;
+        return `
+          <div onclick="processScan('${st.admission_no}')" class="p-2 rounded-xl flex items-center justify-between ${isDone ? 'bg-emerald-950/40 border border-emerald-500/30' : 'bg-slate-900 border border-slate-800'} hover:border-amber-500/50 cursor-pointer transition">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-lg ${isDone ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'} flex items-center justify-center font-bold text-xs">
+                ${isDone ? '✓' : st.roll_no || '#'}
+              </div>
+              <div>
+                <div class="font-bold text-xs ${isDone ? 'text-emerald-300' : 'text-white'}">${st.student_name}</div>
+                <div class="text-[10px] text-slate-400">${st.class_grade}-${st.section} • Roll #${st.roll_no}</div>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono ${isDone ? 'text-emerald-400 font-bold' : 'text-slate-500'}">
+              ${isDone ? 'Boarded' : 'Tap to Board'}
+            </span>
+          </div>
+        `;
+      }).join('');
+
+      countLabel.innerText = `${boarded} / ${routeStudents.length} Boarded`;
     }
 
-    async function handleBusScan(identifier) {
+    async function processScan(identifier) {
       if (scanLock) return;
       scanLock = true;
 
       try {
-        const res = await API.busScan(identifier, activeRoute, scanType, "Bus Conductor");
-        if (res.success) {
-          AudioChime.playSuccess();
-          Toast.show(`✓ ${res.message} (WhatsApp alert sent to Parent)`, 'success', 4000);
+        const res = await fetch('/api/school/bus-scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            identifier: identifier,
+            bus_route: activeRoute,
+            scan_type: scanMode,
+            conductor_name: "Bus Conductor"
+          })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          playBeep(987, 0.2);
+          showSuccessOverlay(data.student);
+          speakText(`${data.student.student_name} boarded`);
+          
+          // Mark in local state
+          const target = routeStudents.find(s => s.admission_no === data.student.admission_no || s.id === data.student.id);
+          if (target) target.is_boarded = true;
+          renderRouteList();
         } else {
-          AudioChime.playError();
-          Toast.show(res.message, 'error');
+          playBeep(300, 0.3);
+          alert(data.message || "Card not recognized");
         }
       } catch (err) {
-        AudioChime.playError();
-        Toast.show(err.message, 'error');
+        console.error(err);
       } finally {
-        setTimeout(() => { scanLock = false; }, 3000);
+        setTimeout(() => { scanLock = false; }, 1200);
       }
     }
 
-    async function handleManualBusBoard(studentId, name) {
-      try {
-        const res = await API.busScan(studentId, activeRoute, scanType, "Bus Conductor");
-        if (res.success) {
-          AudioChime.playSuccess();
-          Toast.show(`✓ ${res.message} (WhatsApp alert sent to Parent)`, 'success', 4000);
-        } else {
-          AudioChime.playError();
-          Toast.show(res.message, 'error');
-        }
-      } catch (err) {
-        AudioChime.playError();
-        Toast.show(err.message, 'error');
-      }
+    function showSuccessOverlay(student) {
+      const overlay = document.getElementById('scanSuccessOverlay');
+      document.getElementById('successStudentName').innerText = student.student_name;
+      document.getElementById('successClass').innerText = `${student.class_grade}-${student.section} • Roll #${student.roll_no}`;
+      overlay.classList.remove('opacity-0', 'pointer-events-none');
+      overlay.classList.add('opacity-100');
+
+      setTimeout(() => {
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('opacity-0', 'pointer-events-none');
+      }, 1500);
+    }
+
+    function startCameraScanner() {
+      document.getElementById('cameraPlaceholder').classList.add('hidden');
+      html5QrScanner = new Html5Qrcode("cameraReader");
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 15, qrbox: { width: 220, height: 220 } },
+        (decodedText) => {
+          processScan(decodedText);
+        },
+        (errorMessage) => {}
+      ).catch((err) => {
+        alert("Camera error: " + err);
+        document.getElementById('cameraPlaceholder').classList.remove('hidden');
+      });
     }
   </script>
 </body>

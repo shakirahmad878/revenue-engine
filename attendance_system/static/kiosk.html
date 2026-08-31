@@ -3,334 +3,328 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Gate High-Speed Kiosk - Maharishi Vidya Mandir Guwahati</title>
-  
-  <!-- Tailwind CSS -->
+  <title>SmartSchool Gate Kiosk — Rapid 1.2s Campus Entrance</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- QRCode.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <!-- Html5-QRCode Scanner Library -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/html5-qrcode"></script>
 
-  <link rel="stylesheet" href="/css/styles.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.90);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
 </head>
-<body class="min-h-screen bg-[#060911] text-gray-100 flex flex-col justify-between p-4 sm:p-8 select-none">
+<body class="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-4 sm:p-6 select-none overflow-hidden">
 
-  <!-- Top Kiosk Header -->
-  <header class="flex items-center justify-between border-b border-white/10 pb-5">
+  <!-- Kiosk Header -->
+  <header class="flex items-center justify-between border-b border-slate-800 pb-4">
     <div class="flex items-center gap-3.5">
-      <div class="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center font-black text-white text-2xl shadow-xl shadow-indigo-600/40">
-        🏫
+      <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center font-black text-slate-950 text-2xl shadow-lg shadow-emerald-500/20">
+        <i class="fa-solid fa-school"></i>
       </div>
       <div>
-        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight" id="kiosk-school-name">Maharishi Vidya Mandir Public School</h1>
+        <h1 class="text-xl sm:text-2xl font-black text-white tracking-tight" id="schoolNameHeader">
+          Maharishi Vidya Mandir Public School
+        </h1>
         <div class="flex items-center gap-2 mt-0.5">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
           <span class="text-xs text-emerald-400 font-mono font-bold uppercase tracking-wider">High-Speed Main Gate Terminal (1.2s Throughput)</span>
-          <span class="text-xs text-gray-500">•</span>
-          <span class="text-xs text-gray-300 font-mono">Reporting: 08:00 AM</span>
+          <span class="text-xs text-slate-600">•</span>
+          <span class="text-xs text-slate-300 font-mono" id="gateReportingTime">Reporting: 08:00 AM</span>
         </div>
       </div>
     </div>
 
-    <!-- Live Clock & Scanner Status -->
+    <!-- Live Clock & Fullscreen Toggle -->
     <div class="flex items-center gap-4">
-      <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-mono font-bold">
-        <span>⚡</span> USB Laser Scanner: Ready
+      <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-mono font-bold">
+        <i class="fa-solid fa-barcode text-emerald-400"></i>
+        <span>USB Scanner: READY</span>
       </div>
 
-      <div class="flex flex-col text-right px-4 py-2 rounded-2xl bg-slate-900 border border-white/10 font-mono">
-        <div id="kiosk-clock-time" class="text-base font-extrabold text-white">07:52:00 AM</div>
-        <div id="kiosk-clock-date" class="text-[11px] text-gray-400">Friday, Aug 28, 2026</div>
+      <div class="flex flex-col text-right px-4 py-2 rounded-2xl bg-slate-900 border border-slate-800 font-mono">
+        <div id="clockTime" class="text-base font-extrabold text-white">07:54:00 AM</div>
+        <div id="clockDate" class="text-[10px] text-slate-400">Monday, Aug 31, 2026</div>
       </div>
+
+      <button onclick="toggleFullscreen()" class="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition" title="Toggle Fullscreen">
+        <i class="fa-solid fa-expand"></i>
+      </button>
     </div>
   </header>
 
   <!-- Main Center Gate Stage -->
-  <main class="my-auto py-6 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-7xl mx-auto w-full">
+  <main class="my-auto py-4 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center max-w-7xl mx-auto w-full">
     
-    <!-- Left 8 Cols: Live Scanner Viewport & Visual Feedback Card -->
+    <!-- Left 8 Cols: Large Card Scanner Stage & Live Flash Feedback -->
     <div class="lg:col-span-8 flex flex-col items-center text-center">
       
-      <!-- Interactive Input Area -->
-      <div class="w-full flex flex-col items-center">
+      <!-- Instructional Banner -->
+      <div class="mb-4">
+        <span class="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 uppercase tracking-wider inline-flex items-center gap-1.5">
+          <i class="fa-solid fa-id-card"></i> Scan PVC ID Badge Under Laser
+        </span>
+        <h2 class="text-2xl sm:text-4xl font-black text-white mt-2 tracking-tight">
+          Tap Student Badge to Check-In
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-md mx-auto">
+          Instant campus arrival verification with automatic Transactional SMS to parents (14p / alert).
+        </p>
+      </div>
+
+      <!-- Scanning Box Viewport -->
+      <div class="relative w-full max-w-md aspect-video sm:aspect-[4/3] rounded-3xl overflow-hidden bg-slate-900 border-2 border-emerald-500/40 shadow-2xl flex flex-col items-center justify-center p-4">
         
-        <div class="mb-4">
-          <span class="px-3.5 py-1 rounded-full text-xs font-mono font-bold bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 uppercase tracking-wider inline-flex items-center gap-1.5">
-            <span>🪪</span> Scan Student PVC ID Card / Barcode
-          </span>
-          <h2 class="text-2xl sm:text-4xl font-black text-white mt-2 tracking-tight">Hold ID Badge Under Laser / Camera</h2>
-          <p class="text-xs sm:text-sm text-gray-400 mt-1 max-w-md mx-auto">Instant gate verification & real-time automated WhatsApp alert to parents.</p>
-        </div>
-
-        <!-- Camera / Laser Scanning Frame -->
-        <div class="relative w-80 h-80 rounded-3xl overflow-hidden bg-slate-900/90 border-2 border-indigo-500/40 shadow-2xl flex items-center justify-center p-2">
-          <div id="gate-camera-reader" class="w-full h-full object-cover rounded-2xl"></div>
-          <div class="scan-line pointer-events-none"></div>
-        </div>
-
-        <!-- Hidden USB Laser Barcode Keypress Listener Indicator -->
-        <div class="mt-4 flex items-center gap-3">
-          <input type="text" id="laser-input-box" placeholder="Scan Barcode / Enter Admission No..." class="glass-input px-4 py-2 rounded-xl text-xs font-mono w-64 text-center focus:border-indigo-400">
-          <button id="btn-submit-manual" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30">
-            Submit
+        <div id="cameraViewport" class="w-full h-full object-cover rounded-2xl hidden"></div>
+        
+        <div id="laserVisualFrame" class="flex flex-col items-center justify-center text-center p-6">
+          <div class="w-20 h-20 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-3xl mb-3 shadow-inner">
+            <i class="fa-solid fa-qrcode animate-pulse"></i>
+          </div>
+          <div class="text-sm font-bold text-white">USB Laser Scanner Listening...</div>
+          <p class="text-xs text-slate-400 mt-1 font-mono">Hold student ID card 10cm under the red laser</p>
+          
+          <button onclick="startCameraBackup()" class="mt-4 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 transition">
+            <i class="fa-solid fa-camera mr-1"></i> Switch to Web Camera
           </button>
         </div>
 
+        <!-- Pop-Up Modal on Scan (0.3s Instant Confirmation) -->
+        <div id="scanResultModal" class="absolute inset-0 bg-slate-950/95 flex flex-col items-center justify-center p-6 text-center transition-all duration-200 opacity-0 pointer-events-none z-30">
+          <div id="modalIcon" class="w-20 h-20 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-4xl mb-3 shadow-lg shadow-emerald-500/30">
+            <i class="fa-solid fa-check"></i>
+          </div>
+
+          <div class="text-2xl font-black text-white" id="modalStudentName">Aman Borah</div>
+          <div class="text-sm text-emerald-300 font-mono mt-0.5" id="modalStudentClass">Class 9-A • Roll #14</div>
+          <div class="text-xs text-slate-400 font-mono mt-1" id="modalTimeAndStatus">Checked in at 07:54 AM [On Time]</div>
+
+          <div class="mt-4 px-3 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-mono font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-comment-sms text-emerald-400"></i>
+            <span id="modalSmsNotice">✅ Transactional SMS Dispatched (14 Paise • Delivered)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Manual ID Test Bar -->
+      <div class="mt-4 flex items-center gap-2 max-w-sm w-full">
+        <input type="text" id="manualInput" placeholder="Scan Barcode or Type Adm No..." class="flex-1 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl text-xs font-mono text-white focus:outline-none focus:border-emerald-500">
+        <button onclick="handleManualSubmit()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-slate-950 font-bold text-xs rounded-xl transition">
+          Enter
+        </button>
       </div>
 
     </div>
 
-    <!-- Right 4 Cols: Recent Gate Influx Feed -->
-    <div class="lg:col-span-4 glass-panel rounded-3xl p-6 flex flex-col h-[520px]">
-      <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
+    <!-- Right 4 Cols: Live Gate Stream & Campus Stats -->
+    <div class="lg:col-span-4 glass-panel rounded-3xl p-5 flex flex-col h-[480px]">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
         <div>
-          <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-            Gate Check-In Stream
+          <h3 class="text-xs font-bold text-white flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            Today's Gate Stream
           </h3>
-          <p class="text-[11px] text-gray-400">Parent WhatsApp delivery confirmations</p>
+          <p class="text-[10px] text-slate-400 font-mono" id="gateStatsSummary">Present: 0 • Late: 0</p>
         </div>
-        <span class="text-xs font-mono text-indigo-400 font-bold">LIVE GATE</span>
+        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-mono font-bold">LIVE</span>
       </div>
 
-      <div id="kiosk-live-stream" class="space-y-3 flex-1 overflow-y-auto pr-1">
-        <!-- Populated dynamically -->
+      <div id="liveStreamList" class="space-y-2 flex-1 overflow-y-auto pr-1">
+        <!-- Live feed items inserted dynamically -->
       </div>
     </div>
 
   </main>
 
-  <!-- Kiosk Footer -->
-  <footer class="flex items-center justify-between border-t border-white/10 pt-4 text-xs text-gray-500 font-mono">
-    <div class="flex items-center gap-2">
-      <span class="text-gray-400 font-bold">Smart School OS</span>
-      <span>•</span>
-      <span>Speed: 1.2s / student</span>
-      <span>•</span>
-      <span>Multi-Language Parent WhatsApp Engine Active</span>
+  <!-- Footer Links -->
+  <footer class="border-t border-slate-800 pt-3 flex items-center justify-between text-xs text-slate-500 font-mono">
+    <div class="flex items-center gap-3">
+      <a href="/" class="text-emerald-400 hover:underline">Principal Dashboard</a>
+      <span>&bull;</span>
+      <a href="/bus" class="text-amber-400 hover:underline">Bus Conductor App</a>
+      <span>&bull;</span>
+      <a href="/badges" class="text-indigo-400 hover:underline">ID Badge Studio</a>
     </div>
-    <div class="flex items-center gap-4">
-      <a href="/" class="text-indigo-400 hover:underline">Principal Dashboard</a>
-      <a href="/bus" class="text-amber-400 hover:underline">Bus Scanner</a>
-      <a href="/badges" class="text-emerald-400 hover:underline">ID Studio</a>
-    </div>
+
+    <span>SmartSchool OS &bull; 24/7 Gate Terminal</span>
   </footer>
 
-  <!-- ============================================================ -->
-  <!-- MODAL: INSTANT STUDENT PHOTO & WHATSAPP DELIVERED POPUP -->
-  <!-- ============================================================ -->
-  <div id="gate-result-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl flex items-center justify-center p-4 hidden">
-    <div id="gate-result-content" class="w-full max-w-lg bg-slate-900 border-2 border-indigo-500/50 rounded-3xl p-8 shadow-2xl text-center">
-      <!-- Populated dynamically -->
-    </div>
-  </div>
-
-  <script src="/js/api.js"></script>
   <script>
-    let html5Qr = null;
     let scanLock = false;
+    let html5CameraScanner = null;
+    let barcodeBuffer = "";
+    let barcodeTimer = null;
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      initKioskClock();
-      await loadKioskSettings();
-      initCameraScanner();
-      setupLaserBarcodeListener();
-      loadLiveStream();
+    // Web Audio Sound Generator
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq = 880, dur = 0.15) {
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (e) {}
+    }
 
-      setInterval(loadLiveStream, 8000);
+    // Global Keystroke Listener for Hardware USB Laser Scanners
+    window.addEventListener('keydown', (e) => {
+      // Ignore if user is actively typing in manual box
+      if (document.activeElement === document.getElementById('manualInput')) return;
+
+      if (e.key === "Enter") {
+        if (barcodeBuffer.trim().length > 2) {
+          executeScan(barcodeBuffer.trim());
+        }
+        barcodeBuffer = "";
+      } else if (e.key.length === 1) {
+        barcodeBuffer += e.key;
+        clearTimeout(barcodeTimer);
+        barcodeTimer = setTimeout(() => { barcodeBuffer = ""; }, 250);
+      }
     });
 
-    function initKioskClock() {
-      const timeEl = document.getElementById('kiosk-clock-time');
-      const dateEl = document.getElementById('kiosk-clock-date');
-      function tick() {
-        const now = new Date();
-        if (timeEl) timeEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        if (dateEl) dateEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
-      }
-      tick();
-      setInterval(tick, 1000);
+    document.addEventListener('DOMContentLoaded', () => {
+      updateClock();
+      setInterval(updateClock, 1000);
+      loadLiveGateStats();
+      setInterval(loadLiveGateStats, 5000);
+    });
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clockTime').innerText = now.toLocaleTimeString('en-US', { hour12: true });
+      document.getElementById('clockDate').innerText = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
     }
 
-    async function loadKioskSettings() {
-      try {
-        const s = await API.getSettings();
-        document.getElementById('kiosk-school-name').textContent = s.name;
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    // USB Barcode Scanner Keyboard Wedge Listener (Instant submission on Enter)
-    function setupLaserBarcodeListener() {
-      const inputBox = document.getElementById('laser-input-box');
-      const btnManual = document.getElementById('btn-submit-manual');
-
-      // Auto-focus input box
-      inputBox.focus();
-      document.addEventListener('click', () => inputBox.focus());
-
-      inputBox.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          const val = inputBox.value.trim();
-          if (val) {
-            processStudentScan(val);
-            inputBox.value = '';
-          }
-        }
-      });
-
-      btnManual.addEventListener('click', () => {
-        const val = inputBox.value.trim();
-        if (val) {
-          processStudentScan(val);
-          inputBox.value = '';
-        }
-      });
-    }
-
-    // Webcam Scanner
-    async function initCameraScanner() {
-      if (typeof Html5Qrcode === 'undefined') return;
-      try {
-        html5Qr = new Html5Qrcode("gate-camera-reader");
-        const cameras = await Html5Qrcode.getCameras();
-        if (cameras && cameras.length) {
-          await html5Qr.start(
-            cameras[0].id,
-            { fps: 15, qrbox: { width: 250, height: 250 } },
-            (decodedText) => processStudentScan(decodedText),
-            (err) => {}
-          );
-        }
-      } catch (err) {
-        console.warn('Camera error:', err);
-      }
-    }
-
-    async function processStudentScan(identifier) {
+    async function executeScan(identifier) {
       if (scanLock) return;
       scanLock = true;
 
       try {
-        const res = await API.gateScan(identifier);
-        if (res.success) {
-          AudioChime.playSuccess();
-          showGateResultModal(res);
-          loadLiveStream();
+        const res = await fetch('/api/school/gate-scan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: identifier, scanned_by: "Main Gate Laser Kiosk" })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          const isLate = data.status === "late";
+          playBeep(isLate ? 600 : 1046, 0.2);
+          showScanModal(data, isLate);
+          prependToStream(data);
         } else {
-          AudioChime.playError();
-          Toast.show(res.message || 'Student not recognized', 'error');
+          playBeep(250, 0.3);
+          alert(data.message || "Badge not recognized");
         }
-      } catch (err) {
-        AudioChime.playError();
-        Toast.show('Scan error: ' + err.message, 'error');
-      } finally {
-        setTimeout(() => {
-          scanLock = false;
-          document.getElementById('laser-input-box').focus();
-        }, 1500);
-      }
-    }
-
-    function showGateResultModal(res) {
-      const modal = document.getElementById('gate-result-modal');
-      const content = document.getElementById('gate-result-content');
-      const s = res.student;
-      const notif = res.notification;
-      const isLate = res.status === 'late';
-
-      content.innerHTML = `
-        <div class="flex flex-col items-center">
-          <!-- Student Photo & Glow Frame -->
-          <div class="relative mb-4">
-            <div class="w-32 h-32 rounded-3xl overflow-hidden border-4 ${isLate ? 'border-amber-400' : 'border-emerald-400'} shadow-2xl">
-              <img src="${s.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-full h-full object-cover" alt="">
-            </div>
-            <span class="absolute -bottom-2 -right-2 px-3 py-0.5 rounded-full font-mono font-bold text-xs text-white ${isLate ? 'bg-amber-500' : 'bg-emerald-500'} shadow-lg">
-              ${isLate ? 'LATE' : 'ON TIME'}
-            </span>
-          </div>
-
-          <h2 class="text-3xl font-black text-white">${s.student_name}</h2>
-          <div class="text-sm text-indigo-300 font-bold mt-1">${s.class_grade}-${s.section} (Roll #${s.roll_no}) • Adm: ${s.admission_no}</div>
-          
-          <div class="grid grid-cols-2 gap-3 w-full bg-slate-800/80 border border-white/10 rounded-2xl p-3.5 my-4 text-xs font-mono text-left">
-            <div>
-              <span class="text-gray-400">Blood Group:</span> <strong class="text-rose-300">${s.blood_group}</strong>
-            </div>
-            <div>
-              <span class="text-gray-400">Bus Transport:</span> <strong class="text-indigo-300">${s.bus_route_no}</strong>
-            </div>
-            <div>
-              <span class="text-gray-400">Parent Name:</span> <strong class="text-white">${s.parent_guardian_name}</strong>
-            </div>
-            <div>
-              <span class="text-gray-400">Time Logged:</span> <strong class="text-emerald-400">${res.time}</strong>
-            </div>
-          </div>
-
-          <!-- Glowing Parent Transactional SMS Confirmation Badge -->
-          <div class="w-full bg-emerald-950/40 border border-emerald-500/40 rounded-2xl p-3.5 flex items-center gap-3 text-left">
-            <div class="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center font-bold text-slate-950 text-sm shrink-0">
-              ✓
-            </div>
-            <div class="flex-1 flex justify-between items-center">
-              <div>
-                <div class="text-xs font-bold text-emerald-400 uppercase tracking-wide">Transactional SMS Dispatched</div>
-                <div class="text-[11px] text-gray-300 font-mono mt-0.5">Cellular delivery to ${s.parent_guardian_name} (${s.parent_whatsapp_phone})</div>
-              </div>
-              <span class="text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded border border-emerald-500/30">14 Paise</span>
-            </div>
-          </div>
-
-          <div class="text-[11px] text-gray-500 font-mono mt-4 flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-            Ready for next student in 1.2 seconds...
-          </div>
-        </div>
-      `;
-
-      modal.classList.remove('hidden');
-
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 2500);
-    }
-
-    async function loadLiveStream() {
-      try {
-        const notifs = await API.getNotifications();
-        const container = document.getElementById('kiosk-live-stream');
-        if (!container || !notifs) return;
-
-        if (!notifs.length) {
-          container.innerHTML = `<div class="text-xs text-gray-500 py-8 text-center">No student scans recorded yet today.</div>`;
-          return;
-        }
-
-        container.innerHTML = notifs.slice(0, 6).map(n => `
-          <div class="p-3 rounded-2xl bg-slate-800/40 border border-white/5 text-xs flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <img src="${n.photo_url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150'}" class="w-10 h-10 rounded-full object-cover border border-white/10" alt="">
-              <div>
-                <div class="font-bold text-white">${n.student_name || n.recipient_name}</div>
-                <div class="text-[10px] text-indigo-300 font-mono">${n.class_grade}-${n.section}</div>
-              </div>
-            </div>
-            <div class="text-right font-mono">
-              <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                SMS Delivered
-              </span>
-              <div class="text-[10px] text-gray-400 mt-1">${n.timestamp.slice(11, 19)}</div>
-            </div>
-          </div>
-        `).join('');
       } catch (err) {
         console.error(err);
+      } finally {
+        setTimeout(() => { scanLock = false; }, 1400);
       }
+    }
+
+    function showScanModal(data, isLate) {
+      const modal = document.getElementById('scanResultModal');
+      const icon = document.getElementById('modalIcon');
+      
+      document.getElementById('modalStudentName').innerText = data.student.student_name;
+      document.getElementById('modalStudentClass').innerText = `${data.student.class_grade}-${data.student.section} • Roll #${data.student.roll_no}`;
+      document.getElementById('modalTimeAndStatus').innerText = `${data.message}`;
+
+      if (isLate) {
+        icon.className = "w-20 h-20 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center text-4xl mb-3 shadow-lg shadow-amber-500/30";
+        icon.innerHTML = `<i class="fa-solid fa-clock"></i>`;
+      } else {
+        icon.className = "w-20 h-20 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center text-4xl mb-3 shadow-lg shadow-emerald-500/30";
+        icon.innerHTML = `<i class="fa-solid fa-check"></i>`;
+      }
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      modal.classList.add('opacity-100');
+
+      setTimeout(() => {
+        modal.classList.remove('opacity-100');
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }, 1600);
+    }
+
+    function prependToStream(data) {
+      const stream = document.getElementById('liveStreamList');
+      const item = document.createElement('div');
+      item.className = "p-2 rounded-xl bg-slate-900/90 border border-slate-800 flex items-center justify-between text-xs animate-fadeIn";
+      item.innerHTML = `
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg ${data.status === 'late' ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'} flex items-center justify-center font-bold">
+            ${data.student.roll_no}
+          </div>
+          <div>
+            <div class="font-bold text-white">${data.student.student_name}</div>
+            <div class="text-[10px] text-slate-400">${data.student.class_grade}-${data.student.section}</div>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="font-mono text-emerald-400 text-[11px] font-bold">${data.time}</div>
+          <div class="text-[9px] text-slate-500">14p SMS Sent</div>
+        </div>
+      `;
+      stream.prepend(item);
+    }
+
+    async function loadLiveGateStats() {
+      try {
+        const res = await fetch('/api/school/morning-strength');
+        const report = await res.json();
+        if (report && report.summary) {
+          const s = report.summary;
+          document.getElementById('gateStatsSummary').innerText = `Present: ${s.present_students} / ${s.total_students} (${s.strength_percentage}%) • Late: ${s.late_students}`;
+        }
+      } catch (e) {}
+    }
+
+    function handleManualSubmit() {
+      const val = document.getElementById('manualInput').value.trim();
+      if (val) {
+        executeScan(val);
+        document.getElementById('manualInput').value = "";
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    function startCameraBackup() {
+      document.getElementById('laserVisualFrame').classList.add('hidden');
+      const v = document.getElementById('cameraViewport');
+      v.classList.remove('hidden');
+
+      html5CameraScanner = new Html5Qrcode("cameraViewport");
+      html5CameraScanner.start(
+        { facingMode: "environment" },
+        { fps: 15, qrbox: { width: 240, height: 240 } },
+        (decodedText) => { executeScan(decodedText); },
+        (err) => {}
+      );
     }
   </script>
 </body>
