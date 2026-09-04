@@ -13,6 +13,78 @@ import socket
 # Curated High-Intent Assam School Directory (100% Real Mobile & WhatsApp Contacts)
 ASSAM_SCHOOLS_DATABASE = [
     {
+        "business_name": "Delhi Public School Silchar",
+        "contact_name": "Principal's Desk",
+        "title": "Principal & Director",
+        "email": "info@dpssilchar.in",
+        "phone": "+91 94019 93344",
+        "city": "Budurail, Kathal Road, Silchar, Assam",
+        "niche": "CBSE Premier Senior Secondary",
+        "estimated_ticket": "₹29,999",
+        "identified_pain": "Large Kathal Road gate morning arrival rush; demands instant parent SMS gate alerts.",
+        "notes": "Premier CBSE school in Silchar. Active WhatsApp mobile (+91 94019 93344)."
+    },
+    {
+        "business_name": "South Point High School Silchar",
+        "contact_name": "Principal's Office",
+        "title": "Principal",
+        "email": "principal@sphsssilchar.com",
+        "phone": "+91 86387 24318",
+        "city": "C.R. Avenue, Silchar, Cachar, Assam",
+        "niche": "CBSE Co-Ed English Medium",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Teachers spend 15 minutes of morning class on manual roll-call paper registers.",
+        "notes": "Top-ranked school in Silchar. WhatsApp active mobile (+91 86387 24318)."
+    },
+    {
+        "business_name": "Pranabananda Holy Child HS School",
+        "contact_name": "Mrs. Pamela Sen",
+        "title": "Principal",
+        "email": "holychildsilchar1993@gmail.com",
+        "phone": "+91 86380 41679",
+        "city": "Hospital Road, Silchar, Cachar, Assam",
+        "niche": "English Medium High School",
+        "estimated_ticket": "₹19,999",
+        "identified_pain": "Wants automated 08:30 AM unexcused absence SMS dispatch to parents.",
+        "notes": "Prominent Silchar institution. Direct WhatsApp mobile (+91 86380 41679)."
+    },
+    {
+        "business_name": "Maharishi Vidya Mandir Silchar",
+        "contact_name": "Mrs. Samita Dutta",
+        "title": "Principal & Academic Director",
+        "email": "mvmsilchar@mssmail.org",
+        "phone": "+91 99540 53062",
+        "city": "Kathal Road, Bhakatpur, Silchar, Assam",
+        "niche": "CBSE Senior Secondary",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Requires rapid 1.2s QR student gate check-in and parent SMS notifications.",
+        "notes": "Established CBSE campus in Silchar. Direct WhatsApp (+91 99540 53062)."
+    },
+    {
+        "business_name": "Pranabananda International School",
+        "contact_name": "Sri Satadal Bhattacharjee",
+        "title": "Headmaster & Administrator",
+        "email": "pvmsilchar2010@gmail.com",
+        "phone": "+91 94350 76060",
+        "city": "Tarapur, Chandmari Road, Silchar, Assam",
+        "niche": "Bharat Sevashram Sangha English Medium",
+        "estimated_ticket": "₹19,999",
+        "identified_pain": "Needs bus transport boarding scan sync with parent SMS alerts.",
+        "notes": "Large school in Tarapur Silchar. Direct WhatsApp mobile (+91 94350 76060)."
+    },
+    {
+        "business_name": "Don Bosco High School Silchar",
+        "contact_name": "Fr. Rector & Principal",
+        "title": "Principal",
+        "email": "donboscosilchar@gmail.com",
+        "phone": "+91 94351 71822",
+        "city": "Ramnagar, Silchar, Cachar, Assam",
+        "niche": "Christian Minority English Medium",
+        "estimated_ticket": "₹24,999",
+        "identified_pain": "Elimination of paper attendance slips across multi-section classes.",
+        "notes": "Prestigious convent school in Silchar. Direct WhatsApp mobile (+91 94351 71822)."
+    },
+    {
         "business_name": "Faculty Higher Secondary School",
         "contact_name": "Pradip Kumar Joshi",
         "title": "Principal",

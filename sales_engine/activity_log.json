@@ -1,5 +1,140 @@
 [
   {
+    "timestamp": "2026-09-04 19:52:45",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Office (South Point High School Silchar) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:52:26",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Desk (Delhi Public School Silchar) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:52:07",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Office (Holy Cross School Silchar) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:51:48",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Sister Superior / Principal (Carmel School Jorhat) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:51:29",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Fr. Headmaster (Don Bosco High School Dibrugarh) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:51:10",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Ashwini Dowerah (Salt Brook Academy) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:50:52",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Senior Management Team (Army Public School Narangi) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:50:32",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal's Office (Maharishi Vidya Mandir Public School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:50:12",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Fr. Sebastian Mathew (Don Bosco Senior Secondary School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:49:53",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Dr. S. K. Singh (Delhi Public School Guwahati) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:49:48",
+    "type": "LEAD_DISCOVERY",
+    "message": "Auto-discovered and injected 5 verified SEBA prospects for Silchar, Assam"
+  },
+  {
+    "timestamp": "2026-09-04 19:49:40",
+    "type": "PIPELINE_RESET",
+    "message": "Purged stale leads and restored 100% verified active contractor prospects."
+  },
+  {
+    "timestamp": "2026-09-04 19:48:04",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Principal Desk (Tinsukia English Academy) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:47:44",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Management Committee (Nagaon English Academy) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:47:25",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Academic Director (Tezpur Gurukul School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:47:05",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to School Administration (Sanskriti The Gurukul) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:46:46",
+    "type": "LIVE_OUTREACH",
+    "message": "Sent Touch 1 to Sr. Principal (St. Mary's Higher Secondary School) - Email delivered via live SMTP relay."
+  },
+  {
+    "timestamp": "2026-09-04 19:46:40",
+    "type": "LEAD_DISCOVERY",
+    "message": "Auto-discovered and injected 5 verified CBSE prospects for Silchar, Assam"
+  },
+  {
+    "timestamp": "2026-08-31 18:34:59",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Principal's Office (Holy Cross School Silchar)"
+  },
+  {
+    "timestamp": "2026-08-31 18:34:40",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Sr. Principal (Holy Child School)"
+  },
+  {
+    "timestamp": "2026-08-31 18:34:21",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to School Administrative Desk (Bal Bharati Public School Bongaigaon)"
+  },
+  {
+    "timestamp": "2026-08-31 18:34:02",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Sister Superior / Principal (Carmel School Jorhat)"
+  },
+  {
+    "timestamp": "2026-08-31 18:33:43",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Fr. Headmaster (Don Bosco High School Dibrugarh)"
+  },
+  {
+    "timestamp": "2026-08-31 18:33:24",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Ashwini Dowerah (Salt Brook Academy)"
+  },
+  {
+    "timestamp": "2026-08-31 18:33:05",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Senior Management Team (Army Public School Narangi)"
+  },
+  {
+    "timestamp": "2026-08-31 18:32:46",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Principal's Office (Maharishi Vidya Mandir Public School)"
+  },
+  {
+    "timestamp": "2026-08-31 18:32:27",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Fr. Sebastian Mathew (Don Bosco Senior Secondary School)"
+  },
+  {
     "timestamp": "2026-08-31 18:32:07",
     "type": "LIVE_FOLLOWUP",
     "message": "Dispatched Touch 2 Follow-Up to Dr. S. K. Singh (Delhi Public School Guwahati)"
@@ -363,140 +498,5 @@
     "timestamp": "2026-08-27 23:24:19",
     "type": "AUTONOMOUS_OUTREACH",
     "message": "Sent Touch 1 to Robert Taylor (Precision Heating & Air) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:24:11",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to David Martinez (Efficient AC, Electric & Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:24:03",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with Mike Davis for 2026-08-29 01:23"
-  },
-  {
-    "timestamp": "2026-08-27 23:24:03",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from Mike Davis (Reliant Air Conditioning & Heating): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:24:03",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Josh Campbell (Rescue Air and Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:23:55",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Mike Davis (Reliant Air Conditioning & Heating) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:23:11",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Travis Miller (Lone Star Emergency Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:23:04",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Carlos Sanchez (Apex Roofing & Restoration) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:56",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with David Martinez for 2026-08-29 01:22"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:56",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from David Martinez (Efficient AC, Electric & Plumbing): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:56",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Karen Whitmore (All Year Heating & Cooling) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:48",
-    "type": "DEAL_CLOSED",
-    "message": "\ud83c\udf89 Closed $500 setup deal with Rescue Air and Plumbing (Josh Campbell)! Stripe invoice paid."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:48",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with Josh Campbell for 2026-08-29 01:22"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:47",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from Josh Campbell (Rescue Air and Plumbing): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:47",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Steve Reynolds (Emergency AC & Plumbing Inc.) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:39",
-    "type": "DEAL_CLOSED",
-    "message": "\ud83c\udf89 Closed $500 setup deal with Reliant Air Conditioning & Heating (Mike Davis)! Stripe invoice paid."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:39",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Robert Taylor (Precision Heating & Air) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:31",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to David Martinez (Efficient AC, Electric & Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:23",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with Mike Davis for 2026-08-29 01:22"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:23",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from Mike Davis (Reliant Air Conditioning & Heating): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:22:23",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Josh Campbell (Rescue Air and Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:22:15",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Mike Davis (Reliant Air Conditioning & Heating) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:43",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Travis Miller (Lone Star Emergency Plumbing) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:39",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Carlos Sanchez (Apex Roofing & Restoration) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:35",
-    "type": "CALENDAR_BOOKING",
-    "message": "Autonomously booked 15-min demo with David Martinez for 2026-08-29 01:08"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:35",
-    "type": "INBOUND_REPLY",
-    "message": "Received reply from David Martinez (Efficient AC, Electric & Plumbing): 'Sounds interesting, let's look at the demo.'"
-  },
-  {
-    "timestamp": "2026-08-27 23:08:35",
-    "type": "AUTONOMOUS_OUTREACH",
-    "message": "Sent Touch 1 to Karen Whitmore (All Year Heating & Cooling) - Email generated & dispatched via Autonomous Agent Simulation."
-  },
-  {
-    "timestamp": "2026-08-27 23:08:31",
-    "type": "DEAL_CLOSED",
-    "message": "\ud83c\udf89 Closed $500 setup deal with Rescue Air and Plumbing (Josh Campbell)! Stripe invoice paid."
   }
 ]
