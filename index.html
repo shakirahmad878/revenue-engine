@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartSchool OS — Interactive School Safety & Attendance Simulator</title>
+  <title>SmartSchool OS — Unified Student Safety & Faculty Payroll Simulator</title>
   
   <!-- OpenGraph Metadata for WhatsApp & Social Previews -->
-  <meta property="og:title" content="SmartSchool OS — 1.2s Gate Attendance & Parent SMS Safety System">
-  <meta property="og:description" content="Explore the live interactive simulator: 8:15 AM Principal War-Room, 1.2s Gate Scanner, Bus Conductor App & ₹2L+ Annual School Profit Calculator.">
+  <meta property="og:title" content="SmartSchool OS — 1.2s Gate Attendance, Teacher Biometrics & Payroll Engine">
+  <meta property="og:description" content="Explore the live interactive simulator: 8:15 AM Principal War-Room, 1.2s Gate Scanner, Bus App, Teacher Attendance & 1-Click Automated Payroll / Payslips.">
   <meta property="og:image" content="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200&auto=format&fit=crop&q=80">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://shakirahmad878.github.io/revenue-engine/">
@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
     .glass-panel {
@@ -62,7 +62,7 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center">
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold mb-6">
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      Interactive System Tour & Live Simulator for School Management
+      Complete Institutional OS: Student Gate Safety + Teacher Biometrics + Automated Payroll
     </div>
 
     <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -71,7 +71,7 @@
     </h1>
 
     <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto mt-4 leading-relaxed">
-      Test the live interactive Principal War-Room, 1.2s Gate Kiosk, Bus Conductor Mobile App, PVC Badge Studio, and School Annual Surplus Calculator below.
+      Test the live interactive Principal War-Room, 1.2s Gate Kiosk, Bus Conductor Mobile App, Teacher Biometrics & Automated Payroll Engine below.
     </p>
   </section>
 
@@ -89,11 +89,14 @@
       <button onclick="switchTab('bus')" id="tab-bus" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-bus"></i> 3. Bus Conductor App
       </button>
+      <button onclick="switchTab('teachers')" id="tab-teachers" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-chalkboard-user"></i> 4. Teacher Attendance & Payroll
+      </button>
       <button onclick="switchTab('badges')" id="tab-badges" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-id-card"></i> 4. PVC Badge Studio
+        <i class="fa-solid fa-id-card"></i> 5. PVC Badge Studio
       </button>
       <button onclick="switchTab('cbse')" id="tab-cbse" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-file-invoice"></i> 5. CBSE Register Export
+        <i class="fa-solid fa-file-invoice"></i> 6. CBSE Register Export
       </button>
     </div>
 
@@ -279,7 +282,134 @@
       </div>
     </div>
 
-    <!-- TAB 4: PVC BADGE STUDIO -->
+    <!-- TAB 4: TEACHER ATTENDANCE & AUTOMATED PAYROLL -->
+    <div id="view-teachers" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-teal-500/30 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+            <span class="text-xs font-mono font-bold text-teal-400 uppercase">Faculty Biometrics & Salary Slip Engine</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mt-1">Teacher Attendance & Automated Payroll</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Auto-calculates EPF, Professional Tax (Assam P-Tax), TDS, and generates 1-click salary slips.</p>
+        </div>
+
+        <button onclick="simulatePayrollRun()" id="btnPayrollRun" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-slate-950 font-black text-xs shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+          <span>1-Click Generate Monthly Payroll (48 Faculty)</span>
+        </button>
+      </div>
+
+      <!-- Teacher Attendance Summary -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] text-slate-400 font-semibold">Total Teaching Staff</div>
+          <div class="text-2xl font-black text-white font-mono mt-1">48</div>
+          <div class="text-[10px] text-teal-400 mt-0.5">PGT / TGT / PRT</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30">
+          <div class="text-[11px] text-emerald-400 font-semibold">Present Today</div>
+          <div class="text-2xl font-black text-emerald-400 font-mono mt-1">46</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">100% Punctual (Before 07:45 AM)</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-indigo-500/30">
+          <div class="text-[11px] text-indigo-400 font-semibold">Approved Leave</div>
+          <div class="text-2xl font-black text-indigo-400 font-mono mt-1">2</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">1 Medical • 1 Casual</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-teal-500/30">
+          <div class="text-[11px] text-teal-300 font-semibold">Monthly Salary Budget</div>
+          <div class="text-2xl font-black text-teal-400 font-mono mt-1">₹18,42,500</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">EPF & P-Tax Deducted</div>
+        </div>
+      </div>
+
+      <!-- Interactive Salary Slip Voucher Preview -->
+      <div class="bg-gradient-to-br from-slate-900 to-teal-950/40 rounded-2xl p-5 border border-teal-500/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-[10px] font-mono text-teal-400 uppercase font-bold">Sample Faculty Salary Slip (August 2026)</span>
+            <div class="text-sm font-bold text-white">Mrs. Ananya Sharma (PGT Mathematics • Emp #T-104)</div>
+          </div>
+          <button onclick="alert('✅ Salary Slip for Mrs. Ananya Sharma (Net: ₹38,692) dispatched via WhatsApp & PDF generated!')" class="px-3 py-1.5 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold rounded-lg text-xs transition flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Send Payslip to Phone
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <!-- Earnings -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="font-bold text-emerald-400 border-b border-slate-800 pb-1 flex justify-between">
+              <span>EARNINGS</span>
+              <span>AMOUNT</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Basic Salary:</span>
+              <span>₹25,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Dearness Allowance (DA):</span>
+              <span>₹10,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>House Rent Allowance (HRA):</span>
+              <span>₹5,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Special Academic Allowance:</span>
+              <span>₹2,500.00</span>
+            </div>
+            <div class="flex justify-between text-emerald-300 font-bold pt-1 border-t border-slate-800">
+              <span>GROSS EARNINGS:</span>
+              <span>₹42,500.00</span>
+            </div>
+          </div>
+
+          <!-- Deductions -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="font-bold text-rose-400 border-b border-slate-800 pb-1 flex justify-between">
+              <span>DEDUCTIONS</span>
+              <span>AMOUNT</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Employee Provident Fund (EPF 12%):</span>
+              <span class="text-rose-400">-₹3,600.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Assam Professional Tax (P-Tax):</span>
+              <span class="text-rose-400">-₹208.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Income Tax (TDS):</span>
+              <span class="text-slate-400">₹0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Late Attendance Penalty (0 Days):</span>
+              <span class="text-slate-400">₹0.00</span>
+            </div>
+            <div class="flex justify-between text-rose-400 font-bold pt-1 border-t border-slate-800">
+              <span>TOTAL DEDUCTIONS:</span>
+              <span>-₹3,808.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+          <div class="text-[11px] text-slate-400">
+            Working Days: <strong class="text-white">22/22 Days</strong> • Leave Taken: <strong class="text-emerald-400">0 Days</strong>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-teal-400 font-bold uppercase tracking-wider">NET SALARY PAYABLE:</span>
+            <span class="text-xl font-black text-teal-300 font-mono ml-2">₹38,692.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: PVC BADGE STUDIO -->
     <div id="view-badges" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-indigo-500/30 shadow-2xl space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
         <div>
@@ -325,7 +455,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: CBSE REGISTER EXPORT -->
+    <!-- TAB 6: CBSE REGISTER EXPORT -->
     <div id="view-cbse" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-emerald-500/30 shadow-2xl space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
         <div>
@@ -460,7 +590,7 @@
 
   <script>
     function switchTab(tabId) {
-      const tabs = ['principal', 'kiosk', 'bus', 'badges', 'cbse'];
+      const tabs = ['principal', 'kiosk', 'bus', 'teachers', 'badges', 'cbse'];
       tabs.forEach(t => {
         const view = document.getElementById(`view-${t}`);
         const tabBtn = document.getElementById(`tab-${t}`);
@@ -481,6 +611,13 @@
       document.getElementById('absentCountText').innerText = "0 Pending";
       document.getElementById('absenceStatusText').innerText = "✅ 35 SMS Alerts Delivered";
       alert("✅ 35 Unexcused Absence SMS Alerts successfully delivered to parents' mobile phones via Fast2SMS DLT Gateway!");
+    }
+
+    function simulatePayrollRun() {
+      const btn = document.getElementById('btnPayrollRun');
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generated for 48 Faculty!`;
+      btn.className = "px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs shadow-lg transition flex items-center gap-2";
+      alert("✅ August 2026 Faculty Payroll successfully computed! Total Disbursement: ₹18,42,500. All 48 digital salary vouchers generated with EPF & Assam Professional Tax compliance.");
     }
 
     function updateProfitCalc() {
