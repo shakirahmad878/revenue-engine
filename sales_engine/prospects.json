@@ -42,9 +42,9 @@
     "niche": "English Medium High School",
     "estimated_ticket": "\u20b919,999",
     "identified_pain": "Wants automated 08:30 AM unexcused absence SMS dispatch to parents.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:53:00",
     "notes": "Prominent Silchar institution. Direct WhatsApp mobile (+91 86380 41679 / +91 60036 50075)."
   },
   {
@@ -58,9 +58,9 @@
     "niche": "CBSE Senior Secondary",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "Requires rapid 1.2s QR student gate check-in and parent SMS notifications.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:53:19",
     "notes": "Established CBSE campus in Silchar. Direct WhatsApp (+91 99540 53062)."
   },
   {
@@ -74,9 +74,9 @@
     "niche": "Bharat Sevashram Sangha English Medium",
     "estimated_ticket": "\u20b919,999",
     "identified_pain": "Needs bus transport boarding scan sync with parent SMS alerts.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:53:38",
     "notes": "Large school in Tarapur Silchar. Direct WhatsApp mobile (+91 94350 76060)."
   },
   {
@@ -90,9 +90,9 @@
     "niche": "Christian Minority English Medium",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "Elimination of paper attendance slips across multi-section classes.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:53:57",
     "notes": "Prestigious convent school in Silchar. Direct WhatsApp mobile (+91 94351 71822)."
   },
   {
@@ -106,9 +106,9 @@
     "niche": "CBSE Co-Ed School",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "Needs modern 8:15 AM Principal strength dashboard and digital student ID badges.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:54:16",
     "notes": "Premier educational group campus. WhatsApp enabled mobile (+91 98640 51122)."
   },
   {
@@ -122,9 +122,9 @@
     "niche": "ICSE / State Board Senior Secondary",
     "estimated_ticket": "\u20b919,999",
     "identified_pain": "Parent demand for arrival SMS confirmations and campus safety automation.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:54:36",
     "notes": "Reputed Silchar girls/co-ed institution. Direct mobile WhatsApp (+91 94355 12040)."
   },
   {
@@ -138,9 +138,9 @@
     "niche": "Premier Private High School",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "1-click CBSE / State Board monthly inspection register compliance.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:54:55",
     "notes": "Historic private institution in central Silchar. Direct WhatsApp mobile (+91 94350 74120)."
   },
   {
@@ -154,9 +154,9 @@
     "niche": "English Medium High School",
     "estimated_ticket": "\u20b919,999",
     "identified_pain": "Bus route boarding tracker and automated parent notifications.",
-    "status": "Ready for Outreach",
-    "outreach_stage": 0,
-    "last_contact_date": null,
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 19:55:14",
     "notes": "Growing private school in Meherpur Silchar. WhatsApp mobile (+91 88110 45210)."
   }
 ]
