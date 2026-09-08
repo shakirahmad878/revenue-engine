@@ -30,7 +30,8 @@ from database import (
     get_cbse_seba_monthly_register, list_teachers, get_teacher, create_teacher, update_teacher,
     record_staff_scan, get_teacher_today_attendance,
     list_teacher_leaves, submit_teacher_leave, review_teacher_leave,
-    generate_teacher_payroll, get_teacher_payroll_summary, get_teacher_payslip, update_teacher_payroll_status
+    generate_teacher_payroll, get_teacher_payroll_summary, get_teacher_payslip, update_teacher_payroll_status,
+    get_chronic_absentees_report, tag_student_absence_reason, send_chronic_absence_notice
 )
 from seed_data import populate_school_seed_data
 
@@ -190,6 +191,12 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
             elif path in ["/api/school/settings", "/api/settings"]:
                 return self.send_json_response(get_school_settings())
 
+            # Chronic & Consecutive Absence Inquests (2, 3 & 5+ Days)
+            elif path in ["/api/school/chronic-absentees", "/api/chronic-absentees", "/api/absenteeism/radar"]:
+                min_days = query.get("min_days", ["2"])[0]
+                date_val = query.get("date", [None])[0]
+                return self.send_json_response(get_chronic_absentees_report(min_consecutive_days=int(min_days), target_date=date_val))
+
             elif path in ["/api/school/notifications", "/api/notifications"]:
                 conn = get_connection()
                 logs = [dict(r) for r in conn.cursor().execute("""
@@ -298,7 +305,23 @@ class UnifiedSchoolHTTPRequestHandler(SimpleHTTPRequestHandler):
                 updated = update_school_settings(body)
                 return self.send_json_response(updated)
 
-            # 10. Reset Demo Data
+            # 10. Consecutive Absence Inquest Actions
+            elif path in ["/api/school/chronic-absentees/escalate", "/api/chronic-absentees/escalate"]:
+                student_id = body.get("student_id")
+                custom_note = body.get("custom_note")
+                res = send_chronic_absence_notice(student_id, custom_note)
+                return self.send_json_response(res, 200 if res.get("success") else 400)
+
+            elif path in ["/api/school/chronic-absentees/tag-reason", "/api/chronic-absentees/tag-reason"]:
+                student_id = body.get("student_id")
+                reason_tag = body.get("reason_tag", "Pending Investigation")
+                notes = body.get("notes", "")
+                followup_teacher = body.get("followup_teacher")
+                status = body.get("status", "contacted")
+                res = tag_student_absence_reason(student_id, reason_tag, notes, followup_teacher, status)
+                return self.send_json_response(res, 200)
+
+            # 11. Reset Demo Data
             elif path == "/api/school/reset-demo":
                 populate_school_seed_data()
                 return self.send_json_response({

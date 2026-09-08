@@ -32,6 +32,11 @@ SMS_TEMPLATES = {
         "as": "জৰুৰী জাননী: {student_name} ({class_section}) আজি পুৱা ০৮:৩০ বজালৈকে {school_short}ত উপস্থিত হোৱা নাই। - {school_short}",
         "hi": "महत्वपूर्ण सूचना: {student_name} ({class_section}) आज सुबह 08:30 बजे तक {school_short} में उपस्थित नहीं है। - {school_short}"
     },
+    "consecutive_absence": {
+        "en": "URGENT SAFETY INQUEST ({school_short}): {student_name} ({class_section}) has been absent for {days_count} consecutive school days ({date_range}) without sanctioned leave. Please contact Principal's Office immediately at {contact_phone} or submit medical reason. - {principal_name}",
+        "as": "জৰুৰী জাননী ({school_short}): {student_name} ({class_section}) বিগত {days_count} দিন ধৰি বিদ্যালয়ত অনুপস্থিত। অনুগ্ৰহ কৰি ততাতৈয়াকৈ অধ্যক্ষৰ কাৰ্যালয়ত যোগাযোগ কৰক। - অধ্যক্ষ",
+        "hi": "अति आवश्यक सुरक्षा सूचना ({school_short}): {student_name} ({class_section}) पिछले {days_count} दिनों से विद्यालय में अनुपस्थित है। कृपया तुरंत प्रधानाचार्य कार्यालय से संपर्क करें। - प्रधानाचार्य"
+    },
     "bus_board": {
         "en": "Dear Parent, {student_name} has safely boarded School Bus {bus_route} at {time}. - {school_short}",
         "as": "শ্ৰদ্ধাৰ অভিভাৱক, {student_name} আজি {time} বজাত স্কুল বাছ {bus_route}ত সুৰক্ষিতভাৱে উঠিছে। - {school_short}",

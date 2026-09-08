@@ -106,7 +106,12 @@ const API = {
   getPayslip: (ref) => API.get(`${API_BASE}/payroll/payslip/${ref}`),
   updatePayrollStatus: (id, status) => API.put(`${API_BASE}/payroll/${id}/status`, { status }),
 
-  // 8. Demo reset
+  // 8. Chronic & Consecutive Absence Radar (2, 3 & 5+ Days)
+  getChronicAbsentees: (min_days = 2, date = null) => API.get(`${API_BASE}/school/chronic-absentees`, { min_days, date }),
+  escalateChronicAbsence: (student_id, custom_note = null) => API.post(`${API_BASE}/school/chronic-absentees/escalate`, { student_id, custom_note }),
+  tagChronicAbsenceReason: (data) => API.post(`${API_BASE}/school/chronic-absentees/tag-reason`, data),
+
+  // 9. Demo reset
   resetDemo: () => API.post(`${API_BASE}/school/reset-demo`, {})
 };
 

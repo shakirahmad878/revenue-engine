@@ -3,14 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartSchool OS — Interactive School Safety & Attendance Simulator</title>
+  <title>SmartSchool OS — Unified Student Safety & Faculty Payroll Simulator</title>
   
+  <!-- OpenGraph Metadata for WhatsApp & Social Previews -->
+  <meta property="og:title" content="SmartSchool OS — 1.2s Gate Attendance, Teacher Biometrics & Payroll Engine">
+  <meta property="og:description" content="Explore the live interactive simulator: 8:15 AM Principal War-Room, 1.2s Gate Scanner, Bus App, Teacher Attendance & 1-Click Automated Payroll / Payslips.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1200&auto=format&fit=crop&q=80">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://shakirahmad878.github.io/revenue-engine/">
+
   <!-- Tailwind CSS & FontAwesome -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap');
     body { font-family: 'Inter', sans-serif; }
     .font-mono { font-family: 'JetBrains Mono', monospace; }
     .glass-panel {
@@ -55,7 +62,7 @@
   <section class="max-w-5xl mx-auto px-4 sm:px-6 pt-12 pb-8 text-center">
     <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs font-semibold mb-6">
       <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-      Interactive System Tour & Live Simulator for School Management
+      Complete Institutional OS: Student Gate Safety + Teacher Biometrics + Automated Payroll
     </div>
 
     <h1 class="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -64,7 +71,7 @@
     </h1>
 
     <p class="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto mt-4 leading-relaxed">
-      Test the live interactive Principal War-Room, 1.2s Gate Kiosk, Bus Conductor Mobile App, PVC Badge Studio, and School Annual Surplus Calculator below.
+      Test the live interactive Principal War-Room, 1.2s Gate Kiosk, Bus Conductor Mobile App, Teacher Biometrics & Automated Payroll Engine below.
     </p>
   </section>
 
@@ -82,11 +89,17 @@
       <button onclick="switchTab('bus')" id="tab-bus" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-bus"></i> 3. Bus Conductor App
       </button>
+      <button onclick="switchTab('chronic')" id="tab-chronic" class="px-4 py-2 rounded-xl border border-amber-500/40 bg-amber-950/20 text-amber-300 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-triangle-exclamation"></i> 4. 🚨 2-3+ Days Missing Inquest Radar
+      </button>
+      <button onclick="switchTab('teachers')" id="tab-teachers" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-chalkboard-user"></i> 5. Teacher Attendance & Payroll
+      </button>
       <button onclick="switchTab('badges')" id="tab-badges" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-id-card"></i> 4. PVC Badge Studio
+        <i class="fa-solid fa-id-card"></i> 6. PVC Badge Studio
       </button>
       <button onclick="switchTab('cbse')" id="tab-cbse" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-file-invoice"></i> 5. CBSE Register Export
+        <i class="fa-solid fa-file-invoice"></i> 7. CBSE Register Export
       </button>
     </div>
 
@@ -272,7 +285,255 @@
       </div>
     </div>
 
-    <!-- TAB 4: PVC BADGE STUDIO -->
+    <!-- TAB 4: 🚨 2-3+ DAYS MISSING INQUEST RADAR -->
+    <div id="view-chronic" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-amber-500/30 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase">Student Safety & Dropout Inquest Radar</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mt-1">🚨 2-3+ Days Consecutive Missing Inquest Radar</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Detects prolonged absences, truant students, and generates official CBSE Rule 14 warning notices.</p>
+        </div>
+
+        <button onclick="simulateChronicBlast()" id="btnChronicBlast" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>1-Click Dispatch Inquest WhatsApp to All (3+ Days)</span>
+        </button>
+      </div>
+
+      <!-- Inquest Severity KPI Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] text-slate-400 font-semibold">Total Flagged (2+ Days)</div>
+          <div class="text-2xl font-black text-white font-mono mt-1" id="demoChronicTotal">3 Students</div>
+          <div class="text-[10px] text-amber-400 mt-0.5">Active Inquests</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30">
+          <div class="text-[11px] text-amber-400 font-semibold">🟡 2 Days Absent</div>
+          <div class="text-2xl font-black text-amber-400 font-mono mt-1">2 Students</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">Class Teacher Follow-up</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-orange-500/30">
+          <div class="text-[11px] text-orange-400 font-semibold">🟠 3-4 Days Severe</div>
+          <div class="text-2xl font-black text-orange-400 font-mono mt-1">1 Student</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">Principal Notice Dispatched</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-rose-500/30">
+          <div class="text-[11px] text-rose-400 font-semibold">🔴 5+ Days Critical</div>
+          <div class="text-2xl font-black text-rose-400 font-mono mt-1">0 Students</div>
+          <div class="text-[10px] text-emerald-400 mt-0.5">0 CBSE Rule 14 Strikes</div>
+        </div>
+      </div>
+
+      <!-- Interactive Sample Chronic Case Card -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Active Inquest Cases (Try 1-Click WhatsApp Notice):</h4>
+
+        <!-- Card 1: 3 Days Missed -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-orange-500/30 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">
+                PC
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm">Pallavi Chetia (Class 6-A • Roll #02)</span>
+                  <span class="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-mono text-[10px] font-bold border border-orange-500/30">
+                    🚨 3 CONSECUTIVE DAYS MISSED
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-400">Parent: Mrs. Jonali Chetia (+91 98642 01234) • Class Teacher: Mrs. Mousumi Barua</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="simulateSingleChronicWhatsApp('Pallavi Chetia', 3, '+91 98642 01234')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow">
+                <i class="fa-brands fa-whatsapp"></i> <span>Send Inquest WhatsApp</span>
+              </button>
+              <button onclick="alert('📄 CBSE Official Notice generated for Pallavi Chetia (3 Days Unexcused Absence). Ready for print / signature.')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1">
+                <i class="fa-solid fa-print"></i> <span>Notice PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+            <div class="text-slate-400">Missed: <span class="text-rose-300 font-bold">08 Sep, 07 Sep, 05 Sep</span></div>
+            <div class="text-slate-400">Last Check-In: <span class="text-emerald-400">04 Sep (07:52 AM)</span></div>
+            <div class="text-slate-400">Inquest Tag: <span class="text-amber-300">🛑 Unexcused / Truancy Risk</span></div>
+          </div>
+        </div>
+
+        <!-- Card 2: 2 Days Missed -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
+                AD
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm">Arindam Dutta (Class 7-A • Roll #08)</span>
+                  <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
+                    🟡 2 DAYS MISSED
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-400">Parent: Mr. Bhaskar Dutta (+91 98642 12345) • Class Teacher: Mrs. Archana Goswami</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="simulateSingleChronicWhatsApp('Arindam Dutta', 2, '+91 98642 12345')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow">
+                <i class="fa-brands fa-whatsapp"></i> <span>Send Inquest WhatsApp</span>
+              </button>
+              <button onclick="alert('📄 CBSE Warning Notice generated for Arindam Dutta (2 Days Absence).')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1">
+                <i class="fa-solid fa-print"></i> <span>Notice PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+            <div class="text-slate-400">Missed: <span class="text-rose-300 font-bold">08 Sep, 07 Sep</span></div>
+            <div class="text-slate-400">Last Check-In: <span class="text-emerald-400">05 Sep (07:48 AM)</span></div>
+            <div class="text-slate-400">Inquest Tag: <span class="text-indigo-300">⏳ Pending Investigation</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: TEACHER ATTENDANCE & AUTOMATED PAYROLL -->
+    <div id="view-teachers" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-teal-500/30 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-teal-400"></span>
+            <span class="text-xs font-mono font-bold text-teal-400 uppercase">Faculty Biometrics & Salary Slip Engine</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mt-1">Teacher Attendance & Automated Payroll</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Auto-calculates EPF, Professional Tax (Assam P-Tax), TDS, and generates 1-click salary slips.</p>
+        </div>
+
+        <button onclick="simulatePayrollRun()" id="btnPayrollRun" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-slate-950 font-black text-xs shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice-dollar text-sm"></i>
+          <span>1-Click Generate Monthly Payroll (48 Faculty)</span>
+        </button>
+      </div>
+
+      <!-- Teacher Attendance Summary -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] text-slate-400 font-semibold">Total Teaching Staff</div>
+          <div class="text-2xl font-black text-white font-mono mt-1">48</div>
+          <div class="text-[10px] text-teal-400 mt-0.5">PGT / TGT / PRT</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-emerald-500/30">
+          <div class="text-[11px] text-emerald-400 font-semibold">Present Today</div>
+          <div class="text-2xl font-black text-emerald-400 font-mono mt-1">46</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">100% Punctual (Before 07:45 AM)</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-indigo-500/30">
+          <div class="text-[11px] text-indigo-400 font-semibold">Approved Leave</div>
+          <div class="text-2xl font-black text-indigo-400 font-mono mt-1">2</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">1 Medical • 1 Casual</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-teal-500/30">
+          <div class="text-[11px] text-teal-300 font-semibold">Monthly Salary Budget</div>
+          <div class="text-2xl font-black text-teal-400 font-mono mt-1">₹18,42,500</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">EPF & P-Tax Deducted</div>
+        </div>
+      </div>
+
+      <!-- Interactive Salary Slip Voucher Preview -->
+      <div class="bg-gradient-to-br from-slate-900 to-teal-950/40 rounded-2xl p-5 border border-teal-500/30 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div>
+            <span class="text-[10px] font-mono text-teal-400 uppercase font-bold">Sample Faculty Salary Slip (August 2026)</span>
+            <div class="text-sm font-bold text-white">Mrs. Ananya Sharma (PGT Mathematics • Emp #T-104)</div>
+          </div>
+          <button onclick="alert('✅ Salary Slip for Mrs. Ananya Sharma (Net: ₹38,692) dispatched via WhatsApp & PDF generated!')" class="px-3 py-1.5 bg-teal-500 hover:bg-teal-400 text-slate-950 font-bold rounded-lg text-xs transition flex items-center gap-1.5">
+            <i class="fa-brands fa-whatsapp text-sm"></i> Send Payslip to Phone
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <!-- Earnings -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="font-bold text-emerald-400 border-b border-slate-800 pb-1 flex justify-between">
+              <span>EARNINGS</span>
+              <span>AMOUNT</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Basic Salary:</span>
+              <span>₹25,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Dearness Allowance (DA):</span>
+              <span>₹10,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>House Rent Allowance (HRA):</span>
+              <span>₹5,000.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Special Academic Allowance:</span>
+              <span>₹2,500.00</span>
+            </div>
+            <div class="flex justify-between text-emerald-300 font-bold pt-1 border-t border-slate-800">
+              <span>GROSS EARNINGS:</span>
+              <span>₹42,500.00</span>
+            </div>
+          </div>
+
+          <!-- Deductions -->
+          <div class="p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-1.5">
+            <div class="font-bold text-rose-400 border-b border-slate-800 pb-1 flex justify-between">
+              <span>DEDUCTIONS</span>
+              <span>AMOUNT</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Employee Provident Fund (EPF 12%):</span>
+              <span class="text-rose-400">-₹3,600.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Assam Professional Tax (P-Tax):</span>
+              <span class="text-rose-400">-₹208.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Income Tax (TDS):</span>
+              <span class="text-slate-400">₹0.00</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>Late Attendance Penalty (0 Days):</span>
+              <span class="text-slate-400">₹0.00</span>
+            </div>
+            <div class="flex justify-between text-rose-400 font-bold pt-1 border-t border-slate-800">
+              <span>TOTAL DEDUCTIONS:</span>
+              <span>-₹3,808.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+          <div class="text-[11px] text-slate-400">
+            Working Days: <strong class="text-white">22/22 Days</strong> • Leave Taken: <strong class="text-emerald-400">0 Days</strong>
+          </div>
+          <div class="text-right">
+            <span class="text-[10px] text-teal-400 font-bold uppercase tracking-wider">NET SALARY PAYABLE:</span>
+            <span class="text-xl font-black text-teal-300 font-mono ml-2">₹38,692.00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: PVC BADGE STUDIO -->
     <div id="view-badges" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-indigo-500/30 shadow-2xl space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
         <div>
@@ -318,7 +579,7 @@
       </div>
     </div>
 
-    <!-- TAB 5: CBSE REGISTER EXPORT -->
+    <!-- TAB 6: CBSE REGISTER EXPORT -->
     <div id="view-cbse" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-emerald-500/30 shadow-2xl space-y-6">
       <div class="flex items-center justify-between pb-4 border-b border-slate-800">
         <div>
@@ -453,10 +714,11 @@
 
   <script>
     function switchTab(tabId) {
-      const tabs = ['principal', 'kiosk', 'bus', 'badges', 'cbse'];
+      const tabs = ['principal', 'kiosk', 'bus', 'chronic', 'teachers', 'badges', 'cbse'];
       tabs.forEach(t => {
         const view = document.getElementById(`view-${t}`);
         const tabBtn = document.getElementById(`tab-${t}`);
+        if (!view || !tabBtn) return;
         if (t === tabId) {
           view.classList.remove('hidden');
           tabBtn.className = "px-4 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-2 whitespace-nowrap active-tab border-emerald-500/40";
@@ -467,6 +729,17 @@
       });
     }
 
+    function simulateChronicBlast() {
+      const btn = document.getElementById('btnChronicBlast');
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Dispatched to All Inquest Cases!`;
+      btn.className = "px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-2";
+      alert("✅ Official Prolonged Absence WhatsApp Notices dispatched to parents of all unexcused 3+ days absentees! Parents received emergency reply options.");
+    }
+
+    function simulateSingleChronicWhatsApp(studentName, days, phone) {
+      alert(`✅ Official Principal Inquest Notice sent to ${studentName}'s Guardian (${phone}) for ${days} consecutive unexcused absences! Notice logged in safety register.`);
+    }
+
     function simulateAbsenceBroadcast() {
       const btn = document.getElementById('btnBroadcast');
       btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Dispatched to 35 Parents!`;
@@ -474,6 +747,13 @@
       document.getElementById('absentCountText').innerText = "0 Pending";
       document.getElementById('absenceStatusText').innerText = "✅ 35 SMS Alerts Delivered";
       alert("✅ 35 Unexcused Absence SMS Alerts successfully delivered to parents' mobile phones via Fast2SMS DLT Gateway!");
+    }
+
+    function simulatePayrollRun() {
+      const btn = document.getElementById('btnPayrollRun');
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Generated for 48 Faculty!`;
+      btn.className = "px-4 py-2.5 rounded-xl bg-emerald-500 text-slate-950 font-black text-xs shadow-lg transition flex items-center gap-2";
+      alert("✅ August 2026 Faculty Payroll successfully computed! Total Disbursement: ₹18,42,500. All 48 digital salary vouchers generated with EPF & Assam Professional Tax compliance.");
     }
 
     function updateProfitCalc() {

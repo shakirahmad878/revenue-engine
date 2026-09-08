@@ -129,6 +129,16 @@
         <div class="text-[10px] text-rose-400 mt-1">Pending WhatsApp</div>
       </div>
 
+      <!-- 2-3+ Days Missing Inquest Radar -->
+      <div onclick="document.querySelector('[data-tab=chronic]').click()" class="glass-card rounded-2xl p-4 border border-amber-500/40 bg-gradient-to-br from-amber-950/30 to-rose-950/30 hover:border-amber-400 cursor-pointer transition-all">
+        <div class="flex items-center justify-between">
+          <div class="text-[11px] font-bold text-amber-300 uppercase tracking-wider">🚨 2-3+ Days Missing</div>
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+        </div>
+        <div id="stat-chronic-absent" class="text-2xl sm:text-3xl font-black text-rose-300 font-mono mt-1">3</div>
+        <div class="text-[10px] text-amber-400 font-bold mt-1">Safety Inquest Hub →</div>
+      </div>
+
       <!-- Teachers on Duty -->
       <div class="glass-card rounded-2xl p-4 border border-white/5">
         <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Faculty on Duty</div>
@@ -142,6 +152,9 @@
       <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-2xl border border-white/10 w-max">
         <button data-tab="strength" class="tab-btn active px-3.5 py-2 rounded-xl text-xs font-bold transition-all bg-indigo-600 text-white flex items-center gap-1.5">
           <span>🏫</span> Student Strength & Matrix
+        </button>
+        <button data-tab="chronic" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-amber-400 hover:text-white hover:bg-amber-500/20 flex items-center gap-1.5 border border-amber-500/30">
+          <span>🚨</span> 2-3+ Days Missing Inquest <span id="badge-chronic-count" class="px-1.5 py-0.2 rounded-full bg-rose-500 text-white text-[10px] font-mono font-bold">3</span>
         </button>
         <button data-tab="teachers" class="tab-btn px-3.5 py-2 rounded-xl text-xs font-bold transition-all text-gray-400 hover:text-white hover:bg-white/5 flex items-center gap-1.5">
           <span>👨‍🏫</span> Teacher Attendance
@@ -204,6 +217,88 @@
           <div id="live-alerts-stream" class="space-y-3 flex-1 overflow-y-auto pr-1"></div>
         </div>
       </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- TAB 1.5: 🚨 CONSECUTIVE & CHRONIC ABSENCE SAFETY INQUEST HUB -->
+    <!-- ============================================================ -->
+    <div id="tab-chronic" class="tab-pane hidden space-y-6">
+      <div class="glass-panel rounded-3xl p-6 sm:p-7 border border-amber-500/30 bg-gradient-to-r from-slate-900/95 via-amber-950/20 to-slate-900/95 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span>
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase tracking-wider">Student Safety & Dropout Prevention Radar</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-1 tracking-tight">Prolonged Absence & Safety Inquest Hub</h2>
+          <p class="text-xs text-gray-300 mt-1">Monitors students missing class for 2, 3 or 5+ consecutive days. Triggers instant parent WhatsApp notices & CBSE Rule 14 warning letters.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="btn-blast-all-chronic" onclick="blastAllChronicNotices()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-xl shadow-rose-600/30 flex items-center gap-2 transition-all">
+            <span>⚡</span>
+            <span>Blast Inquest WhatsApp to All (3+ Days)</span>
+          </button>
+          <button onclick="loadChronicAbsentees(); Toast.show('Refreshed absence radar', 'info');" class="px-3.5 py-2.5 rounded-2xl bg-slate-800 hover:bg-slate-700 text-gray-300 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
+            <span>↻</span> Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Metric Cards for Absence Severity -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <!-- Total Flagged -->
+        <div class="glass-card rounded-2xl p-4 border border-white/10">
+          <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Total Missing 2+ Days</div>
+          <div id="chronic-kpi-total" class="text-2xl sm:text-3xl font-black text-white font-mono mt-1">--</div>
+          <div class="text-[10px] text-gray-400 mt-1">Requires Guardian Inquest</div>
+        </div>
+
+        <!-- 2 Days Early Warning -->
+        <div class="glass-card rounded-2xl p-4 border border-amber-500/20 bg-amber-950/10">
+          <div class="text-[11px] font-semibold text-amber-400 uppercase tracking-wider">🟡 2 Days Absent</div>
+          <div id="chronic-kpi-warning" class="text-2xl sm:text-3xl font-black text-amber-400 font-mono mt-1">--</div>
+          <div class="text-[10px] text-amber-300/80 mt-1">Class Teacher Follow-Up</div>
+        </div>
+
+        <!-- 3-4 Days Severe Alert -->
+        <div class="glass-card rounded-2xl p-4 border border-orange-500/20 bg-orange-950/10">
+          <div class="text-[11px] font-semibold text-orange-400 uppercase tracking-wider">🟠 3-4 Days Severe</div>
+          <div id="chronic-kpi-severe" class="text-2xl sm:text-3xl font-black text-orange-400 font-mono mt-1">--</div>
+          <div class="text-[10px] text-orange-300/80 mt-1">Principal Inquest Notice</div>
+        </div>
+
+        <!-- 5+ Days Critical CBSE Flag -->
+        <div class="glass-card rounded-2xl p-4 border border-rose-500/20 bg-rose-950/10">
+          <div class="text-[11px] font-semibold text-rose-400 uppercase tracking-wider">🔴 5+ Days Critical</div>
+          <div id="chronic-kpi-critical" class="text-2xl sm:text-3xl font-black text-rose-400 font-mono mt-1">--</div>
+          <div class="text-[10px] text-rose-300/80 mt-1">CBSE Rule 14 Notice / Truancy</div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs by Severity -->
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="filterChronicStudents('all')" id="filter-btn-all" class="chronic-filter-btn px-3 py-1.5 rounded-xl bg-indigo-600 text-white text-xs font-bold transition-all">
+            All At-Risk (2+ Days)
+          </button>
+          <button onclick="filterChronicStudents('warning')" id="filter-btn-warning" class="chronic-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10 transition-all">
+            🟡 2 Days Only
+          </button>
+          <button onclick="filterChronicStudents('severe')" id="filter-btn-severe" class="chronic-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10 transition-all">
+            🟠 3-4 Days (Severe)
+          </button>
+          <button onclick="filterChronicStudents('critical')" id="filter-btn-critical" class="chronic-filter-btn px-3 py-1.5 rounded-xl bg-slate-800 text-gray-300 hover:text-white text-xs font-semibold border border-white/10 transition-all">
+            🔴 5+ Days (Critical)
+          </button>
+        </div>
+
+        <div class="text-xs text-gray-400 font-mono" id="chronic-filtered-count-display">
+          Showing 0 students
+        </div>
+      </div>
+
+      <!-- Students Cards List Container -->
+      <div id="chronic-students-list" class="space-y-4"></div>
     </div>
 
     <!-- ============================================================ -->
@@ -559,6 +654,23 @@
   </div>
 
   <!-- ============================================================ -->
+  <!-- MODAL: OFFICIAL CBSE PROLONGED ABSENCE WARNING LETTER -->
+  <!-- ============================================================ -->
+  <div id="chronic-notice-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden no-print">
+    <div class="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl printable-voucher">
+      <div id="chronic-notice-modal-content"></div>
+      <div class="flex items-center justify-end gap-3 pt-4 border-t border-white/10 no-print">
+        <button onclick="window.print()" class="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow flex items-center gap-1.5">
+          <span>🖨️</span> Print Official Notice
+        </button>
+        <button onclick="closeChronicNoticeModal()" class="px-4 py-2 rounded-xl bg-slate-800 text-gray-300 text-xs">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
   <!-- MODAL: ADD FACULTY / STAFF -->
   <!-- ============================================================ -->
   <div id="add-teacher-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden no-print">
@@ -670,6 +782,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       document.getElementById('payroll-month-input').value = curPayrollMonth;
       await loadMorningStrength();
+      await loadChronicAbsentees();
       setupTabs();
       setupAbsenceTrigger();
       setupPayrollHandlers();
@@ -789,6 +902,7 @@
             }
           });
 
+          if (target === 'chronic') loadChronicAbsentees();
           if (target === 'teachers') loadTeacherTodayAttendance();
           if (target === 'payroll') loadPayrollSummary();
           if (target === 'leaves') loadLeaves();
@@ -798,6 +912,270 @@
           if (target === 'settings') loadSettingsForm();
         });
       });
+    }
+
+    // --- 🚨 Chronic & Consecutive Absence Safety Radar (2, 3 & 5+ Days) ---
+    let chronicData = null;
+    let currentChronicFilter = 'all';
+
+    async function loadChronicAbsentees() {
+      try {
+        const data = await API.getChronicAbsentees(2);
+        chronicData = data;
+        renderChronicKPIs(data.summary);
+        renderChronicList();
+      } catch (err) {
+        console.error("Error loading chronic absentees:", err);
+      }
+    }
+
+    function renderChronicKPIs(sum) {
+      if (!sum) return;
+      const count = sum.total_flagged || 0;
+      const statCard = document.getElementById('stat-chronic-absent');
+      if (statCard) statCard.textContent = count;
+      const badge = document.getElementById('badge-chronic-count');
+      if (badge) badge.textContent = count;
+
+      const kpiTot = document.getElementById('chronic-kpi-total');
+      if (kpiTot) kpiTot.textContent = count;
+      const kpiWarn = document.getElementById('chronic-kpi-warning');
+      if (kpiWarn) kpiWarn.textContent = sum.warning_2_days || 0;
+      const kpiSev = document.getElementById('chronic-kpi-severe');
+      if (kpiSev) kpiSev.textContent = sum.severe_3_4_days || 0;
+      const kpiCrit = document.getElementById('chronic-kpi-critical');
+      if (kpiCrit) kpiCrit.textContent = sum.critical_5_plus_days || 0;
+    }
+
+    function filterChronicStudents(filterType) {
+      currentChronicFilter = filterType;
+      document.querySelectorAll('.chronic-filter-btn').forEach(b => {
+        b.classList.remove('bg-indigo-600', 'text-white');
+        b.classList.add('bg-slate-800', 'text-gray-300');
+      });
+      const activeBtn = document.getElementById(`filter-btn-${filterType}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-800', 'text-gray-300');
+        activeBtn.classList.add('bg-indigo-600', 'text-white');
+      }
+      renderChronicList();
+    }
+
+    function renderChronicList() {
+      const container = document.getElementById('chronic-students-list');
+      if (!container || !chronicData) return;
+
+      let students = chronicData.students || [];
+      if (currentChronicFilter === 'warning') {
+        students = students.filter(s => s.consecutive_days === 2);
+      } else if (currentChronicFilter === 'severe') {
+        students = students.filter(s => s.consecutive_days >= 3 && s.consecutive_days <= 4);
+      } else if (currentChronicFilter === 'critical') {
+        students = students.filter(s => s.consecutive_days >= 5);
+      }
+
+      const countDisplay = document.getElementById('chronic-filtered-count-display');
+      if (countDisplay) countDisplay.textContent = `Showing ${students.length} student${students.length === 1 ? '' : 's'}`;
+
+      if (!students.length) {
+        container.innerHTML = `
+          <div class="glass-card rounded-3xl p-10 text-center text-gray-400 space-y-2 border border-white/5">
+            <div class="text-4xl">🎉</div>
+            <div class="text-base font-bold text-white">No students flagged under this filter!</div>
+            <p class="text-xs text-gray-500">All other students have maintained regular attendance or documented leaves.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = students.map(s => {
+        const tierBadgeClass = s.consecutive_days >= 5 
+          ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' 
+          : s.consecutive_days >= 3 
+          ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' 
+          : 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+
+        return `
+          <div class="glass-panel rounded-3xl p-5 sm:p-6 border border-white/10 hover:border-indigo-500/30 transition-all space-y-4">
+            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <!-- Student Bio & Photo -->
+              <div class="flex items-center gap-4">
+                <img src="${s.photo_url || 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150'}" class="w-14 h-14 rounded-2xl object-cover border border-white/10 shadow" alt="">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h4 class="text-base font-black text-white">${s.student_name}</h4>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase ${tierBadgeClass} border">
+                      ${s.consecutive_days} Consecutive Days Absent
+                    </span>
+                  </div>
+                  <div class="text-xs text-gray-400 mt-0.5">
+                    <strong class="text-gray-200">${s.class_name}</strong> • Roll #${s.roll_no} • Adm: <span class="font-mono">${s.admission_no}</span>
+                  </div>
+                  <div class="text-[11px] text-gray-400 mt-1">
+                    Class Teacher: <strong class="text-indigo-300">${s.class_teacher_name || 'Class Teacher'}</strong> • Room: ${s.room_no || 'N/A'}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Action Buttons -->
+              <div class="flex flex-wrap items-center gap-2">
+                <button onclick="sendChronicWhatsApp(${s.student_id})" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white text-xs font-bold shadow-lg shadow-rose-600/20 flex items-center gap-1.5 transition-all">
+                  <span>💬</span> Send Inquest WhatsApp
+                </button>
+                <button onclick="openChronicNoticeModal(${s.student_id})" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-gray-200 text-xs font-semibold border border-white/10 flex items-center gap-1.5 transition-all">
+                  <span>📄</span> CBSE Notice Letter
+                </button>
+                <a href="tel:${s.parent_whatsapp_phone}" class="px-3 py-2 rounded-xl bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white border border-emerald-500/30 text-xs font-bold flex items-center gap-1 transition-all">
+                  <span>📞</span> Call Parent
+                </a>
+              </div>
+            </div>
+
+            <!-- Absence Details & Inquest Status Bar -->
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-3 pt-3 border-t border-white/5 text-xs">
+              <div class="md:col-span-4 space-y-1">
+                <div class="text-[10px] uppercase font-bold text-gray-400">Missed School Dates</div>
+                <div class="font-mono text-rose-300 font-semibold">${s.missed_dates_formatted}</div>
+                <div class="text-[10px] text-gray-500">Last campus check-in: <span class="text-gray-300 font-mono">${s.last_present_date}</span></div>
+              </div>
+
+              <div class="md:col-span-3 space-y-1">
+                <div class="text-[10px] uppercase font-bold text-gray-400">Guardian Contact</div>
+                <div class="font-bold text-gray-200">${s.parent_guardian_name}</div>
+                <div class="font-mono text-gray-400 text-[11px]">${s.parent_whatsapp_phone}</div>
+              </div>
+
+              <div class="md:col-span-5 space-y-1.5">
+                <div class="text-[10px] uppercase font-bold text-gray-400">Absence Reason & Action Status</div>
+                <div class="flex items-center gap-2">
+                  <select onchange="updateStudentAbsenceReason(${s.student_id}, this.value)" class="glass-input px-3 py-1.5 rounded-xl text-xs font-semibold flex-1">
+                    <option value="Pending Investigation" ${s.reason_tag === 'Pending Investigation' ? 'selected' : ''}>⏳ Pending Investigation</option>
+                    <option value="Medical / Hospitalized" ${s.reason_tag === 'Medical / Hospitalized' ? 'selected' : ''}>🏥 Medical / Hospitalized</option>
+                    <option value="Family Emergency" ${s.reason_tag === 'Family Emergency' ? 'selected' : ''}>⚠️ Family Emergency</option>
+                    <option value="Sanctioned Leave" ${s.reason_tag === 'Sanctioned Leave' ? 'selected' : ''}>📝 Sanctioned Leave with App</option>
+                    <option value="Unexcused / Truancy Risk" ${s.reason_tag === 'Unexcused / Truancy Risk' ? 'selected' : ''}>🛑 Unexcused / Truancy Risk</option>
+                    <option value="Out of Station" ${s.reason_tag === 'Out of Station' ? 'selected' : ''}>✈️ Out of Station Travel</option>
+                    <option value="Resolved / Resumed" ${s.reason_tag === 'Resolved / Resumed' ? 'selected' : ''}>✅ Resolved / Attending Again</option>
+                  </select>
+                </div>
+                ${s.inquest_notes ? `<p class="text-[11px] text-amber-200/80 italic font-mono">Note: ${s.inquest_notes}</p>` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateStudentAbsenceReason(studentId, reasonTag) {
+      try {
+        await API.tagChronicAbsenceReason({ student_id: studentId, reason_tag: reasonTag });
+        Toast.show(`Updated reason to: ${reasonTag}`, 'success');
+        AudioChime.playSuccess();
+        await loadChronicAbsentees();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    async function sendChronicWhatsApp(studentId) {
+      try {
+        const res = await API.escalateChronicAbsence(studentId);
+        Toast.show(res.message, 'success');
+        AudioChime.playSuccess();
+        await loadChronicAbsentees();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    async function blastAllChronicNotices() {
+      if (!chronicData || !chronicData.students) return;
+      const targetStudents = chronicData.students.filter(s => s.consecutive_days >= 3 && s.reason_tag !== 'Sanctioned Leave' && s.reason_tag !== 'Resolved / Resumed');
+      if (!targetStudents.length) {
+        Toast.show("No unexcused 3+ days absentees found for blast!", "info");
+        return;
+      }
+      if (!confirm(`CONFIRMATION: Dispatch official Principal's Absence WhatsApp Notice to parents of ${targetStudents.length} students missing 3+ consecutive days?`)) return;
+
+      try {
+        let sentCount = 0;
+        for (const st of targetStudents) {
+          await API.escalateChronicAbsence(st.student_id);
+          sentCount++;
+        }
+        Toast.show(`Dispatched official WhatsApp notices to ${sentCount} parents!`, 'success', 5000);
+        AudioChime.playSuccess();
+        await loadChronicAbsentees();
+      } catch (err) {
+        Toast.show(err.message, 'error');
+      }
+    }
+
+    function openChronicNoticeModal(studentId) {
+      if (!chronicData || !chronicData.students) return;
+      const s = chronicData.students.find(st => st.student_id === Number(studentId));
+      if (!s) return;
+
+      const school = morningData ? morningData.school : { name: "Maharishi Vidya Mandir Public School", principal_name: "Dr. S. K. Mahanta", affiliation_no: "CBSE/AFF/AS/2026/89401" };
+      const modalContent = document.getElementById('chronic-notice-modal-content');
+      if (!modalContent) return;
+
+      modalContent.innerHTML = `
+        <div class="border-b-2 border-indigo-600 pb-4 text-center">
+          <h2 class="text-xl font-black text-white tracking-wide uppercase">${school.name}</h2>
+          <p class="text-xs text-indigo-300 font-mono">Affiliated to CBSE, New Delhi • Affiliation No: ${school.affiliation_no || 'CBSE/AFF/AS/2026/89401'}</p>
+          <p class="text-[11px] text-gray-400">Principal's Confidential Safety & Attendance Bureau</p>
+        </div>
+
+        <div class="pt-4 space-y-4 text-xs text-gray-200 leading-relaxed">
+          <div class="flex justify-between font-mono text-gray-400 border-b border-white/10 pb-2">
+            <span>Ref No: MVM/INQUEST/2026/${s.admission_no}</span>
+            <span>Date: ${new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</span>
+          </div>
+
+          <div class="p-3.5 rounded-xl bg-rose-950/20 border border-rose-500/30">
+            <h4 class="font-bold text-rose-300 uppercase text-xs">OFFICIAL INQUEST NOTICE: CONSECUTIVE PROLONGED ABSENCE</h4>
+            <p class="text-[11px] text-gray-300 mt-1">Issued under CBSE Affiliation Bye-Laws & Student Safety Guidelines</p>
+          </div>
+
+          <div class="space-y-1">
+            <p>To,</p>
+            <p class="font-bold text-white">Parent / Guardian of: ${s.student_name}<br>
+            <span class="font-normal text-gray-300">Class & Section: ${s.class_name} | Roll No: ${s.roll_no} | Adm No: ${s.admission_no}</span><br>
+            <span class="font-normal text-gray-400">Registered WhatsApp: ${s.parent_whatsapp_phone}</span></p>
+          </div>
+
+          <p>Dear Parent / Guardian,</p>
+          <p>
+            This is an urgent official communication to bring to your immediate notice that your ward, <strong>${s.student_name}</strong>, has been recorded absent from campus for <strong class="text-rose-400">${s.consecutive_days} consecutive school days</strong> on: <strong>${s.missed_dates_formatted}</strong> without prior sanctioned leave application.
+          </p>
+
+          <p>
+            As per school safety policy and CBSE guidelines, unauthorized continuous absence poses serious academic and safety concerns. You are requested to:
+          </p>
+          <ol class="list-decimal list-inside space-y-1 pl-2 text-gray-300">
+            <li>Contact the Class Teacher (<strong>${s.class_teacher_name || 'Class Teacher'}</strong>) or the Principal's Office at <strong>+91 94350-89401</strong> within 24 hours.</li>
+            <li>Submit a formal medical fitness certificate if the absence is due to illness.</li>
+          </ol>
+
+          <div class="pt-8 flex justify-between items-end border-t border-white/10 text-center">
+            <div>
+              <div class="font-bold text-white">${s.class_teacher_name || 'Class Teacher'}</div>
+              <div class="text-[10px] text-gray-400">Class Teacher In-Charge</div>
+            </div>
+            <div>
+              <div class="font-bold text-white">${school.principal_name || 'Dr. S. K. Mahanta'}</div>
+              <div class="text-[10px] text-gray-400">Principal & Head of Institution</div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('chronic-notice-modal').classList.remove('hidden');
+    }
+
+    function closeChronicNoticeModal() {
+      document.getElementById('chronic-notice-modal').classList.add('hidden');
     }
 
     // --- Teacher Live Attendance ---

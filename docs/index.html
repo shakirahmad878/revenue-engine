@@ -89,14 +89,17 @@
       <button onclick="switchTab('bus')" id="tab-bus" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-bus"></i> 3. Bus Conductor App
       </button>
+      <button onclick="switchTab('chronic')" id="tab-chronic" class="px-4 py-2 rounded-xl border border-amber-500/40 bg-amber-950/20 text-amber-300 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-triangle-exclamation"></i> 4. 🚨 2-3+ Days Missing Inquest Radar
+      </button>
       <button onclick="switchTab('teachers')" id="tab-teachers" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-chalkboard-user"></i> 4. Teacher Attendance & Payroll
+        <i class="fa-solid fa-chalkboard-user"></i> 5. Teacher Attendance & Payroll
       </button>
       <button onclick="switchTab('badges')" id="tab-badges" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-id-card"></i> 5. PVC Badge Studio
+        <i class="fa-solid fa-id-card"></i> 6. PVC Badge Studio
       </button>
       <button onclick="switchTab('cbse')" id="tab-cbse" class="px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap">
-        <i class="fa-solid fa-file-invoice"></i> 6. CBSE Register Export
+        <i class="fa-solid fa-file-invoice"></i> 7. CBSE Register Export
       </button>
     </div>
 
@@ -282,7 +285,128 @@
       </div>
     </div>
 
-    <!-- TAB 4: TEACHER ATTENDANCE & AUTOMATED PAYROLL -->
+    <!-- TAB 4: 🚨 2-3+ DAYS MISSING INQUEST RADAR -->
+    <div id="view-chronic" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-amber-500/30 shadow-2xl space-y-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"></span>
+            <span class="text-xs font-mono font-bold text-amber-400 uppercase">Student Safety & Dropout Inquest Radar</span>
+          </div>
+          <h2 class="text-xl font-bold text-white mt-1">🚨 2-3+ Days Consecutive Missing Inquest Radar</h2>
+          <p class="text-xs text-slate-400 mt-0.5">Detects prolonged absences, truant students, and generates official CBSE Rule 14 warning notices.</p>
+        </div>
+
+        <button onclick="simulateChronicBlast()" id="btnChronicBlast" class="px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          <span>1-Click Dispatch Inquest WhatsApp to All (3+ Days)</span>
+        </button>
+      </div>
+
+      <!-- Inquest Severity KPI Cards -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] text-slate-400 font-semibold">Total Flagged (2+ Days)</div>
+          <div class="text-2xl font-black text-white font-mono mt-1" id="demoChronicTotal">3 Students</div>
+          <div class="text-[10px] text-amber-400 mt-0.5">Active Inquests</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30">
+          <div class="text-[11px] text-amber-400 font-semibold">🟡 2 Days Absent</div>
+          <div class="text-2xl font-black text-amber-400 font-mono mt-1">2 Students</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">Class Teacher Follow-up</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-orange-500/30">
+          <div class="text-[11px] text-orange-400 font-semibold">🟠 3-4 Days Severe</div>
+          <div class="text-2xl font-black text-orange-400 font-mono mt-1">1 Student</div>
+          <div class="text-[10px] text-slate-400 mt-0.5">Principal Notice Dispatched</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-rose-500/30">
+          <div class="text-[11px] text-rose-400 font-semibold">🔴 5+ Days Critical</div>
+          <div class="text-2xl font-black text-rose-400 font-mono mt-1">0 Students</div>
+          <div class="text-[10px] text-emerald-400 mt-0.5">0 CBSE Rule 14 Strikes</div>
+        </div>
+      </div>
+
+      <!-- Interactive Sample Chronic Case Card -->
+      <div class="space-y-3">
+        <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Active Inquest Cases (Try 1-Click WhatsApp Notice):</h4>
+
+        <!-- Card 1: 3 Days Missed -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-orange-500/30 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center font-bold text-sm">
+                PC
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm">Pallavi Chetia (Class 6-A • Roll #02)</span>
+                  <span class="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 font-mono text-[10px] font-bold border border-orange-500/30">
+                    🚨 3 CONSECUTIVE DAYS MISSED
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-400">Parent: Mrs. Jonali Chetia (+91 98642 01234) • Class Teacher: Mrs. Mousumi Barua</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="simulateSingleChronicWhatsApp('Pallavi Chetia', 3, '+91 98642 01234')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow">
+                <i class="fa-brands fa-whatsapp"></i> <span>Send Inquest WhatsApp</span>
+              </button>
+              <button onclick="alert('📄 CBSE Official Notice generated for Pallavi Chetia (3 Days Unexcused Absence). Ready for print / signature.')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1">
+                <i class="fa-solid fa-print"></i> <span>Notice PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+            <div class="text-slate-400">Missed: <span class="text-rose-300 font-bold">08 Sep, 07 Sep, 05 Sep</span></div>
+            <div class="text-slate-400">Last Check-In: <span class="text-emerald-400">04 Sep (07:52 AM)</span></div>
+            <div class="text-slate-400">Inquest Tag: <span class="text-amber-300">🛑 Unexcused / Truancy Risk</span></div>
+          </div>
+        </div>
+
+        <!-- Card 2: 2 Days Missed -->
+        <div class="p-4 rounded-2xl bg-slate-900/90 border border-amber-500/30 space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
+                AD
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm">Arindam Dutta (Class 7-A • Roll #08)</span>
+                  <span class="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
+                    🟡 2 DAYS MISSED
+                  </span>
+                </div>
+                <div class="text-[11px] text-slate-400">Parent: Mr. Bhaskar Dutta (+91 98642 12345) • Class Teacher: Mrs. Archana Goswami</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button onclick="simulateSingleChronicWhatsApp('Arindam Dutta', 2, '+91 98642 12345')" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs transition flex items-center gap-1.5 shadow">
+                <i class="fa-brands fa-whatsapp"></i> <span>Send Inquest WhatsApp</span>
+              </button>
+              <button onclick="alert('📄 CBSE Warning Notice generated for Arindam Dutta (2 Days Absence).')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 flex items-center gap-1">
+                <i class="fa-solid fa-print"></i> <span>Notice PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+            <div class="text-slate-400">Missed: <span class="text-rose-300 font-bold">08 Sep, 07 Sep</span></div>
+            <div class="text-slate-400">Last Check-In: <span class="text-emerald-400">05 Sep (07:48 AM)</span></div>
+            <div class="text-slate-400">Inquest Tag: <span class="text-indigo-300">⏳ Pending Investigation</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: TEACHER ATTENDANCE & AUTOMATED PAYROLL -->
     <div id="view-teachers" class="hidden glass-panel rounded-3xl p-6 sm:p-8 border border-teal-500/30 shadow-2xl space-y-6">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
@@ -590,10 +714,11 @@
 
   <script>
     function switchTab(tabId) {
-      const tabs = ['principal', 'kiosk', 'bus', 'teachers', 'badges', 'cbse'];
+      const tabs = ['principal', 'kiosk', 'bus', 'chronic', 'teachers', 'badges', 'cbse'];
       tabs.forEach(t => {
         const view = document.getElementById(`view-${t}`);
         const tabBtn = document.getElementById(`tab-${t}`);
+        if (!view || !tabBtn) return;
         if (t === tabId) {
           view.classList.remove('hidden');
           tabBtn.className = "px-4 py-2 rounded-xl border text-xs font-bold transition flex items-center gap-2 whitespace-nowrap active-tab border-emerald-500/40";
@@ -602,6 +727,17 @@
           tabBtn.className = "px-4 py-2 rounded-xl border border-slate-800 bg-slate-900 text-slate-400 hover:text-white text-xs font-bold transition flex items-center gap-2 whitespace-nowrap";
         }
       });
+    }
+
+    function simulateChronicBlast() {
+      const btn = document.getElementById('btnChronicBlast');
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Dispatched to All Inquest Cases!`;
+      btn.className = "px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-extrabold text-xs shadow-lg transition flex items-center gap-2";
+      alert("✅ Official Prolonged Absence WhatsApp Notices dispatched to parents of all unexcused 3+ days absentees! Parents received emergency reply options.");
+    }
+
+    function simulateSingleChronicWhatsApp(studentName, days, phone) {
+      alert(`✅ Official Principal Inquest Notice sent to ${studentName}'s Guardian (${phone}) for ${days} consecutive unexcused absences! Notice logged in safety register.`);
     }
 
     function simulateAbsenceBroadcast() {

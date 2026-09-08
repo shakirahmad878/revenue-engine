@@ -240,6 +240,23 @@ def init_db():
     )
     """)
 
+    # 12. Consecutive & Chronic Absence Inquests (2, 3 & 5+ Days Radar)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS student_absence_inquests (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        student_id INTEGER NOT NULL,
+        consecutive_days INTEGER DEFAULT 2,
+        reason_tag TEXT DEFAULT 'Pending Investigation',
+        inquest_notes TEXT,
+        notice_dispatched_at TEXT,
+        followup_teacher_name TEXT,
+        status TEXT DEFAULT 'open',
+        updated_at TEXT,
+        FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
+        UNIQUE(student_id)
+    )
+    """)
+
     conn.commit()
     conn.close()
 
@@ -1217,3 +1234,256 @@ def update_teacher_payroll_status(payroll_id, status):
     conn.commit()
     conn.close()
     return True
+
+
+# ==============================================================================
+# 🚨 CHRONIC & CONSECUTIVE ABSENCE SAFETY RADAR (2, 3 & 5+ DAYS)
+# ==============================================================================
+
+def get_chronic_absentees_report(min_consecutive_days=2, target_date=None):
+    """
+    Scans student attendance records to identify students with 2, 3, or 5+ consecutive
+    unexcused absences. Formats safety risk tiers, missed dates, and inquest statuses.
+    """
+    if not target_date:
+        target_date_obj = date.today()
+    elif isinstance(target_date, str):
+        target_date_obj = datetime.strptime(target_date, "%Y-%m-%d").date()
+    else:
+        target_date_obj = target_date
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    # 1. Determine the past 20 school days (excluding Sundays) up to target_date
+    working_days = []
+    cur_d = target_date_obj
+    while len(working_days) < 20:
+        if cur_d.weekday() != 6:  # Exclude Sunday
+            working_days.append(cur_d.strftime("%Y-%m-%d"))
+        cur_d -= timedelta(days=1)
+
+    if not working_days:
+        conn.close()
+        return {"summary": {"total_flagged": 0}, "students": []}
+
+    oldest_day = working_days[-1]
+    newest_day = working_days[0]
+
+    # 2. Fetch all active students
+    students = [dict(r) for r in cursor.execute("""
+        SELECT s.*, c.grade as class_grade, c.section, c.class_teacher_name, c.room_no
+        FROM students s
+        JOIN classes c ON s.class_id = c.id
+        WHERE s.status = 'active'
+        ORDER BY c.grade ASC, c.section ASC, s.roll_no ASC
+    """).fetchall()]
+
+    # 3. Fetch attendance presence records in the date window
+    attendance_rows = cursor.execute("""
+        SELECT student_id, date, gate_in_time
+        FROM student_attendance
+        WHERE date >= ? AND date <= ? AND gate_in_time IS NOT NULL
+    """, (oldest_day, newest_day)).fetchall()
+
+    present_set = {(r["student_id"], r["date"]) for r in attendance_rows}
+
+    # 4. Fetch existing inquest tags
+    inquests = {r["student_id"]: dict(r) for r in cursor.execute("""
+        SELECT * FROM student_absence_inquests
+    """).fetchall()}
+
+    conn.close()
+
+    flagged_students = []
+    count_warning = 0   # 2 days
+    count_severe = 0    # 3-4 days
+    count_critical = 0  # 5+ days
+
+    for st in students:
+        s_id = st["id"]
+        consecutive_absent = 0
+        missed_dates = []
+        last_present_date = None
+
+        # Check working days in descending order (today downwards)
+        for i, d_str in enumerate(working_days):
+            if (s_id, d_str) in present_set:
+                if consecutive_absent == 0:
+                    # Student was present today, so 0 consecutive days
+                    break
+                else:
+                    # Student was present on this day before the absence streak
+                    last_present_date = d_str
+                    break
+            else:
+                consecutive_absent += 1
+                missed_dates.append(d_str)
+
+        # If student never attended in the scanned window
+        if consecutive_absent > 0 and not last_present_date:
+            last_present_date = "Over 20 days ago / Not recorded"
+
+        if consecutive_absent >= int(min_consecutive_days):
+            # Assign risk level
+            if consecutive_absent == 2:
+                risk_tier = "warning"
+                risk_label = "Early Warning (2 Days)"
+                risk_color = "amber"
+                count_warning += 1
+            elif 3 <= consecutive_absent <= 4:
+                risk_tier = "severe"
+                risk_label = f"Severe Chronic Alert ({consecutive_absent} Days)"
+                risk_color = "orange"
+                count_severe += 1
+            else:
+                risk_tier = "critical"
+                risk_label = f"Critical CBSE Truancy Flag ({consecutive_absent}+ Days)"
+                risk_color = "rose"
+                count_critical += 1
+
+            inquest_data = inquests.get(s_id, {})
+            reason_tag = inquest_data.get("reason_tag", "Pending Investigation")
+            inquest_notes = inquest_data.get("inquest_notes", "")
+            inquest_status = inquest_data.get("status", "open")
+            notice_sent = inquest_data.get("notice_dispatched_at", None)
+            followup_teacher = inquest_data.get("followup_teacher_name") or st.get("class_teacher_name", "Class Teacher")
+
+            flagged_students.append({
+                "student_id": s_id,
+                "admission_no": st["admission_no"],
+                "student_name": st["student_name"],
+                "roll_no": st["roll_no"],
+                "class_grade": st["class_grade"],
+                "section": st["section"],
+                "class_name": f"{st['class_grade']}-{st['section']}",
+                "class_teacher_name": st["class_teacher_name"],
+                "room_no": st["room_no"],
+                "parent_guardian_name": st["parent_guardian_name"],
+                "parent_whatsapp_phone": st["parent_whatsapp_phone"],
+                "emergency_phone": st["emergency_phone"],
+                "blood_group": st["blood_group"],
+                "bus_route_no": st["bus_route_no"],
+                "photo_url": st["photo_url"],
+                "consecutive_days": consecutive_absent,
+                "missed_dates": missed_dates,
+                "missed_dates_formatted": ", ".join([datetime.strptime(d, "%Y-%m-%d").strftime("%d %b") for d in missed_dates[:5]]),
+                "last_present_date": last_present_date,
+                "risk_tier": risk_tier,
+                "risk_label": risk_label,
+                "risk_color": risk_color,
+                "reason_tag": reason_tag,
+                "inquest_notes": inquest_notes,
+                "inquest_status": inquest_status,
+                "notice_dispatched_at": notice_sent,
+                "followup_teacher_name": followup_teacher
+            })
+
+    # Sort: highest consecutive days first
+    flagged_students.sort(key=lambda x: x["consecutive_days"], reverse=True)
+
+    return {
+        "target_date": target_date_obj.strftime("%Y-%m-%d"),
+        "min_consecutive_days": int(min_consecutive_days),
+        "summary": {
+            "total_flagged": len(flagged_students),
+            "warning_2_days": count_warning,
+            "severe_3_4_days": count_severe,
+            "critical_5_plus_days": count_critical,
+            "resolved_count": sum(1 for s in flagged_students if s["inquest_status"] == "resolved"),
+            "open_investigations": sum(1 for s in flagged_students if s["inquest_status"] != "resolved")
+        },
+        "students": flagged_students
+    }
+
+
+def tag_student_absence_reason(student_id, reason_tag, notes="", followup_teacher=None, status="contacted"):
+    """
+    Updates or creates an official absence inquest record (Medical, Family Emergency, Sanctioned, Truancy).
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    cursor.execute("""
+        INSERT INTO student_absence_inquests (
+            student_id, reason_tag, inquest_notes, followup_teacher_name, status, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?)
+        ON CONFLICT(student_id) DO UPDATE SET
+            reason_tag = excluded.reason_tag,
+            inquest_notes = COALESCE(excluded.inquest_notes, student_absence_inquests.inquest_notes),
+            followup_teacher_name = COALESCE(excluded.followup_teacher_name, student_absence_inquests.followup_teacher_name),
+            status = excluded.status,
+            updated_at = excluded.updated_at
+    """, (student_id, reason_tag, notes, followup_teacher, status, now_str))
+
+    conn.commit()
+    conn.close()
+    return {"success": True, "student_id": student_id, "reason_tag": reason_tag, "status": status}
+
+
+def send_chronic_absence_notice(student_id, custom_message=None):
+    """
+    Dispatches a formal Principal's Prolonged Absence WhatsApp / SMS Notice to the student's guardian.
+    """
+    student = get_student(student_id)
+    if not student:
+        return {"success": False, "message": "Student not found"}
+
+    settings = get_school_settings()
+    report = get_chronic_absentees_report(min_consecutive_days=1)
+    
+    # Find student streak
+    matched = next((s for s in report["students"] if s["student_id"] == int(student_id)), None)
+    days_count = matched["consecutive_days"] if matched else 3
+    date_range = matched["missed_dates_formatted"] if matched else "Past 3 days"
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    try:
+        from notifier import dispatch_parent_notification
+    except ImportError:
+        from attendance_system.notifier import dispatch_parent_notification
+
+    custom_params = {
+        "days_count": days_count,
+        "date_range": date_range,
+        "contact_phone": "+91 94350-89401",
+        "principal_name": settings.get("principal_name", "Dr. S. K. Mahanta")
+    }
+    if custom_message:
+        custom_params["message"] = custom_message
+
+    notif_res = dispatch_parent_notification(
+        conn, student, "consecutive_absence",
+        custom_params=custom_params,
+        school_settings=settings,
+        lang=settings.get("preferred_language", "en")
+    )
+
+    # Update notice timestamp in inquest table
+    cursor.execute("""
+        INSERT INTO student_absence_inquests (
+            student_id, consecutive_days, notice_dispatched_at, status, updated_at
+        ) VALUES (?, ?, ?, 'contacted', ?)
+        ON CONFLICT(student_id) DO UPDATE SET
+            consecutive_days = excluded.consecutive_days,
+            notice_dispatched_at = excluded.notice_dispatched_at,
+            status = 'contacted',
+            updated_at = excluded.updated_at
+    """, (student_id, days_count, now_str, now_str))
+
+    conn.commit()
+    conn.close()
+
+    return {
+        "success": True,
+        "student": student,
+        "days_absent": days_count,
+        "notification": notif_res,
+        "dispatched_at": now_str,
+        "message": f"Official Prolonged Absence Notice successfully sent to {student['parent_guardian_name']} ({student['parent_whatsapp_phone']})."
+    }
+

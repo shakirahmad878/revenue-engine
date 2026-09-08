@@ -180,6 +180,17 @@ def populate_school_seed_data():
             continue
 
         for s_id, s_info, adm_no, qr_tok in student_records:
+            # Explicitly force specific students to be absent in recent days for chronic absence radar demo
+            # Student 21 (Monisha Bharali): absent 3 consecutive days
+            # Student 20 (Arindam Dutta): absent 2 consecutive days
+            # Student 19 (Pallavi Chetia): absent 4 consecutive days
+            if s_id == student_records[-1][0] and days_ago <= 2:
+                continue
+            if s_id == student_records[-2][0] and days_ago <= 1:
+                continue
+            if s_id == student_records[-3][0] and days_ago <= 3:
+                continue
+
             roll = random.random()
             if roll < 0.05: # 5% absent
                 continue
@@ -214,8 +225,8 @@ def populate_school_seed_data():
     # 7. Today's Live Gate Attendance (Morning 8:15 AM State)
     today_str = today.strftime("%Y-%m-%d")
     for i, (s_id, s_info, adm_no, qr_tok) in enumerate(student_records):
-        if i >= len(student_records) - 2:
-            # Leave 2 students absent (to test 8:30 AM Absence broadcast!)
+        # Leave last 3 students absent today
+        if i >= len(student_records) - 3:
             continue
 
         is_late = (i % 5 == 0) # Some late
@@ -249,6 +260,20 @@ def populate_school_seed_data():
             f"Dear {s_info['parent']}, your child {s_info['name']} ({s_info['class'][0]}-{s_info['class'][1]}, Roll #{s_info['roll']}) has safely arrived at Maharishi Vidya Mandir at {in_time_str[:5]}." + (f" [Late by {late_min} mins]" if late_min > 0 else ""),
             f"{today_str} {in_time_str}"
         ))
+
+    # Seed initial Inquest tags for sample chronic absentees
+    st_monisha = student_records[-1][0]
+    st_arindam = student_records[-2][0]
+    st_pallavi = student_records[-3][0]
+
+    cursor.execute("""
+        INSERT INTO student_absence_inquests (
+            student_id, consecutive_days, reason_tag, inquest_notes, followup_teacher_name, status, updated_at
+        ) VALUES 
+        (?, 3, 'Medical / Hospitalized', 'Parent informed Class Teacher of viral fever with high temperature. Medical certificate requested.', 'Dr. Jayanta Bharali', 'contacted', ?),
+        (?, 2, 'Pending Investigation', 'First absence inquest initiated. Automated WhatsApp dispatched.', 'Mr. Bhaskar Dutta', 'open', ?),
+        (?, 4, 'Unexcused / Truancy Risk', 'Parent phone unreachable on first call. Formal CBSE Rule 14 notice recommended.', 'Mrs. Jonali Chetia', 'open', ?)
+    """, (st_monisha, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), st_arindam, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), st_pallavi, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
     # 8. Teachers Live Check-In Today
     for f in TEACHERS_DATA:

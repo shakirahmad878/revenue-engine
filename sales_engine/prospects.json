@@ -10,9 +10,9 @@
     "niche": "CBSE Premier Senior Secondary",
     "estimated_ticket": "\u20b929,999",
     "identified_pain": "Large Kathal Road gate morning arrival rush; demands instant parent SMS gate alerts.",
-    "status": "Touch 1 Sent",
-    "outreach_stage": 1,
-    "last_contact_date": "2026-09-04 19:52:22",
+    "status": "Touch 2 Sent",
+    "outreach_stage": 2,
+    "last_contact_date": "2026-09-08 10:13:27",
     "notes": "Premier CBSE school in Silchar. Active WhatsApp mobile (+91 94019 93344 / +91 94018 83344)."
   },
   {
@@ -26,9 +26,9 @@
     "niche": "CBSE Co-Ed English Medium",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "Teachers spend 15 minutes of morning class on manual roll-call paper registers.",
-    "status": "Touch 1 Sent",
-    "outreach_stage": 1,
-    "last_contact_date": "2026-09-04 19:52:41",
+    "status": "Touch 2 Sent",
+    "outreach_stage": 2,
+    "last_contact_date": "2026-09-08 10:13:47",
     "notes": "Top-ranked school in Silchar. WhatsApp active mobile (+91 86387 24318 / +91 70999 17936)."
   },
   {
@@ -42,9 +42,9 @@
     "niche": "English Medium High School",
     "estimated_ticket": "\u20b919,999",
     "identified_pain": "Wants automated 08:30 AM unexcused absence SMS dispatch to parents.",
-    "status": "Touch 1 Sent",
-    "outreach_stage": 1,
-    "last_contact_date": "2026-09-04 19:53:00",
+    "status": "Touch 2 Sent",
+    "outreach_stage": 2,
+    "last_contact_date": "2026-09-08 10:14:06",
     "notes": "Prominent Silchar institution. Direct WhatsApp mobile (+91 86380 41679 / +91 60036 50075)."
   },
   {
@@ -58,9 +58,9 @@
     "niche": "CBSE Senior Secondary",
     "estimated_ticket": "\u20b924,999",
     "identified_pain": "Requires rapid 1.2s QR student gate check-in and parent SMS notifications.",
-    "status": "Touch 1 Sent",
-    "outreach_stage": 1,
-    "last_contact_date": "2026-09-04 19:53:19",
+    "status": "Touch 2 Sent",
+    "outreach_stage": 2,
+    "last_contact_date": "2026-09-08 10:14:25",
     "notes": "Established CBSE campus in Silchar. Direct WhatsApp (+91 99540 53062)."
   },
   {
@@ -158,5 +158,21 @@
     "outreach_stage": 1,
     "last_contact_date": "2026-09-04 19:55:14",
     "notes": "Growing private school in Meherpur Silchar. WhatsApp mobile (+91 88110 45210)."
+  },
+  {
+    "id": "lead-011",
+    "business_name": "AL-NOOR PUBLIC SCHOOL, Barjatrapur",
+    "contact_name": "Principal",
+    "title": "Owner",
+    "email": "8638542538",
+    "phone": "",
+    "city": "Silchar, Assam",
+    "niche": "CBSE / ICSE Private School",
+    "estimated_ticket": "\u20b924,999",
+    "identified_pain": "Missed after-hours emergency calls going to competitors.",
+    "status": "Touch 1 Sent",
+    "outreach_stage": 1,
+    "last_contact_date": "2026-09-04 20:05:18",
+    "notes": "Custom added lead."
   }
 ]
