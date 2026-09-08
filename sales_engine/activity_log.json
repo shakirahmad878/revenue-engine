@@ -1,5 +1,40 @@
 [
   {
+    "timestamp": "2026-09-08 10:16:39",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Principal (AL-NOOR PUBLIC SCHOOL, Barjatrapur)"
+  },
+  {
+    "timestamp": "2026-09-08 10:16:21",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Academic Coordinator (Greenwood English High School)"
+  },
+  {
+    "timestamp": "2026-09-08 10:16:03",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Secretary & Principal (Silchar Collegiate School)"
+  },
+  {
+    "timestamp": "2026-09-08 10:15:44",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Sr. Principal (St. Capitanio Senior Secondary School)"
+  },
+  {
+    "timestamp": "2026-09-08 10:15:25",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Administrative Office (Sarala Birla Gyan Jyoti Silchar)"
+  },
+  {
+    "timestamp": "2026-09-08 10:15:06",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Fr. Rector & Principal (Don Bosco High School Silchar)"
+  },
+  {
+    "timestamp": "2026-09-08 10:14:47",
+    "type": "LIVE_FOLLOWUP",
+    "message": "Dispatched Touch 2 Follow-Up to Sri Satadal Bhattacharjee (Pranabananda International School)"
+  },
+  {
     "timestamp": "2026-09-08 10:14:28",
     "type": "LIVE_FOLLOWUP",
     "message": "Dispatched Touch 2 Follow-Up to Mrs. Samita Dutta (Maharishi Vidya Mandir Silchar)"
@@ -463,40 +498,5 @@
     "timestamp": "2026-08-28 00:03:05",
     "type": "LIVE_OUTREACH",
     "message": "Sent Touch 1 to Customer Care Team (Christianson Air Conditioning & Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-28 00:02:05",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Operations Lead (Austin Commercial HVAC) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-28 00:01:46",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Service Dispatcher (Austin Air Conditioning) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:32:12",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Travis Miller (Lone Star Emergency Plumbing) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:31:54",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Carlos Sanchez (Apex Roofing & Restoration) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:31:35",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Karen Whitmore (All Year Heating & Cooling) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:31:16",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Steve Reynolds (Emergency AC & Plumbing Inc.) - Email delivered via live SMTP relay."
-  },
-  {
-    "timestamp": "2026-08-27 23:30:57",
-    "type": "LIVE_OUTREACH",
-    "message": "Sent Touch 1 to Robert Taylor (Precision Heating & Air) - Email delivered via live SMTP relay."
   }
 ]
